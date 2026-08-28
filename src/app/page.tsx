@@ -12,6 +12,7 @@ import { PodcastPlayer } from "@/components/PodcastPlayer";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { SummaryDrawer } from "@/components/SummaryDrawer";
 import { PressPassModal } from "@/components/PressPassModal";
+import { SubscriptionModal } from "@/components/SubscriptionModal";
 import { AdContainer } from "@/components/AdContainer";
 import { MOCK_ARTICLES, MOCK_PODCASTS } from "@/lib/mock-articles";
 import { Article } from "@/lib/types";
@@ -19,13 +20,14 @@ import { Article } from "@/lib/types";
 export default function HomePage() {
   const [selectedArticleForDrawer, setSelectedArticleForDrawer] = useState<Article | null>(null);
   const [pressPassModalOpen, setPressPassModalOpen] = useState(false);
+  const [vipModalOpen, setVipModalOpen] = useState(false);
 
   const leadArticle = MOCK_ARTICLES.find((a) => a.isFeatured) || MOCK_ARTICLES[0];
   const subArticles = MOCK_ARTICLES.filter((a) => a.id !== leadArticle.id).slice(0, 3);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Top Header */}
+    <div className="min-h-screen flex flex-col bg-[#08090D]">
+      {/* Top 3-Tier Broadsheet Masthead */}
       <Header />
 
       {/* Breaking News Marquee Ticker */}
@@ -34,7 +36,7 @@ export default function HomePage() {
       {/* Top Header Leaderboard Ad (728x90) */}
       <AdContainer slotType="leaderboard" />
 
-      {/* Hero Headline & Trending Briefings Showcase */}
+      {/* Hero 3-Column Broadsheet Lead Spread */}
       <HeroHeadline
         leadArticle={leadArticle}
         subArticles={subArticles}
@@ -46,7 +48,7 @@ export default function HomePage() {
         <MarketTerminal />
       </section>
 
-      {/* Main Filterable News Grid with 8 Category Verticals */}
+      {/* Main Filterable News Grid with 8 Category Desks & The Big Read */}
       <NewsGrid
         initialArticles={MOCK_ARTICLES}
         onQuickRead={(art) => setSelectedArticleForDrawer(art)}
@@ -81,6 +83,13 @@ export default function HomePage() {
         isOpen={pressPassModalOpen}
         onClose={() => setPressPassModalOpen(false)}
       />
+
+      {/* VIP Pro Subscription Modal */}
+      <SubscriptionModal
+        isOpen={vipModalOpen}
+        onClose={() => setVipModalOpen(false)}
+      />
     </div>
   );
 }
+

@@ -6,26 +6,27 @@ const parser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
   trimValues: true,
+  cdataPropName: "__cdata",
 });
 
 export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 9000); // 9s timeout
 
     const response = await fetch(source.url, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "ArtistDailyNews-Bot/1.0 (+https://artistdailynews.com)",
-        Accept: "application/rss+xml, application/xml, text/xml, application/atom+xml",
+        "User-Agent": "ArtistDailyNews-Aggregator/2.0 (+https://artistdailynews.com; editorial@artistdailynews.com)",
+        Accept: "application/rss+xml, application/xml, text/xml, application/atom+xml, */*",
       },
-      next: { revalidate: 3600 },
+      next: { revalidate: 1800 },
     });
 
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      console.warn(`[RSS Ingest] Failed to fetch feed from ${source.name} (${response.status})`);
+      console.warn(`[RSS Ingest] Warning: HTTP ${response.status} from ${source.name}`);
       return [];
     }
 
@@ -34,17 +35,17 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
 
     let rawItems: any[] = [];
 
-    // Standard RSS 2.0 channel -> item
+    // 1. Standard RSS 2.0 channel -> item
     if (parsed?.rss?.channel?.item) {
       const items = parsed.rss.channel.item;
       rawItems = Array.isArray(items) ? items : [items];
     }
-    // Atom feed -> entry
+    // 2. Atom feed -> entry
     else if (parsed?.feed?.entry) {
       const entries = parsed.feed.entry;
       rawItems = Array.isArray(entries) ? entries : [entries];
     }
-    // RDF / RSS 1.0
+    // 3. RDF / RSS 1.0 -> item
     else if (parsed?.["rdf:RDF"]?.item) {
       const items = parsed["rdf:RDF"].item;
       rawItems = Array.isArray(items) ? items : [items];
@@ -52,46 +53,72 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
 
     const articles: Article[] = [];
 
-    for (const item of rawItems.slice(0, 10)) {
-      const title = cleanHtml(item.title || "Untitled Article");
-      if (!title || title.length < 5) continue;
+    for (const item of rawItems.slice(0, 15)) {
+      const rawTitle = extractText(item.title) || "Untitled Industry Dispatch";
+      const title = cleanHtml(rawTitle);
+      if (!title || title.length < 6) continue;
 
       const link = extractLink(item) || source.website;
-      const pubDateStr = item.pubDate || item.published || item.updated || item["dc:date"] || new Date().toISOString();
-      const rawContent = item["content:encoded"] || item.content || item.description || item.summary || "";
-      const cleanedSnippet = cleanHtml(rawContent).slice(0, 280);
+      const pubDateStr =
+        item.pubDate ||
+        item.published ||
+        item.updated ||
+        item["dc:date"] ||
+        new Date().toISOString();
+
+      const rawContent =
+        extractText(item["content:encoded"]) ||
+        extractText(item.content) ||
+        extractText(item.description) ||
+        extractText(item.summary) ||
+        "";
+
+      const cleanedSnippet = cleanHtml(rawContent).slice(0, 320);
       const imageUrl = extractImage(item, rawContent) || defaultImageForCategory(source.category);
 
-      const slug = `${slugify(title).slice(0, 60)}-${Math.random().toString(36).substring(2, 6)}`;
+      const uniqueHash = Math.random().toString(36).substring(2, 6);
+      const slug = `${slugify(title).slice(0, 65)}-${uniqueHash}`;
+
+      // Synthesize Takeaways & Strategic DIY Signal
+      const takeaway = generateActionableTakeaway(source.name, source.category, title);
+      const bullets = generateBullets(source.name, source.category, title, cleanedSnippet);
 
       articles.push({
-        id: `rss-${slugify(source.name)}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        id: `art-${slugify(source.name)}-${Date.now()}-${uniqueHash}`,
         title,
         slug,
-        summary: cleanedSnippet || `Latest updates on independent music business and creator intelligence from ${source.name}.`,
-        bullets: [
-          `Key industry intelligence reported directly from ${source.name}.`,
-          "Impacts independent artists, streaming visibility, and catalogue rights.",
-          "Read original coverage for complete verified metrics and primary sources.",
-        ],
-        takeaway: `Review your release schedule and distributor metadata to align with new developments reported by ${source.name}.`,
+        summary:
+          cleanedSnippet ||
+          `Exclusive coverage and market intelligence reported by ${source.name} regarding independent music rights, streaming discovery, and creator economics.`,
+        bullets,
+        takeaway,
         category: source.category,
         sourceName: source.name,
         sourceUrl: source.website,
         originalUrl: link,
         imageUrl,
-        publishedAt: new Date(pubDateStr).toISOString(),
-        readTimeMinutes: Math.max(2, Math.ceil(cleanedSnippet.split(" ").length / 60)),
-        tags: [source.name, source.category, "Industry News"],
+        publishedAt: isValidDate(pubDateStr) ? new Date(pubDateStr).toISOString() : new Date().toISOString(),
+        readTimeMinutes: Math.max(2, Math.min(8, Math.ceil(cleanedSnippet.split(" ").length / 45))),
+        isBreaking: title.toLowerCase().includes("breaking") || title.toLowerCase().includes("urgent"),
+        tags: [source.name, source.category, "Music Business", "Independent Rights"],
         content: cleanHtml(rawContent),
+        author: `${source.name} Newsdesk`,
       });
     }
 
     return articles;
   } catch (error) {
-    console.error(`[RSS Ingest Error] ${source.name}:`, error);
+    console.error(`[RSS Parser Error] Failed to process ${source.name}:`, error);
     return [];
   }
+}
+
+function extractText(val: any): string {
+  if (!val) return "";
+  if (typeof val === "string") return val;
+  if (val.__cdata) return val.__cdata;
+  if (val["#text"]) return val["#text"];
+  return String(val);
 }
 
 function extractLink(item: any): string {
@@ -102,6 +129,7 @@ function extractLink(item: any): string {
     if (alternate?.["@_href"]) return alternate["@_href"];
   }
   if (item.guid && typeof item.guid === "string" && item.guid.startsWith("http")) return item.guid;
+  if (item.guid?.["#text"] && item.guid["#text"].startsWith("http")) return item.guid["#text"];
   return "";
 }
 
@@ -117,9 +145,9 @@ function extractImage(item: any, rawContent: string): string | null {
   }
   // 3. Media thumbnail
   if (item["media:thumbnail"]?.["@_url"]) return item["media:thumbnail"]["@_url"];
-  // 4. HTML img tag
+  // 4. Embedded HTML image tag
   const imgMatch = rawContent.match(/<img[^>]+src=["']([^"'>]+)["']/i);
-  if (imgMatch && imgMatch[1] && !imgMatch[1].includes("doubleclick") && !imgMatch[1].includes("feedburner")) {
+  if (imgMatch && imgMatch[1] && !imgMatch[1].includes("doubleclick") && !imgMatch[1].includes("feedburner") && !imgMatch[1].includes("gravatar")) {
     return imgMatch[1];
   }
   return null;
@@ -127,7 +155,7 @@ function extractImage(item: any, rawContent: string): string | null {
 
 function cleanHtml(htmlStr: any): string {
   if (!htmlStr) return "";
-  const str = typeof htmlStr === "object" ? htmlStr["#text"] || "" : String(htmlStr);
+  const str = typeof htmlStr === "object" ? htmlStr["#text"] || htmlStr.__cdata || "" : String(htmlStr);
   return str
     .replace(/<[^>]*>?/gm, "")
     .replace(/&nbsp;/g, " ")
@@ -136,8 +164,42 @@ function cleanHtml(htmlStr: any): string {
     .replace(/&#39;/g, "'")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8216;/g, "'")
+    .replace(/&#8220;/g, '"')
+    .replace(/&#8221;/g, '"')
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function isValidDate(d: any): boolean {
+  const time = new Date(d).getTime();
+  return !isNaN(time);
+}
+
+function generateActionableTakeaway(sourceName: string, category: CategoryType, title: string): string {
+  switch (category) {
+    case "financial":
+      return `Review catalogue split sheets and ensure master recordings have registered ISRC/ISWC codes to capture all international mechanical royalties.`;
+    case "streaming":
+      return `Optimize your 4-week pre-save window and algorithmic pitch metadata in Spotify for Artists to maximize Release Radar momentum.`;
+    case "tech-ai":
+      return `Integrate AI-assisted mastering and automated stems workflow while retaining 100% human songwriting copyright ownership.`;
+    case "marketing":
+      return `Focus short-form video hooks on the 15-second chorus climax to increase TikTok audio save rates and algorithmic sound page adds.`;
+    case "legal":
+      return `Audit all producer contracts for work-for-hire provisions and cap distributor recoupment percentages to safeguard catalogue equity.`;
+    default:
+      return `Align release schedules and rights distribution with the industry trends and market indicators documented by ${sourceName}.`;
+  }
+}
+
+function generateBullets(sourceName: string, category: CategoryType, title: string, snippet: string): string[] {
+  return [
+    `Primary dispatch verified directly from ${sourceName}.`,
+    `Direct strategic impact on ${category} policy and independent artist revenue streams.`,
+    `Independent rights holders advised to review distributor agreements and schedule compliance.`,
+  ];
 }
 
 function defaultImageForCategory(category: CategoryType): string {
@@ -153,3 +215,4 @@ function defaultImageForCategory(category: CategoryType): string {
   };
   return images[category] || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80";
 }
+

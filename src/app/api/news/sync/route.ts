@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { INITIAL_FEEDS } from "@/lib/feeds-config";
 import { fetchAndParseFeed } from "@/lib/rss-parser";
-import { summarizeWithAINewsdesk } from "@/lib/ai-newsdesk";
+import { db } from "@/lib/db";
 import { Article } from "@/lib/types";
 
 export async function POST(req: Request) {
@@ -9,8 +9,8 @@ export async function POST(req: Request) {
     const activeFeeds = INITIAL_FEEDS.filter((f) => f.enabled);
     const allParsedArticles: Article[] = [];
 
-    // Fetch top 4 feeds concurrently to ensure fast response time
-    const feedPromises = activeFeeds.slice(0, 4).map((feed) => fetchAndParseFeed(feed));
+    // Fetch top 6 feeds concurrently for responsive manual sync
+    const feedPromises = activeFeeds.slice(0, 6).map((feed) => fetchAndParseFeed(feed));
     const results = await Promise.allSettled(feedPromises);
 
     for (const res of results) {
@@ -19,10 +19,14 @@ export async function POST(req: Request) {
       }
     }
 
+    const { inserted, updated } = await db.articles.upsertMany(allParsedArticles);
+
     return NextResponse.json({
       success: true,
       ingestedCount: allParsedArticles.length,
-      feedsAttempted: activeFeeds.length,
+      newInserted: inserted,
+      existingUpdated: updated,
+      feedsAttempted: Math.min(6, activeFeeds.length),
       sampleArticles: allParsedArticles.slice(0, 3),
       timestamp: new Date().toISOString(),
     });
@@ -37,3 +41,8 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function GET(req: Request) {
+  return POST(req);
+}
+

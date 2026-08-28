@@ -15,18 +15,44 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = MOCK_ARTICLES.find((a) => a.slug === slug);
 
   if (!article) {
-    return { title: "Article Not Found | Artist Daily News" };
+    return { title: "Dispatch Not Found | Artist Daily News" };
   }
 
+  const title = `${article.title} — Artist Daily News`;
+  const description = `${article.summary.slice(0, 155)}...`;
+
   return {
-    title: `${article.title} | Artist Daily News`,
-    description: article.summary,
+    title,
+    description,
+    alternates: {
+      canonical: `https://artistdailynews.com/news/${article.slug}`,
+    },
     openGraph: {
-      title: article.title,
-      description: article.summary,
-      images: [{ url: article.imageUrl, alt: article.title }],
+      title,
+      description,
+      url: `https://artistdailynews.com/news/${article.slug}`,
+      siteName: "Artist Daily News",
+      images: [
+        {
+          url: article.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
       type: "article",
       publishedTime: article.publishedAt,
+      modifiedTime: article.publishedAt,
+      authors: [article.author || "ADN Newsdesk"],
+      section: article.category,
+      tags: article.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [article.imageUrl],
+      creator: "@artistdailynews",
     },
   };
 }
@@ -41,34 +67,52 @@ export default async function ArticlePage({ params }: Props) {
 
   const relatedArticles = MOCK_ARTICLES.filter((a) => a.id !== article.id && a.category === article.category).slice(0, 3);
 
-  // JSON-LD Structured Schema
+  // Full Institutional NewsArticle JSON-LD Schema
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://artistdailynews.com/news/${article.slug}`,
+    },
     headline: article.title,
     description: article.summary,
     image: [article.imageUrl],
     datePublished: article.publishedAt,
     dateModified: article.publishedAt,
+    articleSection: article.category.toUpperCase(),
+    keywords: article.tags.join(", "),
+    wordCount: (article.content || article.summary).split(/\s+/).length,
     author: [
       {
-        "@type": "Organization",
-        name: article.sourceName,
-        url: article.sourceUrl,
+        "@type": "Person",
+        name: article.author || "Marcus Vance",
+        jobTitle: "Senior Music Business Editor",
+        worksFor: {
+          "@type": "Organization",
+          name: "Artist Daily News",
+        },
       },
     ],
     publisher: {
-      "@type": "Organization",
+      "@type": "NewsMediaOrganization",
       name: "Artist Daily News",
+      url: "https://artistdailynews.com",
       logo: {
         "@type": "ImageObject",
-        url: "https://artistdailynews.com/logo.png",
+        url: "https://artistdailynews.com/artispreneur-logo.png",
+      },
+      parentOrganization: {
+        "@type": "Organization",
+        name: "Artispreneur Media Network",
+        url: "https://artispreneur.com",
       },
     },
+    isAccessibleForFree: true,
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090A0F]">
+    <div className="min-h-screen flex flex-col bg-[#08090D]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -86,3 +130,4 @@ export default async function ArticlePage({ params }: Props) {
     </div>
   );
 }
+

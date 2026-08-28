@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Article } from "@/lib/types";
 import { formatTimeAgo } from "@/lib/utils";
-import { Sparkles, Clock, ArrowUpRight, Zap } from "lucide-react";
+import { Sparkles, Clock, ArrowUpRight, Zap, Bookmark } from "lucide-react";
 
 interface ArticleCardProps {
   article: Article;
@@ -26,17 +26,17 @@ export function ArticleCard({ article, onQuickRead, featured }: ArticleCardProps
   const badgeClass = categoryColorMap[article.category] || "text-slate-300 border-slate-700 bg-slate-800";
 
   return (
-    <article className="group bg-[#13151F] hover:bg-[#181A27] border border-[#232636] hover:border-slate-700/80 rounded-xl overflow-hidden transition-all duration-200 flex flex-col justify-between shadow-sm hover:shadow-md">
+    <article className="group bg-[#11131E] hover:bg-[#161827] border border-[#212435] hover:border-slate-600/80 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-md hover:shadow-xl">
       <div>
         {/* Article Image Cover */}
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-900">
           <img
             src={article.imageUrl}
             alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#13151F] via-transparent to-transparent opacity-80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#11131E] via-transparent to-transparent opacity-90" />
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex items-center space-x-2">
@@ -45,7 +45,7 @@ export function ArticleCard({ article, onQuickRead, featured }: ArticleCardProps
             </span>
             {article.isBreaking && (
               <span className="bg-[#FF3366] text-white font-bold text-[9px] uppercase px-1.5 py-0.5 rounded flex items-center shadow">
-                <Zap className="w-2.5 h-2.5 mr-0.5 fill-current" /> Live
+                <Zap className="w-2.5 h-2.5 mr-0.5 fill-current" /> Live Alert
               </span>
             )}
             {article.isSponsored && (
@@ -55,8 +55,8 @@ export function ArticleCard({ article, onQuickRead, featured }: ArticleCardProps
             )}
           </div>
 
-          <div className="absolute bottom-2 right-3 text-[10px] text-slate-400 font-mono flex items-center bg-black/60 px-2 py-0.5 rounded backdrop-blur-sm">
-            <Clock className="w-3 h-3 mr-1" />
+          <div className="absolute bottom-2.5 right-3 text-[10px] text-slate-300 font-mono flex items-center bg-black/70 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10">
+            <Clock className="w-3 h-3 mr-1 text-[#D4FF00]" />
             {article.readTimeMinutes} min read
           </div>
         </div>
@@ -68,31 +68,31 @@ export function ArticleCard({ article, onQuickRead, featured }: ArticleCardProps
             <span>{formatTimeAgo(article.publishedAt)}</span>
           </div>
 
-          <h3 className="font-bold text-base sm:text-lg text-white leading-snug group-hover:text-[#D4FF00] transition-colors line-clamp-2">
+          <h3 className="font-serif-headline font-bold text-lg sm:text-xl text-white leading-snug group-hover:text-[#D4FF00] transition-colors line-clamp-2">
             <Link href={`/news/${article.slug}`}>
               {article.title}
             </Link>
           </h3>
 
-          <p className="text-xs sm:text-sm text-slate-400 line-clamp-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-300 line-clamp-2 leading-relaxed">
             {article.summary}
           </p>
         </div>
       </div>
 
       {/* Footer Quick Actions */}
-      <div className="px-5 pb-4 pt-2 border-t border-slate-800/40 flex items-center justify-between">
+      <div className="px-5 pb-4 pt-3 border-t border-slate-800/60 flex items-center justify-between">
         <button
           onClick={() => onQuickRead(article)}
           className="inline-flex items-center space-x-1.5 text-xs font-mono text-slate-300 hover:text-[#D4FF00] font-semibold transition-colors py-1"
         >
           <Sparkles className="w-3.5 h-3.5 text-[#D4FF00]" />
-          <span>30s Quick Read</span>
+          <span>30s Briefing</span>
         </button>
 
         <Link
           href={`/news/${article.slug}`}
-          className="text-xs text-slate-400 hover:text-white flex items-center font-medium"
+          className="text-xs text-slate-400 hover:text-white flex items-center font-medium font-mono"
         >
           <span>Story</span>
           <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
