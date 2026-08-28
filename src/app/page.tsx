@@ -26,8 +26,8 @@ export default function HomePage() {
   const subArticles = MOCK_ARTICLES.filter((a) => a.id !== leadArticle.id).slice(0, 3);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#08090D]">
-      {/* Top 3-Tier Broadsheet Masthead */}
+    <div className="min-h-screen flex flex-col">
+      {/* Top 3-Tier Masthead */}
       <Header />
 
       {/* Breaking News Marquee Ticker */}
@@ -36,7 +36,7 @@ export default function HomePage() {
       {/* Top Header Leaderboard Ad (728x90) */}
       <AdContainer slotType="leaderboard" />
 
-      {/* Hero 3-Column Broadsheet Lead Spread */}
+      {/* Hero Platform Value Prop + Lead Story */}
       <HeroHeadline
         leadArticle={leadArticle}
         subArticles={subArticles}
@@ -48,13 +48,13 @@ export default function HomePage() {
         <MarketTerminal />
       </section>
 
-      {/* Main Filterable News Grid with 8 Category Desks & The Big Read */}
+      {/* Main Filterable News Grid */}
       <NewsGrid
         initialArticles={MOCK_ARTICLES}
         onQuickRead={(art) => setSelectedArticleForDrawer(art)}
       />
 
-      {/* Interactive 6-Week Pre-Release Algorithmic Blueprint */}
+      {/* Interactive 6-Week Pre-Release Blueprint */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <ReleaseChecklistTool />
       </section>
@@ -69,22 +69,22 @@ export default function HomePage() {
         <PodcastPlayer episodes={MOCK_PODCASTS} />
       </section>
 
-      {/* High-Conversion Daily Intelligence Newsletter Capture */}
+      {/* Newsletter Capture */}
       <NewsletterSignup />
 
-      {/* Slide-out 30-Second Executive Summary Drawer */}
+      {/* Slide-out Summary Drawer */}
       <SummaryDrawer
         article={selectedArticleForDrawer}
         onClose={() => setSelectedArticleForDrawer(null)}
       />
 
-      {/* Official Press Pass Accreditation Modal */}
+      {/* Press Pass Modal */}
       <PressPassModal
         isOpen={pressPassModalOpen}
         onClose={() => setPressPassModalOpen(false)}
       />
 
-      {/* VIP Pro Subscription Modal */}
+      {/* VIP Subscription Modal */}
       <SubscriptionModal
         isOpen={vipModalOpen}
         onClose={() => setVipModalOpen(false)}
@@ -92,4 +92,3 @@ export default function HomePage() {
     </div>
   );
 }
-

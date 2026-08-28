@@ -28,14 +28,14 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Artist Daily News (ADN) — The Daily Journal of Independent Music Economics & Strategy",
-    template: "%s | Artist Daily News",
+    default: "Artispreneur — The Intelligence Platform for Independent Music Professionals",
+    template: "%s | Artispreneur · Artist Daily News",
   },
   description:
-    "Institutional music business intelligence, daily streaming royalty indices, catalogue valuation multiples, AI music tech investigations, and official press pass accreditation for independent creators.",
+    "Join 35,000+ independent artists, managers, and labels. Daily music business intelligence, streaming royalty calculators, catalogue valuation data, AI copilot, press credentials, and exclusive partner deals.",
   keywords: [
     "music business news",
-    "independent artist",
+    "independent artist platform",
     "music publishing",
     "streaming royalties",
     "spotify algorithm",
@@ -43,10 +43,11 @@ export const metadata: Metadata = {
     "music press pass",
     "artist grants",
     "music industry intelligence",
+    "artispreneur",
   ],
-  authors: [{ name: "Artist Daily News Editorial Board", url: "https://artistdailynews.com" }],
+  authors: [{ name: "Artispreneur Editorial Board", url: "https://artistdailynews.com" }],
   creator: "Artispreneur Media Network",
-  publisher: "Artist Daily News Publishing Ltd.",
+  publisher: "Artispreneur Publishing",
   metadataBase: new URL("https://artistdailynews.com"),
   alternates: {
     canonical: "https://artistdailynews.com",
@@ -55,17 +56,17 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Artist Daily News (ADN) — The Front Page of the Independent Music World",
+    title: "Artispreneur — The Intelligence Platform for Independent Music Professionals",
     description:
-      "Institutional music business intelligence, streaming royalty benchmarks, catalogue deals, and DIY strategy.",
+      "Daily music business intelligence, streaming benchmarks, catalogue data, and DIY strategy for independent creators.",
     url: "https://artistdailynews.com",
-    siteName: "Artist Daily News",
+    siteName: "Artispreneur · Artist Daily News",
     images: [
       {
         url: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80",
         width: 1200,
         height: 630,
-        alt: "Artist Daily News (ADN)",
+        alt: "Artispreneur · Artist Daily News",
       },
     ],
     locale: "en_US",
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Artist Daily News (ADN)",
+    title: "Artispreneur · Artist Daily News",
     description: "Daily music business intelligence for independent creators and indie labels.",
     site: "@artistdailynews",
     creator: "@artispreneur",
@@ -101,7 +102,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "NewsMediaOrganization",
     name: "Artist Daily News",
-    alternateName: "ADN",
+    alternateName: ["ADN", "Artispreneur"],
     url: "https://artistdailynews.com",
     logo: "https://artistdailynews.com/artispreneur-logo.png",
     sameAs: [
@@ -118,7 +119,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`dark ${newsreader.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`light ${newsreader.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -130,7 +131,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#08090D] text-[#F4F4F6] font-sans antialiased selection:bg-[#D4FF00] selection:text-black">
+      <body className="min-h-screen flex flex-col font-sans antialiased">
         <AuthProvider>
           <AudioProvider>
             <ReadingProgressBar />

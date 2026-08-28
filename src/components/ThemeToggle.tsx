@@ -4,36 +4,39 @@ import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
 
 export function ThemeToggle() {
-  const [isLight, setIsLight] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("adn-theme");
-    if (saved === "light") {
-      setIsLight(true);
-      document.documentElement.classList.add("light");
+    if (saved === "dark") {
+      setIsDark(true);
+      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add("dark");
     }
   }, []);
 
   const toggleTheme = () => {
-    if (isLight) {
-      document.documentElement.classList.remove("light");
-      localStorage.setItem("adn-theme", "dark");
-      setIsLight(false);
-    } else {
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
       document.documentElement.classList.add("light");
       localStorage.setItem("adn-theme", "light");
-      setIsLight(true);
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("adn-theme", "dark");
+      setIsDark(true);
     }
   };
 
   return (
     <button
       onClick={toggleTheme}
-      title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+      title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
       aria-label="Toggle visual theme"
-      className="p-2 rounded-full text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors border border-slate-800"
+      className="p-2 rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors border border-[var(--border-color)]"
     >
-      {isLight ? <Moon className="w-4 h-4 text-amber-500" /> : <Sun className="w-4 h-4 text-yellow-400" />}
+      {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-500" />}
     </button>
   );
 }
