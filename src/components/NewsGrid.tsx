@@ -11,10 +11,11 @@ import Link from "next/link";
 interface NewsGridProps {
   initialArticles: Article[];
   onQuickRead: (article: Article) => void;
+  defaultCategory?: CategoryType | "all";
 }
 
-export function NewsGrid({ initialArticles, onQuickRead }: NewsGridProps) {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | "all">("all");
+export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all" }: NewsGridProps) {
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | "all">(defaultCategory);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"latest" | "breaking">("latest");
 

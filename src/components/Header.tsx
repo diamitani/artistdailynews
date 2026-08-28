@@ -235,75 +235,177 @@ export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {
 
         {/* Mobile Drawer Menu */}
         {mobileMenuOpen && (
-          <div className="xl:hidden bg-[#0A0C14] border-b border-slate-800 px-4 pt-3 pb-6 space-y-3">
-            <nav className="flex flex-col space-y-2 text-sm font-medium text-slate-300">
-              <Link
-                href="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-white font-bold"
-              >
-                Front Page (Live Feed)
-              </Link>
-              <Link
-                href="/network"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-amber-300 font-bold flex items-center space-x-2"
-              >
-                <Gift className="w-4 h-4" />
-                <span>Artispreneur Network & Partner Deals</span>
-              </Link>
-              <Link
-                href="/chat"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-[#D4FF00] font-bold flex items-center space-x-2"
-              >
-                <Bot className="w-4 h-4" />
-                <span>ADN Music Business AI Copilot</span>
-              </Link>
-              <Link
-                href="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-white flex items-center space-x-2"
-              >
-                <User className="w-4 h-4" />
-                <span>Creator Dashboard & Saved Briefings</span>
-              </Link>
-              <Link
-                href="/pricing"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-amber-400"
-              >
-                ⭐ VIP Memberships ($19/mo)
-              </Link>
-              <Link
-                href="/topics/financial"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-emerald-400"
-              >
-                💰 Royalties & Catalogue Deals
-              </Link>
-              <Link
-                href="/topics/streaming"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-blue-400"
-              >
-                📻 Streaming & Playlists
-              </Link>
-              <Link
-                href="/tools"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-emerald-300"
-              >
-                📊 Royalty & Release Blueprint Calculators
-              </Link>
-              <Link
-                href="/press-pass"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-md hover:bg-slate-800 text-purple-400"
-              >
-                🎟️ Apply for Official Press Pass
-              </Link>
-            </nav>
+          <div className="xl:hidden bg-[#0A0C14] border-b border-slate-800 px-4 pt-3 pb-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div className="space-y-1">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 px-3">
+                Main Navigation
+              </span>
+              <nav className="flex flex-col space-y-1 text-sm font-medium text-slate-300">
+                <Link
+                  href="/"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-white font-bold"
+                >
+                  Front Page (Live Feed)
+                </Link>
+                <Link
+                  href="/chat"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-[#D4FF00] font-bold flex items-center space-x-2"
+                >
+                  <Bot className="w-4 h-4" />
+                  <span>ADN Music Business AI Copilot</span>
+                </Link>
+                <Link
+                  href="/network"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-amber-300 font-bold flex items-center space-x-2"
+                >
+                  <Gift className="w-4 h-4" />
+                  <span>Artispreneur Network & Partner Deals</span>
+                </Link>
+                <Link
+                  href="/pricing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-amber-400 font-bold"
+                >
+                  ⭐ VIP Pro Membership ($19/mo)
+                </Link>
+                <Link
+                  href="/tools"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-emerald-400 flex items-center space-x-2"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span>Royalty & Valuation Financial Lab</span>
+                </Link>
+                <Link
+                  href="/press-pass"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-purple-400 flex items-center space-x-2"
+                >
+                  <Ticket className="w-4 h-4" />
+                  <span>Official Press Pass Accreditation</span>
+                </Link>
+                <Link
+                  href="/podcasts"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-cyan-400 flex items-center space-x-2"
+                >
+                  <Radio className="w-4 h-4" />
+                  <span>Podcasts & Masterclass Audio</span>
+                </Link>
+                <Link
+                  href="/newsletters"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-md hover:bg-slate-800 text-slate-300 flex items-center space-x-2"
+                >
+                  <Newspaper className="w-4 h-4" />
+                  <span>Daily Dispatch Newsletter Archive</span>
+                </Link>
+              </nav>
+            </div>
+
+            <div className="space-y-1 pt-2 border-t border-slate-800">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 px-3">
+                Channel Desks
+              </span>
+              <nav className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs font-mono text-slate-300">
+                <Link
+                  href="/topics/financial"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-emerald-400"
+                >
+                  💰 Royalties & Catalogues
+                </Link>
+                <Link
+                  href="/topics/streaming"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-blue-400"
+                >
+                  📻 Streaming & Playlists
+                </Link>
+                <Link
+                  href="/topics/tech-ai"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-purple-400"
+                >
+                  🤖 AI & Music Tech
+                </Link>
+                <Link
+                  href="/topics/marketing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-pink-400"
+                >
+                  📈 TikTok & Viral Growth
+                </Link>
+                <Link
+                  href="/topics/legal"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-amber-400"
+                >
+                  ⚖️ Legal & Copyright
+                </Link>
+                <Link
+                  href="/topics/podcasts"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-cyan-400"
+                >
+                  🎙️ Podcasts & Interviews
+                </Link>
+                <Link
+                  href="/topics/tutorials"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-teal-400"
+                >
+                  🎓 DIY Masterclasses
+                </Link>
+                <Link
+                  href="/topics/opportunities"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-[#D4FF00]"
+                >
+                  🎟️ Press Passes & Grants
+                </Link>
+              </nav>
+            </div>
+
+            <div className="space-y-1 pt-2 border-t border-slate-800">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 px-3">
+                Account & Admin
+              </span>
+              <nav className="flex flex-col space-y-1 text-xs font-mono text-slate-400">
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 text-white flex items-center space-x-2"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  <span>Creator Dashboard</span>
+                </Link>
+                <Link
+                  href="/billing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 hover:text-white"
+                >
+                  Manage Billing & Invoices
+                </Link>
+                <Link
+                  href="/advertise"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 hover:text-white"
+                >
+                  Media Kit & Advertising Rates
+                </Link>
+                <Link
+                  href="/admin/newsdesk"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-1.5 rounded hover:bg-slate-800 hover:text-white"
+                >
+                  Newsroom Command Studio
+                </Link>
+              </nav>
+            </div>
           </div>
         )}
       </header>

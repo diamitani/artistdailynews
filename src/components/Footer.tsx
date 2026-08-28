@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Ticket, Radio, Rss, ShieldCheck, Mail, ArrowUpRight, Gift, ExternalLink } from "lucide-react";
+import { Ticket, Radio, Rss, ShieldCheck, Mail, ArrowUpRight, Gift, ExternalLink, Bot, BarChart3, Newspaper, Megaphone } from "lucide-react";
 import { CATEGORIES } from "@/lib/feeds-config";
 import { ArtispreneurLogo } from "./ArtispreneurLogo";
 
@@ -53,16 +53,16 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Col 2: Topics */}
+          {/* Col 2: Topics / Desks */}
           <div className="space-y-3">
             <h4 className="text-xs font-mono uppercase tracking-widest text-white font-bold">
-              Channels
+              Channel Desks
             </h4>
             <ul className="space-y-2 text-xs">
-              {CATEGORIES.slice(0, 5).map((cat) => (
+              {CATEGORIES.map((cat) => (
                 <li key={cat.id}>
-                  <Link href={`/topics/${cat.slug}`} className="hover:text-[#D4FF00] transition-colors">
-                    {cat.name}
+                  <Link href={`/topics/${cat.slug}`} className="hover:text-[#D4FF00] transition-colors flex items-center justify-between">
+                    <span>{cat.name}</span>
                   </Link>
                 </li>
               ))}
@@ -76,29 +76,49 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/network" className="hover:text-amber-300 transition-colors text-amber-400 font-bold flex items-center space-x-1">
-                  <Gift className="w-3 h-3" />
+                <Link href="/network" className="hover:text-amber-300 transition-colors text-amber-400 font-bold flex items-center space-x-1.5">
+                  <Gift className="w-3.5 h-3.5" />
                   <span>Artispreneur Partner Deals</span>
                 </Link>
               </li>
               <li>
-                <Link href="/tools" className="hover:text-[#D4FF00] transition-colors text-emerald-400">
-                  Royalty & Stream Calculators
+                <Link href="/tools" className="hover:text-emerald-300 transition-colors text-emerald-400 flex items-center space-x-1.5">
+                  <BarChart3 className="w-3.5 h-3.5" />
+                  <span>Royalty & Stream Calculators</span>
                 </Link>
               </li>
               <li>
-                <Link href="/chat" className="hover:text-[#D4FF00] transition-colors text-[#D4FF00]">
-                  AI Music Business Copilot
+                <Link href="/chat" className="hover:text-[#D4FF00] transition-colors text-[#D4FF00] flex items-center space-x-1.5">
+                  <Bot className="w-3.5 h-3.5" />
+                  <span>AI Music Business Copilot</span>
                 </Link>
               </li>
               <li>
-                <Link href="/press-pass" className="hover:text-[#D4FF00] transition-colors">
-                  Press Pass Credentials
+                <Link href="/podcasts" className="hover:text-cyan-300 transition-colors text-cyan-400 flex items-center space-x-1.5">
+                  <Radio className="w-3.5 h-3.5" />
+                  <span>Podcasts & Audio Hub</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/newsletters" className="hover:text-slate-200 transition-colors flex items-center space-x-1.5">
+                  <Newspaper className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Daily Dispatch Archives</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/press-pass" className="hover:text-[#D4FF00] transition-colors flex items-center space-x-1.5">
+                  <Ticket className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Press Pass Accreditation</span>
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="hover:text-[#D4FF00] transition-colors">
                   VIP Membership Plans
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard" className="hover:text-[#D4FF00] transition-colors">
+                  Creator Dashboard
                 </Link>
               </li>
             </ul>
@@ -118,6 +138,16 @@ export function Footer() {
               <li>
                 <Link href="/advertise#sponsor-packages" className="hover:text-[#D4FF00] transition-colors">
                   Newsletter Sponsorships
+                </Link>
+              </li>
+              <li>
+                <Link href="/billing" className="hover:text-[#D4FF00] transition-colors">
+                  Subscription & Invoices Portal
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/newsdesk" className="hover:text-[#D4FF00] transition-colors">
+                  Newsroom Command Studio
                 </Link>
               </li>
               <li>
@@ -143,11 +173,15 @@ export function Footer() {
           <div>
             &copy; {new Date().getFullYear()} ArtistDailyNews.com &bull; Powered by <a href="https://artispreneur.com" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline font-bold">Artispreneur.com</a>. All rights reserved.
           </div>
-          <div className="flex items-center space-x-6">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link href="/" className="hover:text-slate-300">Home</Link>
             <Link href="/network" className="hover:text-amber-300">Partner Deals</Link>
+            <Link href="/podcasts" className="hover:text-cyan-300">Podcasts</Link>
+            <Link href="/newsletters" className="hover:text-slate-300">Newsletter</Link>
             <Link href="/press-pass" className="hover:text-slate-300">Press Accreditation</Link>
             <Link href="/advertise" className="hover:text-slate-300">Advertise</Link>
             <Link href="/pricing" className="hover:text-slate-300">VIP Pro</Link>
+            <Link href="/admin/newsdesk" className="hover:text-slate-300">Newsdesk</Link>
             <span className="font-mono text-slate-600">v1.2.0-ARTISPRENEUR</span>
           </div>
         </div>

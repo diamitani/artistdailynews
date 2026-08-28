@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { INITIAL_FEEDS } from "@/lib/feeds-config";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
@@ -203,7 +204,9 @@ export default function AdminNewsdeskPage() {
                       <span>&bull;</span>
                       <span>{art.sourceName}</span>
                     </div>
-                    <h4 className="font-bold text-white text-sm">{art.title}</h4>
+                    <h4 className="font-bold text-white text-sm hover:text-[#D4FF00] transition-colors">
+                      <Link href={`/news/${art.slug}`}>{art.title}</Link>
+                    </h4>
                     <p className="text-xs text-slate-400 line-clamp-1">{art.takeaway}</p>
                   </div>
 

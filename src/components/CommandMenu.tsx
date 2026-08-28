@@ -32,11 +32,16 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
 
   // Quick Action Shortcuts
   const quickActions = [
-    { title: "Streaming Royalty Calculator", icon: Calculator, href: "/tools", category: "Tools" },
+    { title: "ADN Music Business AI Copilot", icon: Sparkles, href: "/chat", category: "AI Assistant" },
+    { title: "Artispreneur Partner Deals & Discounts", icon: Sparkles, href: "/network", category: "Deals" },
+    { title: "Streaming Royalty & NPS Calculator", icon: Calculator, href: "/tools", category: "Financial Lab" },
     { title: "Apply for Official Press Pass", icon: Ticket, href: "/press-pass", category: "Credentials" },
-    { title: "Music Business Podcasts", icon: Radio, href: "/podcasts", category: "Audio" },
+    { title: "VIP Pro Membership Plans", icon: Sparkles, href: "/pricing", category: "Memberships" },
+    { title: "Music Business Podcasts", icon: Radio, href: "/podcasts", category: "Audio Hub" },
     { title: "Daily Newsletter Archives", icon: Newspaper, href: "/newsletters", category: "Dispatches" },
-    { title: "Advertise / Media Kit", icon: Sparkles, href: "/advertise", category: "Sponsorship" },
+    { title: "Advertise / Media Kit & Rate Card", icon: Sparkles, href: "/advertise", category: "Sponsorship" },
+    { title: "Creator Dashboard & Saved Briefings", icon: Compass, href: "/dashboard", category: "Account" },
+    { title: "Subscription & Billing Portal", icon: Compass, href: "/billing", category: "Account" },
     { title: "AI Newsroom Command Studio", icon: Compass, href: "/admin/newsdesk", category: "Admin" },
   ];
 

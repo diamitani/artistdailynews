@@ -10,6 +10,12 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export async function generateStaticParams() {
+  return MOCK_ARTICLES.map((art) => ({
+    slug: art.slug,
+  }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = MOCK_ARTICLES.find((a) => a.slug === slug);
@@ -59,13 +65,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = MOCK_ARTICLES.find((a) => a.slug === slug) || MOCK_ARTICLES[0];
+  const article = MOCK_ARTICLES.find((a) => a.slug === slug);
 
   if (!article) {
     notFound();
   }
 
-  const relatedArticles = MOCK_ARTICLES.filter((a) => a.id !== article.id && a.category === article.category).slice(0, 3);
+  const relatedArticles = MOCK_ARTICLES.filter(
+    (a) => a.id !== article.id && a.category === article.category
+  ).slice(0, 3);
 
   // Full Institutional NewsArticle JSON-LD Schema
   const jsonLd = {
@@ -130,4 +138,3 @@ export default async function ArticlePage({ params }: Props) {
     </div>
   );
 }
-

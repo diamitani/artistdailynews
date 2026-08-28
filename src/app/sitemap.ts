@@ -44,16 +44,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/advertise`,
+      url: `${baseUrl}/newsletters`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
+      changeFrequency: "daily",
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/podcasts`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/advertise`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/dashboard`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/billing`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/admin/newsdesk`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.6,
     },
   ];
 
