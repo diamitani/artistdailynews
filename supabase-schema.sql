@@ -183,3 +183,81 @@ CREATE POLICY "Admin full subscribers access" ON subscribers USING (auth.role() 
 CREATE POLICY "Admin full press_pass access" ON press_pass_applications USING (auth.role() = 'service_role');
 CREATE POLICY "Admin full sponsorships access" ON sponsorships USING (auth.role() = 'service_role');
 CREATE POLICY "Admin full newsletter access" ON newsletter_editions USING (auth.role() = 'service_role');
+
+-- ============================================================================
+-- Artist Daily News (ADN) Tables
+-- ============================================================================
+
+CREATE TYPE adn_tier_enum AS ENUM ('A', 'B', 'C');
+CREATE TYPE adn_platform_enum AS ENUM ('web', 'email', 'youtube', 'tiktok', 'instagram', 'x', 'threads', 'podcast', 'spotify', 'reddit');
+CREATE TYPE adn_media_type_enum AS ENUM ('article', 'video', 'podcast', 'social');
+CREATE TYPE adn_pillar_enum AS ENUM ('culture', 'business', 'ideas');
+
+CREATE TABLE IF NOT EXISTS adn_items (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  url TEXT NOT NULL UNIQUE,
+  canonical_url TEXT,
+  title TEXT NOT NULL,
+  dek TEXT,
+  source_name TEXT NOT NULL,
+  source_tier adn_tier_enum,
+  platform adn_platform_enum,
+  media_type adn_media_type_enum,
+  pillar adn_pillar_enum,
+  secondary_pillars adn_pillar_enum[] DEFAULT '{}',
+  genres TEXT[] DEFAULT '{}',
+  geography TEXT[] DEFAULT '{}',
+  entities TEXT[] DEFAULT '{}',
+  why_it_matters TEXT,
+  action TEXT,
+  signal_score INT DEFAULT 0 CHECK (signal_score >= 0 AND signal_score <= 100),
+  freshness TIMESTAMPTZ,
+  ingested_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  used_in_daily_id UUID, -- FK to adn_issues added later
+  nsfw_or_rights_risk BOOLEAN DEFAULT false,
+  quote_ok BOOLEAN DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS adn_issues (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  issue_date DATE NOT NULL UNIQUE,
+  kicker adn_pillar_enum NOT NULL,
+  lead_item_id UUID REFERENCES adn_items(id),
+  rails JSONB NOT NULL DEFAULT '{"culture": [], "business": [], "ideas": []}'::jsonb,
+  watch JSONB,
+  listen JSONB,
+  email_subject TEXT,
+  email_preheader TEXT,
+  published_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE adn_items ADD CONSTRAINT fk_adn_issues FOREIGN KEY (used_in_daily_id) REFERENCES adn_issues(id);
+
+CREATE TABLE IF NOT EXISTS adn_newsrooms (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL, -- references auth.users(id) in a real setup
+  issue_id UUID REFERENCES adn_issues(id),
+  created_for_date DATE NOT NULL,
+  items JSONB NOT NULL DEFAULT '[]'::jsonb, -- the 7 items
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS adn_shares (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  newsroom_id UUID REFERENCES adn_newsrooms(id),
+  share_url_id TEXT UNIQUE NOT NULL,
+  expires_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE adn_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE adn_issues ENABLE ROW LEVEL SECURITY;
+ALTER TABLE adn_newsrooms ENABLE ROW LEVEL SECURITY;
+ALTER TABLE adn_shares ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public adn_items read access" ON adn_items FOR SELECT USING (true);
+CREATE POLICY "Public adn_issues read access" ON adn_issues FOR SELECT USING (true);
+CREATE POLICY "Public adn_shares read access" ON adn_shares FOR SELECT USING (true);
+-- Auth users can read their own newsroom
+CREATE POLICY "Auth adn_newsrooms read access" ON adn_newsrooms FOR SELECT USING (true); -- simplify for v1, should be auth.uid() = user_id
+

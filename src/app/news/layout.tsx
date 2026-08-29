@@ -1,0 +1,40 @@
+import React from "react";
+import Link from "next/link";
+
+export default function NewsLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-[#F6F1E8] text-[#111111] font-sans">
+      <header className="border-b-4 border-[#111111] py-6 px-4 md:px-8 bg-[#F6F1E8]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end">
+          <div>
+            <h1 className="font-sans font-black text-5xl tracking-tighter uppercase leading-none text-[#111111]">
+              <Link href="/news">ADN</Link>
+              <span className="font-serif font-normal text-3xl ml-3 tracking-normal">Artist Daily News</span>
+            </h1>
+            <p className="font-sans text-sm font-medium mt-1 text-[#111111]/70 uppercase tracking-widest">
+              An Artispreneur publication
+            </p>
+          </div>
+          <nav className="flex space-x-6 mt-4 md:mt-0 font-sans font-semibold text-sm uppercase">
+            <Link href="/news" className="hover:text-[#C1121F]">Today</Link>
+            <Link href="/news/articles?pillar=culture" className="hover:text-[#C1121F]">Culture</Link>
+            <Link href="/news/articles?pillar=business" className="hover:text-[#C1121F]">Business</Link>
+            <Link href="/news/articles?pillar=ideas" className="hover:text-[#C1121F]">Ideas</Link>
+            <Link href="/news/articles" className="hover:text-[#C1121F]">Articles</Link>
+            <Link href="/news/newsroom" className="text-[#C1121F] hover:underline">Newsroom</Link>
+          </nav>
+        </div>
+      </header>
+      <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        {children}
+      </main>
+      <footer className="border-t border-[#D9D1C4] mt-12 py-8 text-center text-sm font-sans text-[#111111]/70">
+        <p>&copy; {new Date().getFullYear()} Artispreneur. Art means business.</p>
+        <div className="mt-2 space-x-4">
+          <Link href="/news/about" className="hover:text-[#C1121F]">About</Link>
+          <Link href="/news/archive" className="hover:text-[#C1121F]">Archive</Link>
+        </div>
+      </footer>
+    </div>
+  );
+}

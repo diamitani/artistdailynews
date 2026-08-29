@@ -1,0 +1,157 @@
+{
+  "name": "ADN RSS Ingest (Weight A Sources)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "18c21a47-a4bb-4e94-b778-f73dcdebe1f1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "urls": "https://www.billboard.com/c/music/feed/\nhttps://pitchfork.com/feed/feed-news/rss\nhttps://www.musicbusinessworldwide.com/feed/"
+      },
+      "id": "e30129bc-db34-406a-a2fc-349fc13c75ab",
+      "name": "RSS Read (A-Tier)",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "url",
+              "value": "={{ $json.link }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "name": "excerpt",
+              "value": "={{ $json.contentSnippet }}"
+            },
+            {
+              "name": "published_at",
+              "value": "={{ $json.pubDate }}"
+            },
+            {
+              "name": "source_tier",
+              "value": "A"
+            },
+            {
+              "name": "platform",
+              "value": "web"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f583ebbe-9877-4c40-9a3b-2f0ef0cba002",
+      "name": "Format Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://news.artispreneur.com/api/webhooks/n8n-ingest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_N8N_WEBHOOK_SECRET"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "23c21a47-a4bb-4e94-b778-f73dcdebe1f1",
+      "name": "Send to ADN Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        900,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Read (A-Tier)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read (A-Tier)": {
+      "main": [
+        [
+          {
+            "node": "Format Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Payload": {
+      "main": [
+        [
+          {
+            "node": "Send to ADN Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f78ec301-3829-4d69-a1d2-7c8bb5444a82",
+  "id": "eK3gX1gR5S2kP9aQ",
+  "meta": {
+    "instanceId": "cb486f059c3ad80e0e0ab393b8e734bc7e828e104eec2476d1e441ea3d7edc46"
+  },
+  "tags": []
+}
