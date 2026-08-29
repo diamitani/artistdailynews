@@ -1,11 +1,19 @@
 import React from 'react';
 import { ArticleCard } from '@/components/news/ArticleCard';
+import { getNewsroomForUser } from '@/lib/adn-db';
 
-export default function NewsroomPage() {
-  const currentDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+// Using a mock auth user id for now until standard auth is wired
+const MOCK_USER_ID = "00000000-0000-0000-0000-000000000000";
 
-  // Mock personalized items
-  const items = [
+export default async function NewsroomPage() {
+  const newsroom = await getNewsroomForUser(MOCK_USER_ID);
+
+  const currentDate = newsroom?.created_for_date 
+    ? new Date(newsroom.created_for_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+    : new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Mock personalized items fallback
+  const mockItems = [
     {
       platform: 'Web',
       mediaType: 'Article',
@@ -33,8 +41,19 @@ export default function NewsroomPage() {
       timestamp: '2 days ago',
       url: '#'
     },
-    // ... 4 more to make 7 total, but we'll render just 3 for the mock
   ];
+
+  const itemsToRender = newsroom?.items?.length > 0
+    ? newsroom.items.map((item: any) => ({
+        platform: item.platform,
+        mediaType: item.media_type || 'Article',
+        title: item.title,
+        dek: item.dek || '',
+        whyItMatters: item.why_it_matters || item.why_this_is_for_you || '',
+        timestamp: new Date().toLocaleDateString(), // simplified
+        url: item.url
+      }))
+    : mockItems;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -61,7 +80,7 @@ export default function NewsroomPage() {
       </div>
 
       <div className="space-y-6">
-        {items.map((item, idx) => (
+        {itemsToRender.map((item: any, idx: number) => (
           <ArticleCard key={idx} {...item} />
         ))}
       </div>
@@ -78,3 +97,4 @@ export default function NewsroomPage() {
     </div>
   );
 }
+

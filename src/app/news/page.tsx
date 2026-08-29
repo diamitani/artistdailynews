@@ -1,40 +1,70 @@
 import React from 'react';
 import Link from 'next/link';
+import { getLatestIssue } from '@/lib/adn-db';
 
-export default function DailyPostHomepage() {
-  const currentDate = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+export default async function DailyPostHomepage() {
+  const issue = await getLatestIssue();
   
+  // Use DB issue if available, else mock
+  const issueDate = issue?.issue_date 
+    ? new Date(issue.issue_date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
+    : new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+    
+  const kicker = issue?.kicker || 'CULTURE';
+  const headline = issue?.lead_item?.title || 'The sound that ate Friday';
+  const dek = issue?.lead_item?.dek || 'One sentence, what happened + why an independent should care.';
+  const bodyParagraphs = issue?.lead_item?.why_it_matters 
+    ? [issue.lead_item.why_it_matters]
+    : [
+        "The first paragraph contains the fact. We do not open with atmosphere. We state the news clearly, avoiding consultant-speak and generic hype.",
+        "The second and third paragraphs delve into the zeitgeist or the money. This is where we break down the economics of the platform change, or the cultural rupture that is happening in real time. We use concrete examples.",
+        "Every claim needs a source URL. If we cannot source it, we drop it. The music industry changes, but we focus on what exactly happened today."
+      ];
+  const action = issue?.lead_item?.action || "Check your ASCAP / BMI registration and ensure your splits are documented.";
+
+  // Rails parsing
+  const rails = issue?.rails || {
+    culture: [
+      { title: "TikTok's new algorithm favors micro-genres", platform: "TikTok", time: "2 hours ago" },
+      { title: "Pitchfork names new EIC", platform: "Web", time: "5 hours ago" },
+      { title: "Chicago's Radius announces fall lineup", platform: "Web", time: "12 hours ago" }
+    ],
+    business: [
+      { title: "Spotify adjusts mechanical royalty rates", platform: "Web", time: "1 hour ago" },
+      { title: "Universal Music Q2 earnings breakdown", platform: "Email", time: "4 hours ago" },
+      { title: "Live Nation faces new regulatory scrutiny", platform: "Web", time: "8 hours ago" }
+    ],
+    ideas: [
+      { title: "Questlove on the anatomy of a groove", platform: "Podcast", time: "Yesterday" },
+      { title: "How to build an email list from scratch", platform: "YouTube", time: "2 days ago" }
+    ]
+  };
+
   return (
     <div className="border-t-2 border-[#111111] pt-4">
       {/* Issue Header */}
       <div className="flex justify-between font-sans text-xs font-bold text-[#111111] uppercase tracking-widest border-b-2 border-[#111111] pb-4 mb-8">
-        <span>{currentDate} · ISSUE 001 · CHICAGO / GLOBAL</span>
+        <span>{issueDate} · ISSUE {issue ? issue.id.slice(0, 3).toUpperCase() : '001'} · CHICAGO / GLOBAL</span>
       </div>
 
       {/* Hero Essay Section */}
       <section className="mb-12 max-w-3xl mx-auto">
         <div className="bg-[#111111] text-[#F6F1E8] inline-block px-3 py-1 font-sans font-bold text-xs uppercase tracking-widest mb-4">
-          Kicker: CULTURE
+          Kicker: {kicker}
         </div>
         <h2 className="font-serif text-5xl leading-tight font-bold text-[#111111] mb-4">
-          The sound that ate Friday
+          {headline}
         </h2>
         <p className="font-sans text-lg font-medium text-[#C1121F] mb-6 border-l-4 border-[#C1121F] pl-4">
-          One sentence, what happened + why an independent should care.
+          {dek}
         </p>
         
         <div className="font-serif text-lg leading-relaxed text-[#111111]/90 space-y-5">
-          <p>
-            The first paragraph contains the fact. We do not open with atmosphere. We state the news clearly, avoiding consultant-speak and generic hype.
-          </p>
-          <p>
-            The second and third paragraphs delve into the zeitgeist or the money. This is where we break down the economics of the platform change, or the cultural rupture that is happening in real time. We use concrete examples.
-          </p>
-          <p>
-            Every claim needs a source URL. If we cannot source it, we drop it. The music industry changes, but we focus on what exactly happened today.
-          </p>
+          {bodyParagraphs.map((p: string, idx: number) => (
+            <p key={idx}>{p}</p>
+          ))}
           <p className="font-bold">
-            Action: Check your ASCAP / BMI registration and ensure your splits are documented.
+            Action: {action}
           </p>
           <p className="italic border-t border-[#D9D1C4] pt-4 mt-8">
             "Art means business. Protect your catalog before the weekend hits."
@@ -42,9 +72,9 @@ export default function DailyPostHomepage() {
         </div>
 
         <div className="mt-8 flex space-x-4">
-          <button className="bg-[#111111] text-[#F6F1E8] px-6 py-2 font-sans font-bold uppercase text-sm hover:bg-[#C1121F] transition-colors">
+          <Link href={issue?.lead_item?.url || "#"} className="bg-[#111111] text-[#F6F1E8] px-6 py-2 font-sans font-bold uppercase text-sm hover:bg-[#C1121F] transition-colors inline-block">
             Read Full
-          </button>
+          </Link>
           <button className="border border-[#111111] text-[#111111] px-6 py-2 font-sans font-bold uppercase text-sm hover:bg-[#D9D1C4] transition-colors">
             Listen 4:00
           </button>
@@ -59,9 +89,9 @@ export default function DailyPostHomepage() {
             Culture
           </h3>
           <div className="space-y-4">
-            <RailItem title="TikTok's new algorithm favors micro-genres" platform="TikTok" time="2 hours ago" />
-            <RailItem title="Pitchfork names new EIC" platform="Web" time="5 hours ago" />
-            <RailItem title="Chicago's Radius announces fall lineup" platform="Web" time="12 hours ago" />
+            {rails.culture?.map((item: any, idx: number) => (
+              <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+            ))}
           </div>
         </div>
 
@@ -71,9 +101,9 @@ export default function DailyPostHomepage() {
             Business
           </h3>
           <div className="space-y-4">
-            <RailItem title="Spotify adjusts mechanical royalty rates" platform="Web" time="1 hour ago" />
-            <RailItem title="Universal Music Q2 earnings breakdown" platform="Email" time="4 hours ago" />
-            <RailItem title="Live Nation faces new regulatory scrutiny" platform="Web" time="8 hours ago" />
+            {rails.business?.map((item: any, idx: number) => (
+              <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+            ))}
           </div>
         </div>
 
@@ -83,8 +113,9 @@ export default function DailyPostHomepage() {
             Ideas
           </h3>
           <div className="space-y-4">
-            <RailItem title="Questlove on the anatomy of a groove" platform="Podcast" time="Yesterday" />
-            <RailItem title="How to build an email list from scratch" platform="YouTube" time="2 days ago" />
+            {rails.ideas?.map((item: any, idx: number) => (
+              <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+            ))}
           </div>
         </div>
       </section>
@@ -116,3 +147,4 @@ function RailItem({ title, platform, time }: { title: string, platform: string, 
     </Link>
   );
 }
+

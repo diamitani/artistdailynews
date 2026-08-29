@@ -1,11 +1,18 @@
 import React from 'react';
 import { ArticleCard } from '@/components/news/ArticleCard';
+import { getArticles } from '@/lib/adn-db';
 
-export default function ArticlesPage() {
+export default async function ArticlesPage({ searchParams }: { searchParams: { pillar?: string, platform?: string } }) {
   const filters = ['All', 'Culture', 'Business', 'Ideas', 'Web', 'TikTok', 'YouTube', 'Podcast', 'Instagram'];
+  
+  // Await searchParams for Next.js 15+ if needed, assuming synchronous access here is okay for now or handled by Next framework version constraints.
+  const params = await Promise.resolve(searchParams);
+  
+  // Fetch from DB
+  const fetchedArticles = await getArticles(30, params?.pillar, params?.platform);
 
-  // Mock data for articles
-  const articles = [
+  // Mock data for articles fallback
+  const mockArticles = [
     {
       platform: 'Web',
       mediaType: 'Article',
@@ -35,20 +42,33 @@ export default function ArticlesPage() {
     }
   ];
 
+  const articlesToRender = fetchedArticles?.length > 0 
+    ? fetchedArticles.map(a => ({
+        platform: a.platform,
+        mediaType: a.media_type,
+        title: a.title,
+        dek: a.dek || '',
+        whyItMatters: a.why_it_matters || '',
+        timestamp: new Date(a.freshness || a.ingested_at).toLocaleDateString(),
+        url: a.url
+      }))
+    : mockArticles;
+
   return (
     <div>
       <div className="flex items-center justify-between border-b-2 border-[#111111] pb-4 mb-8">
         <h2 className="font-serif font-bold text-4xl text-[#111111]">Articles</h2>
         <div className="hidden md:flex space-x-2">
           {filters.map(f => (
-            <button key={f} className={`px-3 py-1 font-sans text-xs font-bold uppercase tracking-wider border ${f === 'All' ? 'bg-[#111111] text-[#F6F1E8] border-[#111111]' : 'border-[#D9D1C4] text-[#111111] hover:border-[#111111]'}`}>
+            <a key={f} href={`/news/articles?${['Culture', 'Business', 'Ideas'].includes(f) ? `pillar=${f.toLowerCase()}` : `platform=${f.toLowerCase()}`}`} 
+               className={`px-3 py-1 font-sans text-xs font-bold uppercase tracking-wider border ${(params?.pillar === f.toLowerCase() || params?.platform === f.toLowerCase() || (!params?.pillar && !params?.platform && f === 'All')) ? 'bg-[#111111] text-[#F6F1E8] border-[#111111]' : 'border-[#D9D1C4] text-[#111111] hover:border-[#111111]'}`}>
               {f}
-            </button>
+            </a>
           ))}
         </div>
       </div>
       
-      {/* Mobile filter dropdown (mocked) */}
+      {/* Mobile filter dropdown */}
       <div className="md:hidden mb-6">
         <select className="w-full border-2 border-[#111111] bg-[#F6F1E8] p-2 font-sans font-bold uppercase text-sm">
           {filters.map(f => <option key={f}>{f}</option>)}
@@ -56,7 +76,7 @@ export default function ArticlesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {articles.map((article, idx) => (
+        {articlesToRender.map((article: any, idx: number) => (
           <ArticleCard key={idx} {...article} />
         ))}
       </div>
@@ -69,3 +89,4 @@ export default function ArticlesPage() {
     </div>
   );
 }
+
