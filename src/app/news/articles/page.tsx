@@ -2,11 +2,11 @@ import React from 'react';
 import { ArticleCard } from '@/components/news/ArticleCard';
 import { getArticles } from '@/lib/adn-db';
 
-export default async function ArticlesPage({ searchParams }: { searchParams: { pillar?: string, platform?: string } }) {
+export default async function ArticlesPage({ searchParams }: { searchParams: Promise<{ pillar?: string, platform?: string }> }) {
   const filters = ['All', 'Culture', 'Business', 'Ideas', 'Web', 'TikTok', 'YouTube', 'Podcast', 'Instagram'];
   
-  // Await searchParams for Next.js 15+ if needed, assuming synchronous access here is okay for now or handled by Next framework version constraints.
-  const params = await Promise.resolve(searchParams);
+  // Await searchParams for Next.js 15
+  const params = await searchParams;
   
   // Fetch from DB
   const fetchedArticles = await getArticles(30, params?.pillar, params?.platform);

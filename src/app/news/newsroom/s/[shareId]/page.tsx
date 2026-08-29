@@ -4,11 +4,14 @@ import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder';
 const adnDb = createClient(supabaseUrl, supabaseKey);
 
-export default async function NewsroomSharePage({ params }: { params: { shareId: string } }) {
+export default async function NewsroomSharePage({ params }: { params: Promise<{ shareId: string }> }) {
+  // Await params for Next.js 15
+  const resolvedParams = await params;
+  
   // Fetch the share record
   const { data: share, error: shareError } = await adnDb
     .from('adn_shares')
@@ -19,7 +22,7 @@ export default async function NewsroomSharePage({ params }: { params: { shareId:
         user:user_id (name)
       )
     `)
-    .eq('share_url_id', params.shareId)
+    .eq('share_url_id', resolvedParams.shareId)
     .single();
 
   if (shareError || !share) {
