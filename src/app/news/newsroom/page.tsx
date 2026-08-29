@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArticleCard } from '@/components/news/ArticleCard';
+import { LiveRail } from '@/components/news/LiveRail';
 import { getNewsroomForUser } from '@/lib/adn-db';
 
 // Using a mock auth user id for now until standard auth is wired
@@ -55,6 +56,24 @@ export default async function NewsroomPage() {
       }))
     : mockItems;
 
+  // Mock Chicago Live Rail Data
+  const mockLiveEvents = [
+    {
+      artist: 'Saba',
+      venue: 'Radius',
+      date: new Date(Date.now() + 86400000 * 3).toISOString(), // +3 days
+      genres: ['hip-hop'],
+      ticketUrl: '#'
+    },
+    {
+      artist: 'DJ Seinfeld',
+      venue: 'Smartbar',
+      date: new Date(Date.now() + 86400000 * 5).toISOString(), // +5 days
+      genres: ['electronic'],
+      ticketUrl: '#'
+    }
+  ];
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Personalized Greeting Header */}
@@ -69,6 +88,9 @@ export default async function NewsroomPage() {
           A brief dedicated to you. Genre, city, and career stage. Shareable with your friends and network.
         </p>
       </div>
+      
+      {/* Live Rail Component */}
+      <LiveRail city="Chicago" events={mockLiveEvents} />
 
       <div className="flex justify-between items-end border-b-2 border-[#111111] pb-4 mb-8">
         <h3 className="font-sans font-black text-2xl uppercase text-[#111111]">

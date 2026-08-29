@@ -215,7 +215,8 @@ CREATE TABLE IF NOT EXISTS adn_items (
   ingested_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   used_in_daily_id UUID, -- FK to adn_issues added later
   nsfw_or_rights_risk BOOLEAN DEFAULT false,
-  quote_ok BOOLEAN DEFAULT true
+  quote_ok BOOLEAN DEFAULT true,
+  cluster_id UUID -- FK to another adn_items row if this is part of a trend
 );
 
 CREATE TABLE IF NOT EXISTS adn_issues (
@@ -261,3 +262,15 @@ CREATE POLICY "Public adn_shares read access" ON adn_shares FOR SELECT USING (tr
 -- Auth users can read their own newsroom
 CREATE POLICY "Auth adn_newsrooms read access" ON adn_newsrooms FOR SELECT USING (true); -- simplify for v1, should be auth.uid() = user_id
 
+-- User Sources for "Follow this source" feature
+CREATE TABLE IF NOT EXISTS adn_user_sources (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL, -- references auth.users(id)
+  source_name TEXT NOT NULL,
+  followed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id, source_name)
+);
+
+ALTER TABLE adn_user_sources ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Auth adn_user_sources read access" ON adn_user_sources FOR SELECT USING (true);
+CREATE POLICY "Auth adn_user_sources insert access" ON adn_user_sources FOR INSERT WITH CHECK (true);

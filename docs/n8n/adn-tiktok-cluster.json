@@ -1,0 +1,144 @@
+{
+  "name": "ADN TikTok Trend Clustering",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 23 * * *"
+            }
+          ]
+        }
+      },
+      "id": "e2f12345-cron-4a21-9d22-123456789cron",
+      "name": "Run at 11PM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://YOUR_NEXTJS_APP.vercel.app/api/webhooks/n8n-ingest?action=get_tiktoks_last_24h",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SECRET_KEY"
+            }
+          ]
+        }
+      },
+      "id": "dbfetch-1234-4a21-9d22-123456789abc",
+      "name": "Fetch TikToks from ADN DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "claude-3-5-sonnet-20240620"
+            },
+            {
+              "name": "system",
+              "value": "You are adn.cluster. You group 15-30 raw social media posts into unified Trend Clusters."
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\":\"user\",\"content\":\"{{ JSON.stringify($json.tiktoks) }}\"}]"
+            }
+          ]
+        }
+      },
+      "id": "anthropic-cluster-4g21-9f22-fedcba654321",
+      "name": "Anthropic adn.cluster",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR_NEXTJS_APP.vercel.app/api/webhooks/n8n-ingest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SECRET_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "agent",
+              "value": "adn.cluster"
+            },
+            {
+              "name": "payload",
+              "value": "={{ $json.content[0].text }}"
+            }
+          ]
+        }
+      },
+      "id": "webhookback-4h21-9g22-12345abcdefg",
+      "name": "Webhook to ADN Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Run at 11PM": {
+      "main": [
+        [
+          {
+            "node": "Fetch TikToks from ADN DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch TikToks from ADN DB": {
+      "main": [
+        [
+          {
+            "node": "Anthropic adn.cluster",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic adn.cluster": {
+      "main": [
+        [
+          {
+            "node": "Webhook to ADN Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
