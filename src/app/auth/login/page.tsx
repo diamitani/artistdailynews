@@ -8,23 +8,32 @@ import { Mail, Lock, Sparkles, ArrowRight, ShieldCheck, CheckCircle2 } from "luc
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
-  const [email, setEmail] = useState("artist@adn.media");
-  const [password, setPassword] = useState("••••••••");
+  const { signInWithPassword, signInWithOAuth } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      login(email, "Jordan Hayes", "Artist");
+    setError("");
+
+    try {
+      await signInWithPassword(email, password);
       router.push("/dashboard");
-    }, 600);
+    } catch (err: any) {
+      setError(err.message || "Failed to sign in");
+      setLoading(false);
+    }
   };
 
-  const handleOAuth = (provider: string) => {
-    login(`${provider.toLowerCase()}user@adn.media`, `${provider} Creator`, "Artist");
-    router.push("/dashboard");
+  const handleOAuth = async (provider: "google" | "spotify") => {
+    try {
+      await signInWithOAuth(provider);
+    } catch (err: any) {
+      setError(err.message || "Failed to sign in with OAuth");
+    }
   };
 
   return (
@@ -50,17 +59,26 @@ export default function LoginPage() {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-xs text-red-400">
+            {error}
+          </div>
+        )}
+
         {/* OAuth Buttons */}
         <div className="space-y-2.5">
           <button
-            onClick={() => handleOAuth("Spotify")}
+            onClick={() => handleOAuth("spotify")}
+            type="button"
             className="w-full bg-[#1DB954] hover:bg-[#1aa34a] text-black font-bold text-xs uppercase tracking-wider py-2.5 rounded-xl flex items-center justify-center space-x-2 transition-transform active:scale-98 shadow"
           >
             <span>Continue with Spotify for Artists</span>
           </button>
 
           <button
-            onClick={() => handleOAuth("Google")}
+            onClick={() => handleOAuth("google")}
+            type="button"
             className="w-full bg-[#1C1E2D] hover:bg-slate-800 text-white font-medium text-xs py-2.5 rounded-xl border border-slate-700 flex items-center justify-center space-x-2 transition-colors"
           >
             <span>Continue with Google</span>

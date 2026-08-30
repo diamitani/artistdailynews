@@ -8,19 +8,26 @@ import { Mail, Lock, User, ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { signUp } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      login(email, name || "Independent Creator", "Artist");
-      router.push("/auth/onboarding");
-    }, 600);
+    setError("");
+
+    try {
+      await signUp(email, password, name || "Independent Creator", "Artist");
+      // Show success message and redirect
+      router.push("/auth/verify-email");
+    } catch (err: any) {
+      setError(err.message || "Failed to sign up");
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,6 +49,13 @@ export default function SignupPage() {
             Get your free intelligence account and customized daily news feed
           </p>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-xs text-red-400">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
