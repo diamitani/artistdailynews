@@ -91,126 +91,98 @@ export function ReleaseChecklistTool() {
   };
 
   const completedCount = tasks.filter((t) => t.completed).length;
-  const progressPct = Math.round((completedCount / tasks.length) * 100);
+  const progressPercent = Math.round((completedCount / tasks.length) * 100);
 
-  const categoryColor = (cat: string) => {
+  const getCategoryColor = (cat: TaskItem["category"]) => {
     switch (cat) {
-      case "DSP & Metadata": return "bg-blue-500/10 text-blue-400 border-blue-500/30";
-      case "Content & TikTok": return "bg-pink-500/10 text-pink-400 border-pink-500/30";
-      case "Marketing & Ads": return "bg-[#D4FF00]/10 text-[#D4FF00] border-[#D4FF00]/30";
-      case "PR & Pitching": return "bg-purple-500/10 text-purple-400 border-purple-500/30";
-      default: return "bg-slate-800 text-slate-300";
+      case "DSP & Metadata": return "bg-blue-100 text-blue-800 border-blue-200";
+      case "Content & TikTok": return "bg-pink-100 text-pink-800 border-pink-200";
+      case "Marketing & Ads": return "bg-purple-100 text-purple-800 border-purple-200";
+      case "PR & Pitching": return "bg-amber-100 text-amber-800 border-amber-200";
+      default: return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   return (
-    <div className="bg-[#121420] border border-[#272B3F] rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
-      
+    <div className="card-brand p-6 sm:p-8 space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-        <div>
-          <div className="flex items-center space-x-2 text-[#D4FF00] text-xs font-mono font-bold uppercase tracking-wider">
-            <Rocket className="w-4 h-4" />
-            <span>Interactive Release Blueprint</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-5">
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2 text-[var(--accent-primary)] text-xs font-mono font-bold uppercase tracking-wider">
+            <ListChecks className="w-4 h-4" />
+            <span>Interactive Strategy Blueprint</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
-            6-Week Algorithmic Pre-Release Roadmap
+          <h2 className="font-serif text-2xl font-bold text-[var(--text-primary)]">
+            6-Week Algorithmic Release Countdown
           </h2>
-          <p className="text-xs text-slate-400 font-mono">
-            Follow the exact sequence top independent labels use to trigger Release Radar & Discover Weekly
+          <p className="text-xs text-[var(--text-muted)] font-mono">
+            Execute the exact 42-day cadence used by top independent labels to trigger Spotify editorial indexing.
           </p>
         </div>
 
-        {/* Progress Bar & Reset */}
-        <div className="flex items-center space-x-4">
-          <div className="text-right">
-            <div className="text-xs font-mono font-bold text-white">
-              {completedCount} / {tasks.length} Complete ({progressPct}%)
-            </div>
-            <div className="w-36 h-2 bg-slate-800 rounded-full overflow-hidden mt-1.5">
-              <div
-                style={{ width: `${progressPct}%` }}
-                className="h-full bg-gradient-to-r from-[#D4FF00] to-emerald-400 rounded-full transition-all duration-300"
-              />
-            </div>
+        {/* Progress Display */}
+        <div className="flex items-center space-x-4 bg-[var(--bg-secondary)] px-4 py-2.5 rounded-xl border border-[var(--border-color)]">
+          <div>
+            <div className="text-[10px] font-mono text-[var(--text-muted)] uppercase">Readiness Score</div>
+            <div className="text-lg font-bold text-[var(--text-primary)] font-mono">{progressPercent}% Completed</div>
           </div>
-
+          <div className="w-24 h-2 bg-[var(--border-color)] rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[var(--accent-primary)] transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
           <button
             onClick={resetTasks}
             title="Reset Checklist"
-            className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+            className="p-1.5 rounded-lg bg-[var(--bg-card)] hover:bg-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-colors"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Task List */}
+      {/* Task List Items */}
       <div className="space-y-3">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            onClick={() => toggleTask(task.id)}
-            className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start space-x-4 ${
-              task.completed
-                ? "bg-emerald-950/20 border-emerald-500/30 opacity-80"
-                : "bg-[#161826] border-slate-800 hover:border-slate-700"
-            }`}
-          >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleTask(task.id);
-              }}
-              className="mt-0.5 text-slate-400 hover:text-[#D4FF00] transition-colors shrink-0"
+        {tasks.map((task) => {
+          return (
+            <div
+              key={task.id}
+              onClick={() => toggleTask(task.id)}
+              className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start space-x-3.5 select-none ${
+                task.completed
+                  ? "bg-[var(--bg-secondary)]/50 border-[var(--border-color)] opacity-75"
+                  : "bg-[var(--bg-card)] border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 hover:shadow-sm"
+              }`}
             >
-              {task.completed ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 fill-emerald-400/20" />
-              ) : (
-                <Circle className="w-5 h-5 text-slate-600" />
-              )}
-            </button>
+              <button className="mt-0.5 shrink-0 text-[var(--accent-primary)]">
+                {task.completed ? (
+                  <CheckCircle2 className="w-5 h-5 fill-current text-[var(--accent-primary)]" />
+                ) : (
+                  <Circle className="w-5 h-5 text-[var(--text-muted)]" />
+                )}
+              </button>
 
-            <div className="min-w-0 flex-1 space-y-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-xs text-[#D4FF00] font-bold">{task.week}</span>
-                <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${categoryColor(task.category)}`}>
-                  {task.category}
-                </span>
+              <div className="flex-1 space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[10px] font-mono font-bold bg-[var(--bg-secondary)] text-[var(--text-secondary)] px-2 py-0.5 rounded border border-[var(--border-color)]">
+                    {task.week}
+                  </span>
+                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${getCategoryColor(task.category)}`}>
+                    {task.category}
+                  </span>
+                  <h4 className={`font-serif text-sm font-bold ${task.completed ? "line-through text-[var(--text-muted)]" : "text-[var(--text-primary)]"}`}>
+                    {task.title}
+                  </h4>
+                </div>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  {task.description}
+                </p>
               </div>
-
-              <h4 className={`text-sm font-bold ${task.completed ? "text-slate-300 line-through" : "text-white"}`}>
-                {task.title}
-              </h4>
-
-              <p className="text-xs text-slate-400 leading-relaxed">
-                {task.description}
-              </p>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-
-      {/* Footer Info */}
-      <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono">
-        <span>Checklist progress is saved automatically in your browser.</span>
-        <button
-          onClick={() => {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tasks, null, 2));
-            const downloadAnchor = document.createElement("a");
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "adn-release-roadmap.json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-          }}
-          className="text-[#D4FF00] hover:underline font-bold flex items-center space-x-1"
-        >
-          <Download className="w-3.5 h-3.5" />
-          <span>Export Roadmap JSON</span>
-        </button>
-      </div>
-
     </div>
   );
 }

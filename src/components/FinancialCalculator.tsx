@@ -9,7 +9,7 @@ export function FinancialCalculator() {
   // Stream Calculator States
   const [streams, setStreams] = useState<number>(250000);
   const [dsp, setDsp] = useState<"spotify" | "apple" | "tidal" | "youtube">("spotify");
-  const [masterShare, setMasterShare] = useState<number>(100); // 100% indie
+  const [masterShare, setMasterShare] = useState<number>(100);
   const [publisherShare, setPublisherShare] = useState<number>(100);
 
   // Catalogue Valuation States
@@ -45,232 +45,236 @@ export function FinancialCalculator() {
   const highValuation = annualNetIncome * (baseMultiple + 2.5);
 
   return (
-    <div className="bg-[#12141F] border border-[#272A38] rounded-2xl p-6 sm:p-8 space-y-8 shadow-xl">
+    <div className="card-brand p-6 sm:p-8 space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-5">
         <div>
-          <div className="flex items-center space-x-2 text-[#D4FF00] text-xs font-mono font-bold uppercase tracking-wider">
+          <div className="flex items-center space-x-2 text-[var(--accent-primary)] text-xs font-mono font-bold uppercase tracking-wider">
             <Calculator className="w-4 h-4" />
             <span>ADN Independent Financial Lab</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+          <h2 className="font-serif text-2xl font-bold text-[var(--text-primary)] mt-1">
             Music Business & Rights Calculators
           </h2>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center bg-[#090A0F] p-1 rounded-lg border border-slate-800">
+        <div className="flex items-center bg-[var(--bg-secondary)] p-1 rounded-lg border border-[var(--border-color)]">
           <button
             onClick={() => setActiveTab("stream-payout")}
             className={`px-3.5 py-1.5 rounded-md text-xs font-mono font-bold transition-all ${
               activeTab === "stream-payout"
-                ? "bg-[#D4FF00] text-black shadow"
-                : "text-slate-400 hover:text-white"
+                ? "bg-[var(--accent-primary)] text-white shadow-sm"
+                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
           >
-            Streaming Payouts
+            Streaming Royalties
           </button>
           <button
             onClick={() => setActiveTab("catalogue-valuation")}
             className={`px-3.5 py-1.5 rounded-md text-xs font-mono font-bold transition-all ${
               activeTab === "catalogue-valuation"
-                ? "bg-[#D4FF00] text-black shadow"
-                : "text-slate-400 hover:text-white"
+                ? "bg-[var(--accent-primary)] text-white shadow-sm"
+                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
           >
-            Catalogue Valuation (NPS)
+            Catalogue Valuation Multipliers
           </button>
         </div>
       </div>
 
-      {/* Calculator Body */}
-      {activeTab === "stream-payout" ? (
+      {/* ── TAB 1: Streaming Royalty Calculator ── */}
+      {activeTab === "stream-payout" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Controls (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
             <div>
-              <div className="flex justify-between items-center text-xs font-mono mb-2">
-                <label className="text-slate-300 font-bold">Estimated Total Streams</label>
-                <span className="text-[#D4FF00] font-black text-base">{streams.toLocaleString()}</span>
+              <div className="flex justify-between text-xs font-mono text-[var(--text-secondary)] mb-2">
+                <span>Target Stream Volume:</span>
+                <span className="text-[var(--text-primary)] font-bold">{streams.toLocaleString()} streams</span>
               </div>
               <input
                 type="range"
-                min="10000"
-                max="10000000"
-                step="10000"
+                min={10000}
+                max={5000000}
+                step={25000}
                 value={streams}
                 onChange={(e) => setStreams(Number(e.target.value))}
-                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#D4FF00]"
+                className="w-full h-2 bg-[var(--bg-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--accent-primary)]"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
+              <div className="flex justify-between text-[10px] font-mono text-[var(--text-muted)] mt-1">
                 <span>10k</span>
-                <span>1 Million</span>
-                <span>10 Million</span>
+                <span>1M</span>
+                <span>5M</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-mono text-slate-400 block mb-1.5">Platform</label>
-                <select
-                  value={dsp}
-                  onChange={(e) => setDsp(e.target.value as any)}
-                  className="w-full bg-[#0A0B10] border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-[#D4FF00] focus:outline-none"
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {(["spotify", "apple", "tidal", "youtube"] as const).map((key) => (
+                <button
+                  key={key}
+                  onClick={() => setDsp(key)}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    dsp === key
+                      ? "bg-[var(--bg-secondary)] border-[var(--accent-primary)] text-[var(--text-primary)] ring-1 ring-[var(--accent-primary)]"
+                      : "bg-[var(--bg-card)] border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--border-highlight)]"
+                  }`}
                 >
-                  <option value="spotify">Spotify (~$0.0035/stream)</option>
-                  <option value="apple">Apple Music (~$0.0078/stream)</option>
-                  <option value="tidal">Tidal (~$0.0125/stream)</option>
-                  <option value="youtube">YouTube (~$0.0018/stream)</option>
-                </select>
-              </div>
+                  <div className="text-xs font-bold capitalize">{key}</div>
+                  <div className="text-[10px] font-mono text-[var(--text-muted)] mt-0.5">{dspRates[key].perThousand}/1k</div>
+                </button>
+              ))}
+            </div>
 
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-[var(--border-color)]">
               <div>
-                <label className="text-xs font-mono text-slate-400 block mb-1.5">Your Master Ownership %</label>
-                <select
+                <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1.5">
+                  Master Ownership Share: {masterShare}%
+                </label>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
                   value={masterShare}
                   onChange={(e) => setMasterShare(Number(e.target.value))}
-                  className="w-full bg-[#0A0B10] border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-[#D4FF00] focus:outline-none"
-                >
-                  <option value={100}>100% (Independent / Self-Released)</option>
-                  <option value={80}>80% (Indie Label / Distro Split)</option>
-                  <option value={50}>50% (50/50 Joint Venture)</option>
-                  <option value={18}>18% (Traditional Major Label Deal)</option>
-                </select>
+                  className="w-full h-2 bg-[var(--bg-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--accent-primary)]"
+                />
               </div>
-            </div>
 
-            <div className="p-4 bg-[#0A0B10] rounded-xl border border-slate-800 text-xs text-slate-400 space-y-1">
-              <span className="text-[#D4FF00] font-mono font-bold block">💡 Streaming Royalty Formula:</span>
-              <p>
-                DSPs pay ~70% of gross revenue to rights holders: ~82% allocated to Master Recording and ~18% allocated to Composition/Publishing (Mechanicals + Performance).
-              </p>
+              <div>
+                <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1.5">
+                  Publishing/Songwriting Share: {publisherShare}%
+                </label>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={publisherShare}
+                  onChange={(e) => setPublisherShare(Number(e.target.value))}
+                  className="w-full h-2 bg-[var(--bg-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--accent-primary)]"
+                />
+              </div>
             </div>
           </div>
 
           {/* Results Summary (5 cols) */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-[#161826] to-[#0A0B10] border border-[#2D3145] rounded-xl p-6 flex flex-col justify-between space-y-4">
-            <div className="space-y-4">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">
-                NET ESTIMATED ARTIST PAYOUT
+          <div className="lg:col-span-5 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-6 flex flex-col justify-between space-y-6">
+            <div>
+              <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider block mb-1">
+                Estimated Net Take-Home Payout
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-[#D4FF00]">
+              <div className="text-4xl font-serif font-bold text-[var(--text-primary)]">
                 ${totalNetEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
-              <p className="text-xs text-slate-400">
-                Gross generated by {streams.toLocaleString()} {dspRates[dsp].name} streams: <strong>${grossStreamingEarnings.toFixed(2)}</strong>
+              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-mono">
+                Based on {dspRates[dsp].name} blended 2026 rates
               </p>
-
-              <div className="divide-y divide-slate-800 text-xs pt-2 space-y-2">
-                <div className="flex justify-between pt-2">
-                  <span className="text-slate-400">Master Royalties ({masterShare}%):</span>
-                  <span className="font-mono text-white font-bold">${masterEarnings.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between pt-2">
-                  <span className="text-slate-400">Publishing / Mechanicals ({publisherShare}%):</span>
-                  <span className="font-mono text-white font-bold">${publishingEarnings.toFixed(2)}</span>
-                </div>
-              </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 text-[11px] text-slate-500 font-mono">
-              Calculated using 2026 Q1 industry standard weighted pro-rata distributions.
+            <div className="space-y-2.5 pt-4 border-t border-[var(--border-color)] text-xs font-mono">
+              <div className="flex justify-between text-[var(--text-secondary)]">
+                <span>Master Recording Share (~82% pool):</span>
+                <span className="text-[var(--text-primary)] font-bold">${masterEarnings.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-[var(--text-secondary)]">
+                <span>Publishing & Mechanicals (~18% pool):</span>
+                <span className="text-[var(--text-primary)] font-bold">${publishingEarnings.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-[var(--text-muted)] pt-2 border-t border-[var(--border-color)] text-[11px]">
+                <span>Gross Streaming Value:</span>
+                <span>${grossStreamingEarnings.toFixed(2)}</span>
+              </div>
             </div>
           </div>
         </div>
-      ) : (
+      )}
+
+      {/* ── TAB 2: Catalogue Valuation Multipliers ── */}
+      {activeTab === "catalogue-valuation" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Controls (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
             <div>
-              <div className="flex justify-between items-center text-xs font-mono mb-2">
-                <label className="text-slate-300 font-bold">Annual Net Publisher's Share / Master Profit (NPS)</label>
-                <span className="text-emerald-400 font-black text-base">${annualNetIncome.toLocaleString()}</span>
+              <div className="flex justify-between text-xs font-mono text-[var(--text-secondary)] mb-2">
+                <span>Annual Net Publisher's Share (NPS):</span>
+                <span className="text-[var(--text-primary)] font-bold">${annualNetIncome.toLocaleString()}/yr</span>
               </div>
               <input
                 type="range"
-                min="5000"
-                max="500000"
-                step="5000"
+                min={5000}
+                max={250000}
+                step={5000}
                 value={annualNetIncome}
                 onChange={(e) => setAnnualNetIncome(Number(e.target.value))}
-                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                className="w-full h-2 bg-[var(--bg-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--accent-primary)]"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
-                <span>$5k/yr</span>
-                <span>$100k/yr</span>
-                <span>$500k/yr</span>
+            </div>
+
+            <div className="space-y-3">
+              <label className="text-xs font-mono text-[var(--text-secondary)] block">Streaming Decay / Growth Trajectory:</label>
+              <div className="grid grid-cols-3 gap-2.5">
+                {(["declining", "stable", "growing"] as const).map((rate) => (
+                  <button
+                    key={rate}
+                    onClick={() => setGrowthRate(rate)}
+                    className={`p-3 rounded-xl border text-xs font-bold capitalize transition-all ${
+                      growthRate === rate
+                        ? "bg-[var(--bg-secondary)] border-[var(--accent-primary)] text-[var(--text-primary)] ring-1 ring-[var(--accent-primary)]"
+                        : "bg-[var(--bg-card)] border-[var(--border-color)] text-[var(--text-secondary)]"
+                    }`}
+                  >
+                    {rate === "declining" && "Decaying (8-10x)"}
+                    {rate === "stable" && "Stable (11-13x)"}
+                    {rate === "growing" && "Growing (15-18x)"}
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-mono text-slate-400 block mb-1.5">Historical Stream Trend</label>
-                <select
-                  value={growthRate}
-                  onChange={(e) => setGrowthRate(e.target.value as any)}
-                  className="w-full bg-[#0A0B10] border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-emerald-400 focus:outline-none"
-                >
-                  <option value="growing">Growing / Viral (+15% YoY)</option>
-                  <option value="stable">Stable / Evergreen (Flat YoY)</option>
-                  <option value="declining">Decaying / Past Peak (-10% YoY)</option>
-                </select>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-[var(--border-color)] text-xs">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={syncHistory}
+                  onChange={(e) => setSyncHistory(e.target.checked)}
+                  className="rounded border-[var(--border-color)] text-[var(--accent-primary)] focus:ring-0"
+                />
+                <span className="text-[var(--text-primary)] font-medium">Proven TV/Film/Gaming Sync Placements (+2x multiple)</span>
+              </label>
 
-              <div>
-                <label className="text-xs font-mono text-slate-400 block mb-1.5">Rights Controlled</label>
-                <select
-                  value={rightsControl}
-                  onChange={(e) => setRightsControl(e.target.value as any)}
-                  className="w-full bg-[#0A0B10] border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-emerald-400 focus:outline-none"
-                >
-                  <option value="both">Both Master & Publishing (100%)</option>
-                  <option value="master-only">Master Sound Recordings Only</option>
-                  <option value="publishing-only">Publishing & Composition Only</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3 p-3 bg-[#0A0B10] rounded-xl border border-slate-800">
-              <input
-                type="checkbox"
-                id="sync-check"
-                checked={syncHistory}
-                onChange={(e) => setSyncHistory(e.target.checked)}
-                className="w-4 h-4 rounded accent-emerald-400 cursor-pointer"
-              />
-              <label htmlFor="sync-check" className="text-xs text-slate-300 cursor-pointer">
-                Track record of TV / Film / Gaming sync placements (+2.0x multiple premium)
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rightsControl === "both"}
+                  onChange={(e) => setRightsControl(e.target.checked ? "both" : "master-only")}
+                  className="rounded border-[var(--border-color)] text-[var(--accent-primary)] focus:ring-0"
+                />
+                <span className="text-[var(--text-primary)] font-medium">Controls 100% of both Master & Composition (+2.5x multiple)</span>
               </label>
             </div>
           </div>
 
-          {/* Results Summary (5 cols) */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-[#121F17] to-[#0A0B10] border border-emerald-500/30 rounded-xl p-6 flex flex-col justify-between space-y-4">
-            <div className="space-y-3">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 block">
-                ESTIMATED CATALOGUE MARKET VALUE
+          <div className="lg:col-span-5 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-6 flex flex-col justify-between space-y-6">
+            <div>
+              <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider block mb-1">
+                Estimated Catalogue Valuation Benchmark
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-white">
-                ${midValuation.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              <div className="text-3xl sm:text-4xl font-serif font-bold text-[var(--text-primary)]">
+                ${Math.round(midValuation).toLocaleString()}
               </div>
-              <p className="text-xs text-emerald-200">
-                Implied Valuation Multiple: <strong>{baseMultiple.toFixed(1)}x NPS</strong>
+              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-mono">
+                Valuation Multiplier: <strong className="text-[var(--accent-primary)] font-bold">{baseMultiple.toFixed(1)}x NPS</strong>
               </p>
-
-              <div className="bg-[#080D0A] p-3 rounded-lg border border-emerald-900/50 space-y-1.5 text-xs">
-                <div className="flex justify-between text-slate-400">
-                  <span>Conservative (Liquidity Floor):</span>
-                  <span className="text-white font-mono font-bold">${lowValuation.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>Aggressive (Private Equity Bid):</span>
-                  <span className="text-emerald-400 font-mono font-bold">${highValuation.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                </div>
-              </div>
             </div>
 
-            <div className="pt-3 border-t border-emerald-950 text-[11px] text-slate-500 font-mono">
-              Based on trailing multiples published by Hipgnosis, Round Hill, and Chord Music.
+            <div className="space-y-2 pt-4 border-t border-[var(--border-color)] text-xs font-mono text-[var(--text-secondary)]">
+              <div className="flex justify-between">
+                <span>Conservative Range (Low):</span>
+                <span className="font-bold text-[var(--text-primary)]">${Math.round(lowValuation).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Aggressive Fund Range (High):</span>
+                <span className="font-bold text-[var(--text-primary)]">${Math.round(highValuation).toLocaleString()}</span>
+              </div>
             </div>
           </div>
         </div>

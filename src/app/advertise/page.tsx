@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
@@ -44,135 +45,157 @@ export default function AdvertisePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090A0F]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
       <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 w-full">
         
         {/* Page Hero */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 bg-[#D4FF00]/10 border border-[#D4FF00]/30 text-[#D4FF00] px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center space-x-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--accent-primary)] px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider">
             <Megaphone className="w-3.5 h-3.5" />
             <span>2026 Official Media Kit & Rate Card</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
-            Put Your Brand in Front of 50,000+ Active Music Creators.
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] leading-tight">
+            Reach 35,000+ Verified Music Creators & Label Executives
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            The highest-converting channel for music tech tools, AI audio plugins, hardware gear, independent distributors, sync agencies, and master rights brokers.
+          <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
+            Directly market your audio gear, distribution service, plug-in suite, law firm, or music tech software to independent rights holders who invest in their business.
           </p>
         </div>
 
-        {/* Readership Demographics */}
+        {/* Audience Metrics Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-[#12141F] border border-[#272A38] rounded-2xl p-6 text-center space-y-1">
-            <Users className="w-6 h-6 mx-auto text-[#D4FF00] mb-2" />
-            <div className="text-2xl sm:text-3xl font-black text-white">52,000+</div>
-            <div className="text-xs text-slate-400 font-mono">Monthly Active Readers</div>
+          <div className="card-brand p-5 text-center space-y-1">
+            <Users className="w-5 h-5 mx-auto text-[var(--accent-primary)]" />
+            <div className="text-2xl font-black text-[var(--text-primary)] font-mono">35,400+</div>
+            <div className="text-xs text-[var(--text-muted)] font-mono">Active Monthly Readers</div>
           </div>
 
-          <div className="bg-[#12141F] border border-[#272A38] rounded-2xl p-6 text-center space-y-1">
-            <Mail className="w-6 h-6 mx-auto text-emerald-400 mb-2" />
-            <div className="text-2xl sm:text-3xl font-black text-white">35,400+</div>
-            <div className="text-xs text-slate-400 font-mono">Newsletter Subscribers</div>
+          <div className="card-brand p-5 text-center space-y-1">
+            <Eye className="w-5 h-5 mx-auto text-[var(--accent-emerald)]" />
+            <div className="text-2xl font-black text-[var(--text-primary)] font-mono">180,000+</div>
+            <div className="text-xs text-[var(--text-muted)] font-mono">Monthly Page Views</div>
           </div>
 
-          <div className="bg-[#12141F] border border-[#272A38] rounded-2xl p-6 text-center space-y-1">
-            <Eye className="w-6 h-6 mx-auto text-blue-400 mb-2" />
-            <div className="text-2xl sm:text-3xl font-black text-white">44.2%</div>
-            <div className="text-xs text-slate-400 font-mono">Average Email Open Rate</div>
+          <div className="card-brand p-5 text-center space-y-1">
+            <Mail className="w-5 h-5 mx-auto text-[var(--accent-blue)]" />
+            <div className="text-2xl font-black text-[var(--text-primary)] font-mono">46.8%</div>
+            <div className="text-xs text-[var(--text-muted)] font-mono">Newsletter Open Rate</div>
           </div>
 
-          <div className="bg-[#12141F] border border-[#272A38] rounded-2xl p-6 text-center space-y-1">
-            <Sparkles className="w-6 h-6 mx-auto text-purple-400 mb-2" />
-            <div className="text-2xl sm:text-3xl font-black text-white">68% DIY</div>
-            <div className="text-xs text-slate-400 font-mono">Artists, Producers & Labels</div>
+          <div className="card-brand p-5 text-center space-y-1">
+            <ShieldCheck className="w-5 h-5 mx-auto text-[var(--accent-amber)]" />
+            <div className="text-2xl font-black text-[var(--text-primary)] font-mono">82%</div>
+            <div className="text-xs text-[var(--text-muted)] font-mono">Independent Rights Owners</div>
           </div>
         </div>
 
-        {/* Sponsorship Pricing Cards */}
+        {successMsg && (
+          <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 text-center text-xs text-emerald-800 max-w-xl mx-auto font-medium">
+            ✓ {successMsg}
+          </div>
+        )}
+
+        {/* Sponsorship Packages Grid */}
         <div id="sponsor-packages" className="space-y-6">
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-black text-white">Self-Serve Sponsorship Packages</h2>
-            <p className="text-xs text-slate-400 font-mono">Instant booking with automated invoice generation</p>
+            <h2 className="font-serif text-3xl font-bold text-[var(--text-primary)]">
+              Select Your Media Placement Package
+            </h2>
+            <p className="text-xs text-[var(--text-muted)] font-mono">
+              Transparent, flat-rate institutional pricing. Instant Stripe checkout reservation.
+            </p>
           </div>
 
-          {successMsg && (
-            <div className="bg-emerald-950/50 border border-emerald-500/40 rounded-xl p-4 text-center text-xs text-emerald-300 max-w-xl mx-auto">
-              ✓ {successMsg}
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {SPONSORSHIP_PACKAGES.map((pkg) => (
               <div
                 key={pkg.id}
-                className={`bg-[#12141F] border rounded-2xl p-6 flex flex-col justify-between space-y-6 relative ${
-                  pkg.highlight ? "border-[#D4FF00] shadow-2xl shadow-[#D4FF00]/10" : "border-[#272A38]"
+                className={`card-brand p-6 sm:p-8 flex flex-col justify-between space-y-6 relative ${
+                  pkg.highlight ? "!border-[var(--accent-primary)] ring-2 ring-[var(--accent-primary)]/20 shadow-md" : ""
                 }`}
               >
                 {pkg.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D4FF00] text-black font-black text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow">
-                    ★ MOST POPULAR FOR ARTISTS & SAAS
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--accent-primary)] text-white font-black text-[9px] uppercase px-3 py-1 rounded-full shadow">
+                    MOST POPULAR CAMPAIGN
                   </div>
                 )}
 
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-bold text-lg text-white">{pkg.name}</h3>
-                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">{pkg.description}</p>
+                    <h3 className="font-serif font-bold text-xl text-[var(--text-primary)]">{pkg.name}</h3>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">{pkg.description}</p>
                   </div>
 
                   <div className="flex items-baseline space-x-1">
-                    <span className="text-3xl sm:text-4xl font-black text-white">{pkg.priceFormatted}</span>
-                    <span className="text-xs text-slate-500 font-mono">/{pkg.period}</span>
+                    <span className="text-3xl font-black text-[var(--text-primary)] font-mono">{pkg.priceFormatted}</span>
+                    <span className="text-xs text-[var(--text-muted)] font-mono">/ placement</span>
                   </div>
 
-                  <div className="space-y-2.5 pt-4 border-t border-slate-800 text-xs text-slate-300">
-                    {pkg.features.map((feat, idx) => (
+                  <div className="space-y-2.5 pt-4 border-t border-[var(--border-color)] text-xs text-[var(--text-secondary)]">
+                    {pkg.features.map((d, idx) => (
                       <div key={idx} className="flex items-start space-x-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#D4FF00] shrink-0 mt-0.5" />
-                        <span>{feat}</span>
+                        <CheckCircle2 className="w-4 h-4 text-[var(--accent-primary)] shrink-0 mt-0.5" />
+                        <span>{d}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleCheckout(pkg.id)}
-                  disabled={loading}
-                  className={`w-full font-bold text-xs uppercase tracking-wider py-3 rounded-lg transition-transform active:scale-95 flex items-center justify-center space-x-2 ${
-                    pkg.highlight
-                      ? "bg-[#D4FF00] hover:bg-[#bde600] text-black shadow-lg shadow-[#D4FF00]/15"
-                      : "bg-slate-800 hover:bg-slate-700 text-white"
-                  }`}
-                >
-                  <span>Book Placement</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                <div className="space-y-3 pt-4 border-t border-[var(--border-color)]">
+                  {bookingPackage === pkg.id ? (
+                    <div className="space-y-2.5">
+                      <input
+                        type="text"
+                        placeholder="Company / Brand Name"
+                        value={sponsorName}
+                        onChange={(e) => setSponsorName(e.target.value)}
+                        className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-2 text-xs text-[var(--text-primary)]"
+                      />
+                      <input
+                        type="email"
+                        placeholder="Billing Email"
+                        value={sponsorEmail}
+                        onChange={(e) => setSponsorEmail(e.target.value)}
+                        className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-2 text-xs text-[var(--text-primary)]"
+                      />
+                      <input
+                        type="url"
+                        placeholder="Target Destination URL (https://...)"
+                        value={ctaUrl}
+                        onChange={(e) => setCtaUrl(e.target.value)}
+                        className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-2 text-xs text-[var(--text-primary)]"
+                      />
+                      <button
+                        onClick={() => handleCheckout(pkg.id)}
+                        disabled={loading}
+                        className="btn-brand w-full py-2.5"
+                      >
+                        {loading ? "Redirecting to Stripe..." : "Reserve & Pay via Stripe"}
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setBookingPackage(pkg.id)}
+                      className={pkg.highlight ? "btn-brand w-full py-2.5" : "btn-brand-outline w-full py-2.5"}
+                    >
+                      <span>Book Placement &rarr;</span>
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Google AdSense Network Info */}
-        <div className="bg-[#12141F] border border-[#272A38] rounded-2xl p-6 sm:p-8 space-y-4">
-          <h3 className="font-bold text-white text-base">Programmatic Google AdSense & Header Bidding</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            ArtistDailyNews.com complies with all IAB standard banner units and Google Publisher Policies. We support standard 728x90 Leaderboard, 300x250 Medium Rectangle, 300x600 Half Page, and 320x50 Mobile Sticky Anchors.
-          </p>
-          <div className="p-3 bg-[#0A0B10] rounded-lg border border-slate-800 font-mono text-[11px] text-slate-400 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <span>Verified Ads.txt Location: <strong>artistdailynews.com/ads.txt</strong></span>
-            <span className="text-[#D4FF00]">Direct Inquiries: ads@artistdailynews.com</span>
           </div>
         </div>
 
       </main>
 
       <NewsletterSignup />
+      <Footer />
     </div>
   );
 }

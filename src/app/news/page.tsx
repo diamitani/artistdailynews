@@ -1,6 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { getLatestIssue } from '@/lib/adn-db';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { BreakingTicker } from '@/components/BreakingTicker';
+import { MOCK_ARTICLES } from '@/lib/mock-articles';
 
 export default async function DailyPostHomepage() {
   const issue = await getLatestIssue();
@@ -41,95 +45,103 @@ export default async function DailyPostHomepage() {
   };
 
   return (
-    <div className="border-t-2 border-[#111111] pt-4">
-      {/* Issue Header */}
-      <div className="flex justify-between font-sans text-xs font-bold text-[#111111] uppercase tracking-widest border-b-2 border-[#111111] pb-4 mb-8">
-        <span>{issueDate} · ISSUE {issue ? issue.id.slice(0, 3).toUpperCase() : '001'} · CHICAGO / GLOBAL</span>
-      </div>
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
+      <Header />
+      <BreakingTicker articles={MOCK_ARTICLES} />
 
-      {/* Hero Essay Section */}
-      <section className="mb-12 max-w-3xl mx-auto">
-        <div className="bg-[#111111] text-[#F6F1E8] inline-block px-3 py-1 font-sans font-bold text-xs uppercase tracking-widest mb-4">
-          Kicker: {kicker}
-        </div>
-        <h2 className="font-serif text-5xl leading-tight font-bold text-[#111111] mb-4">
-          {headline}
-        </h2>
-        <p className="font-sans text-lg font-medium text-[#C1121F] mb-6 border-l-4 border-[#C1121F] pl-4">
-          {dek}
-        </p>
-        
-        <div className="font-serif text-lg leading-relaxed text-[#111111]/90 space-y-5">
-          {bodyParagraphs.map((p: string, idx: number) => (
-            <p key={idx}>{p}</p>
-          ))}
-          <p className="font-bold">
-            Action: {action}
-          </p>
-          <p className="italic border-t border-[#D9D1C4] pt-4 mt-8">
-            "Art means business. Protect your catalog before the weekend hits."
-          </p>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 w-full">
+        {/* Issue Header */}
+        <div className="flex justify-between font-mono text-xs font-bold text-[var(--text-primary)] uppercase tracking-widest border-b border-[var(--border-color)] pb-4">
+          <span>{issueDate} · ISSUE {issue ? issue.id.slice(0, 3).toUpperCase() : '001'} · CHICAGO / GLOBAL</span>
+          <span className="text-[var(--accent-primary)]">POWERED BY ARTISPRENEUR</span>
         </div>
 
-        <div className="mt-8 flex space-x-4">
-          <Link href={issue?.lead_item?.url || "#"} className="bg-[#111111] text-[#F6F1E8] px-6 py-2 font-sans font-bold uppercase text-sm hover:bg-[#C1121F] transition-colors inline-block">
-            Read Full
+        {/* Hero Essay Section */}
+        <section className="mb-12 max-w-3xl mx-auto card-brand p-8 sm:p-12">
+          <div className="bg-[var(--accent-primary)] text-white inline-block px-3 py-1 font-mono font-bold text-xs uppercase tracking-widest mb-4 rounded">
+            Kicker: {kicker}
+          </div>
+          <h2 className="font-serif text-4xl sm:text-5xl leading-tight font-bold text-[var(--text-primary)] mb-4">
+            {headline}
+          </h2>
+          <p className="font-sans text-lg font-medium text-[var(--accent-primary)] mb-6 border-l-4 border-[var(--accent-primary)] pl-4">
+            {dek}
+          </p>
+          
+          <div className="font-serif text-lg leading-relaxed text-[var(--text-secondary)] space-y-5">
+            {bodyParagraphs.map((p: string, idx: number) => (
+              <p key={idx}>{p}</p>
+            ))}
+            <p className="font-bold text-[var(--text-primary)] pt-2">
+              Action: {action}
+            </p>
+            <p className="italic border-t border-[var(--border-color)] pt-4 mt-8 text-sm text-[var(--text-muted)]">
+              &ldquo;Art means business. Protect your catalog before the weekend hits.&rdquo;
+            </p>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link href={issue?.lead_item?.url || "#"} className="btn-brand text-xs px-6 py-2.5">
+              Read Full Dispatch
+            </Link>
+            <Link href="/podcasts" className="btn-brand-outline text-xs px-6 py-2.5">
+              Listen Audio Brief
+            </Link>
+          </div>
+        </section>
+
+        {/* Rails */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-[var(--border-color)] pt-8">
+          {/* Culture Rail */}
+          <div className="card-brand p-6">
+            <h3 className="font-serif font-bold text-xl uppercase border-b border-[var(--border-color)] pb-2 mb-4 text-[var(--accent-primary)]">
+              Culture
+            </h3>
+            <div className="space-y-4">
+              {rails.culture?.map((item: any, idx: number) => (
+                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+              ))}
+            </div>
+          </div>
+
+          {/* Business Rail */}
+          <div className="card-brand p-6">
+            <h3 className="font-serif font-bold text-xl uppercase border-b border-[var(--border-color)] pb-2 mb-4 text-[var(--accent-emerald)]">
+              Business
+            </h3>
+            <div className="space-y-4">
+              {rails.business?.map((item: any, idx: number) => (
+                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+              ))}
+            </div>
+          </div>
+
+          {/* Ideas Rail */}
+          <div className="card-brand p-6">
+            <h3 className="font-serif font-bold text-xl uppercase border-b border-[var(--border-color)] pb-2 mb-4 text-[var(--accent-blue)]">
+              Ideas
+            </h3>
+            <div className="space-y-4">
+              {rails.ideas?.map((item: any, idx: number) => (
+                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Newsroom CTA */}
+        <section className="bg-[var(--bg-dark)] p-8 text-center text-white rounded-3xl">
+          <h2 className="font-serif text-3xl font-bold mb-4">Make this about your catalog</h2>
+          <p className="font-sans text-base mb-6 max-w-xl mx-auto text-white/80">
+            Get a personalized digest filtered by your genre and city. Never miss an opportunity in your scene.
+          </p>
+          <Link href="/news/newsroom" className="btn-brand text-xs px-8 py-3.5 inline-block">
+            Go to Newsroom
           </Link>
-          <button className="border border-[#111111] text-[#111111] px-6 py-2 font-sans font-bold uppercase text-sm hover:bg-[#D9D1C4] transition-colors">
-            Listen 4:00
-          </button>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* Rails */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t-4 border-[#111111] pt-8">
-        {/* Culture Rail */}
-        <div>
-          <h3 className="font-sans font-black text-xl uppercase border-b border-[#D9D1C4] pb-2 mb-4 text-[#111111]">
-            Culture
-          </h3>
-          <div className="space-y-4">
-            {rails.culture?.map((item: any, idx: number) => (
-              <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
-            ))}
-          </div>
-        </div>
-
-        {/* Business Rail */}
-        <div>
-          <h3 className="font-sans font-black text-xl uppercase border-b border-[#D9D1C4] pb-2 mb-4 text-[#111111]">
-            Business
-          </h3>
-          <div className="space-y-4">
-            {rails.business?.map((item: any, idx: number) => (
-              <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
-            ))}
-          </div>
-        </div>
-
-        {/* Ideas Rail */}
-        <div>
-          <h3 className="font-sans font-black text-xl uppercase border-b border-[#D9D1C4] pb-2 mb-4 text-[#111111]">
-            Ideas
-          </h3>
-          <div className="space-y-4">
-            {rails.ideas?.map((item: any, idx: number) => (
-              <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Newsroom CTA */}
-      <section className="mt-16 bg-[#111111] p-8 text-center text-[#F6F1E8]">
-        <h2 className="font-serif text-3xl font-bold mb-4">Make this about your catalog</h2>
-        <p className="font-sans text-lg mb-6 max-w-xl mx-auto opacity-80">
-          Get a personalized digest filtered by your genre and city. Never miss an opportunity in your scene.
-        </p>
-        <Link href="/news/newsroom" className="inline-block bg-[#C1121F] text-[#F6F1E8] px-8 py-3 font-sans font-bold uppercase tracking-wide hover:bg-red-700 transition-colors">
-          Go to Newsroom
-        </Link>
-      </section>
+      <Footer />
     </div>
   );
 }
@@ -137,14 +149,13 @@ export default async function DailyPostHomepage() {
 function RailItem({ title, platform, time }: { title: string, platform: string, time: string }) {
   return (
     <Link href="#" className="block group">
-      <div className="flex justify-between items-center text-[10px] font-sans font-bold text-[#111111]/60 uppercase tracking-wider mb-1">
+      <div className="flex justify-between items-center text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1">
         <span>{platform}</span>
         <span>{time}</span>
       </div>
-      <h4 className="font-serif text-md font-semibold leading-tight group-hover:text-[#C1121F] transition-colors">
+      <h4 className="font-serif text-base font-semibold leading-tight text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors">
         {title}
       </h4>
     </Link>
   );
 }
-

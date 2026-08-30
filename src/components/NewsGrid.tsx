@@ -5,7 +5,7 @@ import { Article, CategoryType } from "@/lib/types";
 import { CATEGORIES } from "@/lib/feeds-config";
 import { ArticleCard } from "./ArticleCard";
 import { AdContainer } from "./AdContainer";
-import { Search, Filter, Sparkles, Layers, SlidersHorizontal, BookOpen, ArrowRight, Zap, TrendingUp } from "lucide-react";
+import { Search, BookOpen, ArrowRight, Layers, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 interface NewsGridProps {
@@ -56,11 +56,11 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
           
           <div>
-            <div className="flex items-center space-x-2 text-xs font-mono font-bold text-[var(--accent-gold)] uppercase tracking-wider mb-0.5">
+            <div className="flex items-center space-x-2 text-xs font-mono font-bold text-[var(--accent-primary)] uppercase tracking-wider mb-0.5">
               <BookOpen className="w-3.5 h-3.5" />
               <span>THE DAILY INTELLIGENCE WIRE</span>
             </div>
-            <h2 className="font-serif-headline text-2xl sm:text-3xl font-black text-[var(--text-primary)] flex items-center">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[var(--text-primary)] flex items-center">
               Front-Page Dispatches & Analysis
             </h2>
             <p className="text-xs text-[var(--text-muted)] font-mono mt-0.5">
@@ -76,7 +76,7 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
                 placeholder="Search royalties, AI, Spotify..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-[var(--accent-gold)] rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none transition-colors"
+                className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-[var(--accent-primary)] rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none transition-colors"
               />
               {searchQuery && (
                 <button
@@ -91,7 +91,7 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="bg-[var(--bg-card)] border border-[var(--border-color)] text-xs text-[var(--text-secondary)] rounded-xl px-3 py-2 focus:outline-none focus:border-[var(--accent-gold)] font-mono"
+              className="bg-[var(--bg-card)] border border-[var(--border-color)] text-xs text-[var(--text-secondary)] rounded-xl px-3 py-2 focus:outline-none focus:border-[var(--accent-primary)] font-mono"
             >
               <option value="latest">Latest Dispatches</option>
               <option value="breaking">Breaking First</option>
@@ -105,7 +105,7 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
             onClick={() => setSelectedCategory("all")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold uppercase whitespace-nowrap transition-all ${
               selectedCategory === "all"
-                ? "bg-[var(--accent-gold)] text-white shadow-md"
+                ? "bg-[var(--accent-primary)] text-white shadow-sm"
                 : "bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] border border-[var(--border-color)]"
             }`}
           >
@@ -121,7 +121,7 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium whitespace-nowrap transition-all flex items-center space-x-1.5 ${
                   isSelected
-                    ? "bg-[var(--text-primary)] text-[var(--bg-card)] font-bold shadow-md"
+                    ? "bg-[var(--text-primary)] text-white font-bold shadow-sm"
                     : "bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] border border-[var(--border-color)]"
                 }`}
               >
@@ -135,9 +135,9 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
 
       {/* Articles Grid */}
       {filteredArticles.length === 0 ? (
-        <div className="card-elevated rounded-2xl p-12 text-center space-y-3">
+        <div className="card-brand p-12 text-center space-y-3">
           <Layers className="w-8 h-8 mx-auto text-[var(--text-muted)]" />
-          <h3 className="font-serif-headline text-lg font-bold text-[var(--text-primary)]">No dispatches found</h3>
+          <h3 className="font-serif text-lg font-bold text-[var(--text-primary)]">No dispatches found</h3>
           <p className="text-xs text-[var(--text-muted)]">
             Try adjusting your search query or select another category desk.
           </p>
@@ -146,7 +146,7 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
               setSelectedCategory("all");
               setSearchQuery("");
             }}
-            className="text-xs text-[var(--accent-gold)] hover:underline font-bold uppercase font-mono"
+            className="text-xs text-[var(--accent-primary)] hover:underline font-bold uppercase font-mono"
           >
             Reset all filters
           </button>
@@ -161,11 +161,11 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
 
           {/* "The Big Read" — Magazine Feature */}
           {bigReadStory && selectedCategory === "all" && !searchQuery && (
-            <div className="card-elevated rounded-3xl p-6 sm:p-10 relative overflow-hidden group border-[var(--accent-gold)]/20">
+            <div className="card-brand p-6 sm:p-10 relative overflow-hidden group border-[var(--accent-primary)]/20">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 <div className="lg:col-span-7 space-y-4">
                   <div className="flex items-center space-x-2">
-                    <span className="gold-badge text-[10px] px-3 py-1 rounded">
+                    <span className="bg-[var(--accent-primary)] text-white text-[10px] font-mono font-bold px-3 py-1 rounded">
                       ★ THE BIG READ
                     </span>
                     <span className="text-xs font-mono text-[var(--text-muted)]">
@@ -173,7 +173,7 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
                     </span>
                   </div>
 
-                  <h3 className="font-serif-headline text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--text-primary)] leading-tight group-hover:text-[var(--accent-gold)] transition-colors">
+                  <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight group-hover:text-[var(--accent-primary)] transition-colors">
                     <Link href={`/news/${bigReadStory.slug}`}>{bigReadStory.title}</Link>
                   </h3>
 
@@ -188,7 +188,7 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
                   <div className="pt-3 flex items-center space-x-4">
                     <Link
                       href={`/news/${bigReadStory.slug}`}
-                      className="bg-[var(--accent-gold)] hover:bg-[var(--accent-gold-hover)] text-white font-black text-xs uppercase px-5 py-2.5 rounded-lg flex items-center space-x-1.5 shadow-lg transition-transform active:scale-95"
+                      className="btn-brand px-5 py-2.5 flex items-center space-x-1.5"
                     >
                       <span>Read Feature Essay</span>
                       <ArrowRight className="w-4 h-4" />
@@ -196,20 +196,20 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
 
                     <button
                       onClick={() => onQuickRead(bigReadStory)}
-                      className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-secondary)] px-4 py-2.5 rounded-lg border border-[var(--border-color)] font-semibold flex items-center space-x-1.5"
+                      className="btn-brand-ghost text-xs px-4 py-2.5 flex items-center space-x-1.5"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-[var(--accent-gold)]" />
-                      <span>30s Brief</span>
+                      <Sparkles className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
+                      <span>Quick Brief</span>
                     </button>
                   </div>
                 </div>
 
                 <div className="lg:col-span-5">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-xl">
+                  <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)]">
                     <img
                       src={bigReadStory.imageUrl}
                       alt={bigReadStory.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                 </div>
@@ -217,17 +217,11 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
             </div>
           )}
 
-          {/* Remaining Articles */}
-          {filteredArticles.length > 6 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-              {filteredArticles.slice(6).map((article) => (
-                <ArticleCard key={article.id} article={article} onQuickRead={onQuickRead} />
-              ))}
-            </div>
-          )}
-
-          <div className="pt-2">
-            <AdContainer slotType="in-feed" />
+          {/* Remaining Articles Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredArticles.slice(6).map((article) => (
+              <ArticleCard key={article.id} article={article} onQuickRead={onQuickRead} />
+            ))}
           </div>
         </div>
       )}

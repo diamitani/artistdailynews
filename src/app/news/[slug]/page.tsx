@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { ArticleDetailView } from "@/components/ArticleDetailView";
@@ -122,7 +123,7 @@ export default async function ArticlePage({ params }: Props) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#08090D]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -137,6 +138,7 @@ export default async function ArticlePage({ params }: Props) {
       />
 
       <NewsletterSignup />
+      <Footer />
     </div>
   );
 }

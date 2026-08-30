@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { useAuth } from "@/components/AuthContext";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
-import { Sparkles, CheckCircle2, ShieldCheck, Zap, ArrowRight, Star } from "lucide-react";
+import { Sparkles, CheckCircle2, ArrowRight, Star, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 export default function PricingPage() {
@@ -69,7 +70,7 @@ export default function PricingPage() {
       features: [
         "100% Ad-Free reading experience across all devices",
         "Wall Street Net Publisher's Share (NPS) Catalogue Multiplier Database",
-        "Early 48-hour grant & festival showcase alert alerts",
+        "Early 48-hour grant & festival showcase alerts",
         "ADN AI Music Business Chat Copilot (unlimited queries)",
         "Priority VIP Festival Press Pass review & Letter of Assignment",
         "Exportable 6-Week Release Blueprint JSON schemas",
@@ -98,33 +99,33 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090A0F]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
       <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 w-full">
         
         {/* Masthead */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 bg-[#D4FF00]/10 border border-[#D4FF00]/30 text-[#D4FF00] px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center space-x-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--accent-primary)] px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
             <span>VIP Creator & Label Memberships</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
-            Invest in the Data That Protects Your Music Equity.
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] leading-tight">
+            Invest in the Data That Protects Your Music Equity
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+          <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
             Gain full access to catalogue valuation datasets, priority festival credentials, ad-free reading, and the ADN AI Copilot.
           </p>
 
           {/* Billing Cycle Switcher */}
-          <div className="inline-flex items-center bg-[#121420] p-1.5 rounded-xl border border-slate-800 text-xs font-mono">
+          <div className="inline-flex items-center bg-[var(--bg-secondary)] p-1.5 rounded-xl border border-[var(--border-color)] text-xs font-mono">
             <button
               onClick={() => setBillingCycle("monthly")}
               className={`px-4 py-1.5 rounded-lg font-bold transition-colors ${
-                billingCycle === "monthly" ? "bg-[#D4FF00] text-black shadow" : "text-slate-400 hover:text-white"
+                billingCycle === "monthly" ? "bg-[var(--accent-primary)] text-white shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               Monthly Billing
@@ -132,17 +133,17 @@ export default function PricingPage() {
             <button
               onClick={() => setBillingCycle("annual")}
               className={`px-4 py-1.5 rounded-lg font-bold transition-colors flex items-center space-x-1.5 ${
-                billingCycle === "annual" ? "bg-[#D4FF00] text-black shadow" : "text-slate-400 hover:text-white"
+                billingCycle === "annual" ? "bg-[var(--accent-primary)] text-white shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <span>Annual (Save 20%)</span>
-              <span className="text-[9px] bg-emerald-500 text-black px-1.5 py-0.2 rounded font-black">2 MOS FREE</span>
+              <span className="text-[9px] bg-[var(--accent-emerald)] text-white px-1.5 py-0.5 rounded font-black">2 MOS FREE</span>
             </button>
           </div>
         </div>
 
         {successMsg && (
-          <div className="bg-emerald-950/40 border border-emerald-500/40 rounded-xl p-4 text-center text-xs text-emerald-300 max-w-xl mx-auto">
+          <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 text-center text-xs text-emerald-800 max-w-xl mx-auto font-medium">
             ✓ {successMsg}
           </div>
         )}
@@ -156,14 +157,14 @@ export default function PricingPage() {
             return (
               <div
                 key={plan.id}
-                className={`bg-[#121420] border rounded-3xl p-8 flex flex-col justify-between space-y-6 relative transition-all duration-200 ${
+                className={`card-brand p-8 flex flex-col justify-between space-y-6 relative transition-all duration-200 ${
                   plan.highlight
-                    ? "border-[#D4FF00] shadow-2xl shadow-[#D4FF00]/10 ring-1 ring-[#D4FF00]/30"
-                    : "border-[#272B3F] hover:border-slate-700"
+                    ? "!border-[var(--accent-primary)] shadow-lg ring-2 ring-[var(--accent-primary)]/20"
+                    : ""
                 }`}
               >
                 {plan.highlight && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#D4FF00] text-black font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow flex items-center space-x-1">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[var(--accent-primary)] text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow flex items-center space-x-1">
                     <Star className="w-3 h-3 fill-current" />
                     <span>RECOMMENDED FOR WORKING ARTISTS</span>
                   </div>
@@ -171,23 +172,23 @@ export default function PricingPage() {
 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-bold text-white">{plan.name}</h3>
-                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">{plan.description}</p>
+                    <h3 className="font-serif text-2xl font-bold text-[var(--text-primary)]">{plan.name}</h3>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed">{plan.description}</p>
                   </div>
 
                   <div className="flex items-baseline space-x-1">
-                    <span className="text-4xl font-black text-white">{price}</span>
+                    <span className="text-4xl font-black text-[var(--text-primary)]">{price}</span>
                     {plan.period && (
-                      <span className="text-xs text-slate-400 font-mono">
+                      <span className="text-xs text-[var(--text-muted)] font-mono">
                         {plan.period} {billingCycle === "annual" && "(billed annually)"}
                       </span>
                     )}
                   </div>
 
-                  <div className="space-y-3 pt-4 border-t border-slate-800 text-xs text-slate-300">
+                  <div className="space-y-3 pt-4 border-t border-[var(--border-color)] text-xs text-[var(--text-secondary)]">
                     {plan.features.map((feat, idx) => (
                       <div key={idx} className="flex items-start space-x-2.5">
-                        <CheckCircle2 className="w-4 h-4 text-[#D4FF00] shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-[var(--accent-primary)] shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </div>
                     ))}
@@ -197,12 +198,12 @@ export default function PricingPage() {
                 <button
                   onClick={() => handleSubscribe(plan.id)}
                   disabled={loadingTier === plan.id || isCurrent}
-                  className={`w-full font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-transform active:scale-98 flex items-center justify-center space-x-2 ${
+                  className={`w-full font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all flex items-center justify-center space-x-2 ${
                     isCurrent
-                      ? "bg-slate-800 text-slate-400 cursor-default"
+                      ? "bg-[var(--bg-secondary)] text-[var(--text-muted)] cursor-default border border-[var(--border-color)]"
                       : plan.highlight
-                      ? "bg-[#D4FF00] hover:bg-[#bde600] text-black shadow-lg shadow-[#D4FF00]/15"
-                      : "bg-white hover:bg-slate-200 text-black"
+                      ? "btn-brand w-full"
+                      : "btn-brand-outline w-full"
                   }`}
                 >
                   <span>{isCurrent ? "Active Tier" : loadingTier === plan.id ? "Processing..." : plan.cta}</span>
@@ -214,19 +215,19 @@ export default function PricingPage() {
         </div>
 
         {/* Enterprise Guarantee */}
-        <div className="bg-[#121420] border border-[#272B3F] rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="card-brand p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <span className="text-[10px] font-mono text-[#D4FF00] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-mono text-[var(--accent-primary)] font-bold uppercase tracking-wider">
               100% Satisfaction Guarantee
             </span>
-            <h3 className="text-base font-bold text-white">Cancel or Pause Anytime with 1-Click</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="font-serif text-lg font-bold text-[var(--text-primary)]">Cancel or Pause Anytime with 1-Click</h3>
+            <p className="text-xs text-[var(--text-secondary)]">
               Manage your subscription, change credit cards, or download VAT invoices anytime via Stripe Customer Portal.
             </p>
           </div>
           <Link
             href="/billing"
-            className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs uppercase px-5 py-2.5 rounded-lg border border-slate-700 shrink-0 transition-colors"
+            className="btn-brand-outline text-xs px-5 py-2.5 shrink-0"
           >
             Manage Billing & Invoices
           </Link>
@@ -235,6 +236,7 @@ export default function PricingPage() {
       </main>
 
       <NewsletterSignup />
+      <Footer />
     </div>
   );
 }

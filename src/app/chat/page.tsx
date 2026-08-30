@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { useAuth } from "@/components/AuthContext";
-import { Sparkles, Send, Bot, User, ArrowRight, ShieldCheck, HelpCircle, Compass } from "lucide-react";
+import { Sparkles, Send, Bot, User, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -62,7 +63,7 @@ Select a prompt below or type your inquiry to get started!`,
         ...prev,
         {
           role: "assistant",
-          content: "Independent creators controlling both master sound recordings and publishing composition rights capture maximum equity yield. Try asking about catalogue multipliers or Spotify pitches!",
+          content: `**ADN Copilot Response**: Based on 2026 industry benchmarks, catalogues with growing streaming velocity typically command 14–16x trailing Net Publisher's Share (NPS). For active releases, maintain clean ISRC metadata and submit Spotify editorial pitches at least 21 days prior to release date.`,
         },
       ]);
     } finally {
@@ -71,121 +72,117 @@ Select a prompt below or type your inquiry to get started!`,
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090A0F]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
       <Header />
 
-      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col justify-between space-y-6">
-        
-        {/* Chat Header */}
-        <div className="bg-[#121420] border border-[#272B3F] rounded-2xl p-4 sm:p-5 flex items-center justify-between shadow-xl">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 flex-1 w-full flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-[#D4FF00]/10 border border-[#D4FF00]/30 flex items-center justify-center text-[#D4FF00]">
+            <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary-light)] border border-[var(--accent-primary)]/20 flex items-center justify-center text-[var(--accent-primary)]">
               <Bot className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h1 className="text-base font-bold text-white">ADN Music Business AI Copilot</h1>
-                <span className="bg-emerald-500/10 text-emerald-400 text-[10px] font-mono font-bold px-2 py-0.2 rounded border border-emerald-500/20">
-                  ONLINE
+                <h1 className="font-serif font-bold text-xl text-[var(--text-primary)]">ADN Music Business Copilot</h1>
+                <span className="bg-[var(--bg-secondary)] text-[var(--accent-primary)] font-mono text-[10px] font-bold px-2 py-0.5 rounded border border-[var(--border-color)]">
+                  LIVE AI
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-mono">Trained on 2026 Q1 catalogue deals, DSP policies & legal splits</p>
+              <p className="text-xs text-[var(--text-muted)] font-mono">
+                Trained on music law, royalty distribution models, and algorithmic promotion
+              </p>
             </div>
           </div>
-
-          <span className="text-xs font-mono text-slate-500 hidden sm:inline">
-            Tier: <strong className="text-[#D4FF00]">{user?.tier.toUpperCase()}</strong>
-          </span>
         </div>
 
-        {/* Message Stream */}
-        <div className="flex-1 space-y-4 overflow-y-auto max-h-[60vh] pr-2">
-          {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`flex items-start space-x-3 ${
-                msg.role === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              {msg.role === "assistant" && (
-                <div className="w-8 h-8 rounded-lg bg-[#D4FF00]/10 border border-[#D4FF00]/30 flex items-center justify-center text-[#D4FF00] shrink-0 mt-1">
-                  <Bot className="w-4 h-4" />
-                </div>
-              )}
-
+        {/* Chat Window */}
+        <div className="card-brand p-4 sm:p-6 flex-1 flex flex-col justify-between space-y-4 min-h-[460px]">
+          <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
+            {messages.map((m, idx) => (
               <div
-                className={`max-w-2xl rounded-2xl p-5 text-xs sm:text-sm leading-relaxed shadow-lg ${
-                  msg.role === "user"
-                    ? "bg-[#D4FF00] text-black font-semibold rounded-tr-sm"
-                    : "bg-[#141624] border border-[#2B2F44] text-slate-200 rounded-tl-sm space-y-2 whitespace-pre-line"
+                key={idx}
+                className={`flex items-start space-x-3 ${
+                  m.role === "user" ? "flex-row-reverse space-x-reverse" : ""
                 }`}
               >
-                {msg.content}
-              </div>
-
-              {msg.role === "user" && (
-                <div className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-white shrink-0 mt-1">
-                  <User className="w-4 h-4" />
-                </div>
-              )}
-            </div>
-          ))}
-
-          {loading && (
-            <div className="flex items-center space-x-3 text-xs font-mono text-slate-400 animate-pulse">
-              <div className="w-8 h-8 rounded-lg bg-[#D4FF00]/10 flex items-center justify-center text-[#D4FF00]">
-                <Bot className="w-4 h-4" />
-              </div>
-              <span>ADN Copilot is analyzing music business intelligence...</span>
-            </div>
-          )}
-        </div>
-
-        {/* Starter Suggestion Pills */}
-        {messages.length < 3 && (
-          <div className="space-y-2">
-            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
-              Suggested Questions:
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {starterPrompts.map((prompt, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleSend(prompt)}
-                  className="px-3 py-1.5 bg-[#141624] hover:bg-slate-800 text-xs text-slate-300 hover:text-white rounded-xl border border-slate-800 transition-colors text-left"
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 mt-1 ${
+                    m.role === "user" ? "bg-[var(--accent-primary)]" : "bg-[var(--bg-secondary)] text-[var(--accent-primary)] border border-[var(--border-color)]"
+                  }`}
                 >
-                  {prompt}
+                  {m.role === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-[var(--accent-primary)]" />}
+                </div>
+
+                <div
+                  className={`p-4 rounded-2xl max-w-xl text-xs sm:text-sm leading-relaxed ${
+                    m.role === "user"
+                      ? "bg-[var(--accent-primary)] text-white"
+                      : "bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)]"
+                  }`}
+                >
+                  <div className="prose prose-sm max-w-none dark:prose-invert">
+                    {m.content.split("\n").map((line, lIdx) => (
+                      <p key={lIdx} className="mb-1.5 last:mb-0">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {loading && (
+              <div className="flex items-center space-x-2 text-xs text-[var(--text-muted)] font-mono pl-11">
+                <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-bounce" />
+                <span>ADN Intelligence Copilot is querying catalogue databases...</span>
+              </div>
+            )}
+          </div>
+
+          {/* Starter Prompts */}
+          <div className="pt-3 border-t border-[var(--border-color)] space-y-2">
+            <div className="text-[11px] font-mono text-[var(--text-muted)]">Quick Inquiries:</div>
+            <div className="flex flex-wrap gap-2">
+              {starterPrompts.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => handleSend(p)}
+                  className="px-3 py-1.5 bg-[var(--bg-secondary)] hover:bg-[var(--border-color)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-xl border border-[var(--border-color)] transition-colors text-left"
+                >
+                  {p}
                 </button>
               ))}
             </div>
           </div>
-        )}
 
-        {/* Chat Input Bar */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
-          className="relative bg-[#141624] border border-[#2B2F44] rounded-2xl p-2 flex items-center space-x-2 shadow-2xl"
-        >
-          <input
-            type="text"
-            placeholder="Ask about catalogue multiples, sample clearances, Spotify pitches..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 bg-transparent px-4 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || loading}
-            className="bg-[#D4FF00] hover:bg-[#bde600] text-black font-black p-2.5 rounded-xl transition-transform active:scale-95 disabled:opacity-40"
+          {/* Input Box */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
+            className="flex items-center space-x-2 pt-2"
           >
-            <Send className="w-4 h-4" />
-          </button>
-        </form>
-
+            <input
+              type="text"
+              placeholder="Ask about publishing splits, Spotify pitching, catalogue valuation..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] focus:border-[var(--accent-primary)] rounded-xl px-4 py-3 text-xs sm:text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={loading || !input.trim()}
+              className="btn-brand px-4 py-3 shrink-0"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </form>
+        </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
