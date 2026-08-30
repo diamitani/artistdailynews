@@ -58,15 +58,28 @@ export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {
         {/* Main Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="w-9 h-9 rounded-lg bg-[var(--accent-primary)] flex items-center justify-center text-white font-black text-lg shadow-sm group-hover:shadow-md transition-shadow">
-                A
+            <Link href="/" className="flex items-center space-x-3 group">
+              {/* ADN Mark Badge */}
+              <div className="relative flex items-center">
+                <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex flex-col items-center justify-center text-white font-black shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all">
+                  <span className="text-[13px] tracking-wider leading-none font-mono font-black">ADN</span>
+                </div>
+                {/* Artispreneur Laurel Mini Badge Overlay */}
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[var(--bg-primary)] border border-[var(--border-color)] p-0.5 shadow-sm overflow-hidden flex items-center justify-center">
+                  <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
+                </div>
               </div>
+
               <div className="flex flex-col">
-                <span className="font-black text-lg tracking-tight leading-none text-[var(--text-primary)]">
-                  ARTIS<span className="text-[var(--accent-primary)]">PRENEUR</span>
-                </span>
-                <span className="text-[9px] font-mono uppercase tracking-widest text-[var(--text-muted)]">Artist Daily News</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-black text-lg tracking-tight leading-none text-[var(--text-primary)]">
+                    ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 text-[9px] font-mono tracking-wider text-[var(--text-muted)] uppercase -mt-0.5">
+                  <span>Powered by</span>
+                  <span className="font-bold text-[var(--accent-primary)] tracking-widest">ARTISPRENEUR</span>
+                </div>
               </div>
             </Link>
 

@@ -12,32 +12,44 @@ export function Footer() {
           
           {/* Col 1: Brand (2 cols) */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--bg-secondary)] border border-[#C5952B]/40 p-0.5 flex items-center justify-center shrink-0 shadow">
-                <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="relative flex items-center">
+                <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex flex-col items-center justify-center text-white font-black shadow-sm group-hover:scale-105 transition-all">
+                  <span className="text-[13px] tracking-wider leading-none font-mono font-black">ADN</span>
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] p-0.5 shadow-sm overflow-hidden flex items-center justify-center">
+                  <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
+                </div>
               </div>
-              <span className="font-black text-lg text-[var(--text-primary)] tracking-tight">
-                ARTIST DAILY <span className="text-[#E2B547]">NEWS</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="font-black text-lg text-[var(--text-primary)] tracking-tight">
+                  ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
+                </span>
+                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase">
+                  Powered by <strong className="text-[var(--accent-primary)]">Artispreneur</strong>
+                </span>
+              </div>
             </Link>
 
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-sm">
               The premier intelligence platform for independent musicians, managers, and indie labels worldwide. Aggregating 50+ music industry feeds with autonomous AI synthesis.
             </p>
 
-            <div className="p-3.5 bg-[var(--bg-secondary)] rounded-xl border border-[#C5952B]/20 flex items-center justify-between">
+            <div className="p-3.5 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] flex items-center justify-between">
               <div className="flex items-center space-x-2.5">
-                <img src="/artispreneur-logo.png" alt="" className="w-6 h-6 object-contain shrink-0" />
+                <div className="w-7 h-7 rounded-full bg-white p-0.5 border border-[var(--border-color)] flex items-center justify-center shrink-0">
+                  <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
+                </div>
                 <div>
-                  <div className="text-[11px] font-bold text-[var(--text-primary)]">An Artispreneur Media Property</div>
-                  <div className="text-[9px] font-mono text-[var(--text-muted)]">Independent Artist Entrepreneurship Hub</div>
+                  <div className="text-[11px] font-bold text-[var(--text-primary)]">Powered by Artispreneur.com</div>
+                  <div className="text-[9px] font-mono text-[var(--text-muted)]">The Music Business Operating System</div>
                 </div>
               </div>
               <a
                 href="https://artispreneur.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#E2B547] hover:underline font-mono text-[10px] font-bold flex items-center"
+                className="text-[var(--accent-primary)] hover:underline font-mono text-[10px] font-bold flex items-center"
               >
                 <span>Artispreneur.com</span>
                 <ExternalLink className="w-3 h-3 ml-0.5" />

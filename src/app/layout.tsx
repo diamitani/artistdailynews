@@ -25,8 +25,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Artispreneur — The Intelligence Platform for Independent Music Professionals",
-    template: "%s | Artispreneur · Artist Daily News",
+    default: "Artist Daily News — Powered by Artispreneur | Music Business Intelligence",
+    template: "%s | Artist Daily News (ADN) · Powered by Artispreneur",
   },
   description:
     "Join 35,000+ independent artists, managers, and labels. Daily music business intelligence, streaming royalty calculators, catalogue valuation data, AI copilot, press credentials, and exclusive partner deals.",
