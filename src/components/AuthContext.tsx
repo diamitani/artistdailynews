@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 export type UserRole = "Artist" | "Manager" | "Producer" | "Label" | "Press";
 export type MembershipTier = "free" | "pro_insider" | "enterprise";
@@ -19,90 +21,204 @@ export interface UserProfile {
 interface AuthContextType {
   user: UserProfile | null;
   isAuthenticated: boolean;
-  login: (email: string, name?: string, role?: UserRole) => void;
-  logout: () => void;
-  upgradeTier: (tier: MembershipTier) => void;
-  toggleSaveArticle: (articleId: string) => void;
-  updateProfile: (updates: Partial<UserProfile>) => void;
+  isLoading: boolean;
+  signInWithPassword: (email: string, password: string) => Promise<void>;
+  signInWithOAuth: (provider: "google" | "spotify") => Promise<void>;
+  signUp: (email: string, password: string, name?: string, role?: UserRole) => Promise<void>;
+  logout: () => Promise<void>;
+  upgradeTier: (tier: MembershipTier) => Promise<void>;
+  toggleSaveArticle: (articleId: string) => Promise<void>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<void>;
 }
-
-const DEFAULT_USER: UserProfile = {
-  id: "user-demo-01",
-  email: "artist@adn.media",
-  name: "Jordan Hayes",
-  role: "Artist",
-  tier: "free",
-  avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-  savedArticleIds: ["art-01", "art-02"],
-  topicsOfInterest: ["financial", "streaming", "opportunities"],
-};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserProfile | null>(DEFAULT_USER);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
 
-  useEffect(() => {
-    const saved = localStorage.getItem("adn-user-session");
-    if (saved) {
-      try {
-        setUser(JSON.parse(saved));
-      } catch (e) {
-        console.error(e);
+  // Fetch profile from Supabase
+  const fetchProfile = async (authUser: User) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", authUser.id)
+        .single();
+
+      if (error) throw error;
+
+      if (profile) {
+        // Fetch saved articles
+        const { data: savedArticles } = await supabase
+          .from("user_saved_articles")
+          .select("article_id")
+          .eq("user_id", authUser.id);
+
+        const userProfile: UserProfile = {
+          id: profile.id,
+          email: profile.email,
+          name: profile.name || authUser.email?.split("@")[0] || "User",
+          role: profile.role as UserRole,
+          tier: profile.tier as MembershipTier,
+          avatarUrl: profile.avatar_url || "",
+          savedArticleIds: savedArticles?.map((a) => a.article_id) || [],
+          topicsOfInterest: profile.topics_of_interest || [],
+        };
+
+        setUser(userProfile);
       }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
     }
+  };
+
+  // Initialize auth state
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          await fetchProfile(session.user);
+        }
+      } catch (error) {
+        console.error("Error initializing auth:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        await fetchProfile(session.user);
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const saveUserSession = (updatedUser: UserProfile | null) => {
-    setUser(updatedUser);
-    if (updatedUser) {
-      localStorage.setItem("adn-user-session", JSON.stringify(updatedUser));
-    } else {
-      localStorage.removeItem("adn-user-session");
-    }
-  };
-
-  const login = (email: string, name?: string, role?: UserRole) => {
-    const newUser: UserProfile = {
-      id: `user-${Date.now()}`,
+  const signInWithPassword = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
       email,
-      name: name || email.split("@")[0],
-      role: role || "Artist",
-      tier: "free",
-      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-      savedArticleIds: ["art-01"],
-      topicsOfInterest: ["financial", "streaming"],
-    };
-    saveUserSession(newUser);
+      password,
+    });
+    if (error) throw error;
   };
 
-  const logout = () => {
-    saveUserSession(null);
+  const signInWithOAuth = async (provider: "google" | "spotify") => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) throw error;
   };
 
-  const upgradeTier = (tier: MembershipTier) => {
-    if (user) {
-      const updated = { ...user, tier };
-      saveUserSession(updated);
+  const signUp = async (
+    email: string,
+    password: string,
+    name?: string,
+    role?: UserRole
+  ) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name: name || email.split("@")[0],
+          role: role || "Artist",
+        },
+      },
+    });
+    if (error) throw error;
+
+    // Profile will be created automatically via database trigger
+  };
+
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    setUser(null);
+  };
+
+  const upgradeTier = async (tier: MembershipTier) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ tier })
+      .eq("id", user.id);
+
+    if (error) throw error;
+
+    setUser({ ...user, tier });
+  };
+
+  const toggleSaveArticle = async (articleId: string) => {
+    if (!user) return;
+
+    const isSaved = user.savedArticleIds.includes(articleId);
+
+    if (isSaved) {
+      // Remove from saved
+      const { error } = await supabase
+        .from("user_saved_articles")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("article_id", articleId);
+
+      if (error) throw error;
+
+      setUser({
+        ...user,
+        savedArticleIds: user.savedArticleIds.filter((id) => id !== articleId),
+      });
+    } else {
+      // Add to saved
+      const { error } = await supabase
+        .from("user_saved_articles")
+        .insert({ user_id: user.id, article_id: articleId });
+
+      if (error) throw error;
+
+      setUser({
+        ...user,
+        savedArticleIds: [...user.savedArticleIds, articleId],
+      });
     }
   };
 
-  const toggleSaveArticle = (articleId: string) => {
-    if (user) {
-      const isSaved = user.savedArticleIds.includes(articleId);
-      const newSaved = isSaved
-        ? user.savedArticleIds.filter((id) => id !== articleId)
-        : [...user.savedArticleIds, articleId];
-      const updated = { ...user, savedArticleIds: newSaved };
-      saveUserSession(updated);
-    }
-  };
+  const updateProfile = async (updates: Partial<UserProfile>) => {
+    if (!user) return;
 
-  const updateProfile = (updates: Partial<UserProfile>) => {
-    if (user) {
-      const updated = { ...user, ...updates };
-      saveUserSession(updated);
-    }
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        name: updates.name,
+        role: updates.role,
+        avatar_url: updates.avatarUrl,
+        topics_of_interest: updates.topicsOfInterest,
+      })
+      .eq("id", user.id);
+
+    if (error) throw error;
+
+    setUser({ ...user, ...updates });
   };
 
   return (
@@ -110,7 +226,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         isAuthenticated: !!user,
-        login,
+        isLoading,
+        signInWithPassword,
+        signInWithOAuth,
+        signUp,
         logout,
         upgradeTier,
         toggleSaveArticle,
