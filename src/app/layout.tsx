@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Newsreader, Inter, JetBrains_Mono } from "next/font/google";
+import { Newsreader, Inter, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { AudioProvider } from "@/components/AudioContext";
 import { AuthProvider } from "@/components/AuthContext";
 import { AudioPlayerBar } from "@/components/AudioPlayerBar";
 import { ReadingProgressBar } from "@/components/ReadingProgressBar";
+import { cn } from "@/lib/utils";
 
 const newsreader = Newsreader({
   subsets: ["latin"],
@@ -14,11 +15,7 @@ const newsreader = Newsreader({
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -119,7 +116,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`light ${newsreader.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={cn("light", newsreader.variable, jetbrainsMono.variable, "font-sans", geist.variable)}>
       <head>
         <script
           type="application/ld+json"
