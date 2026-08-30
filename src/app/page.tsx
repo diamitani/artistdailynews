@@ -1,24 +1,18 @@
 import React from 'react';
-import { adnDb } from '@/lib/adn-db';
+import { getArticles } from '@/lib/adn-db';
 import Link from 'next/link';
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 export default async function HomePage() {
-  // Fetch latest items from Supabase
-  const { data: rawItems, error } = await adnDb
-    .from('adn_items')
-    .select('*')
-    .order('freshness', { ascending: false })
-    .limit(50);
-
-  const items = rawItems || [];
+  // Fetch latest real items from database / live RSS cache
+  const items = await getArticles(100);
 
   // Group by pillar
-  const cultureItems = items.filter(item => item.pillar === 'culture').slice(0, 6);
-  const businessItems = items.filter(item => item.pillar === 'business').slice(0, 6);
-  const ideasItems = items.filter(item => item.pillar === 'ideas').slice(0, 6);
+  const cultureItems = items.filter(item => item.pillar === 'culture').slice(0, 10);
+  const businessItems = items.filter(item => item.pillar === 'business').slice(0, 10);
+  const ideasItems = items.filter(item => item.pillar === 'ideas').slice(0, 10);
 
   return (
     <div className="min-h-screen bg-[#F2F0E9] text-[#14130F] overflow-x-hidden">

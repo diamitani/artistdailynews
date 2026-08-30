@@ -6,21 +6,23 @@ const parser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
   trimValues: true,
+  processEntities: false,
+  htmlEntities: true,
   cdataPropName: "__cdata",
 });
 
 export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 9000); // 9s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
 
     const response = await fetch(source.url, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "ArtistDailyNews-Aggregator/2.0 (+https://artistdailynews.com; editorial@artistdailynews.com)",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         Accept: "application/rss+xml, application/xml, text/xml, application/atom+xml, */*",
       },
-      next: { revalidate: 1800 },
+      next: { revalidate: 900 },
     });
 
     clearTimeout(timeoutId);
@@ -53,8 +55,8 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
 
     const articles: Article[] = [];
 
-    for (const item of rawItems.slice(0, 15)) {
-      const rawTitle = extractText(item.title) || "Untitled Industry Dispatch";
+    for (const item of rawItems) {
+      const rawTitle = extractText(item.title) || "";
       const title = cleanHtml(rawTitle);
       if (!title || title.length < 6) continue;
 
@@ -79,6 +81,9 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
       const uniqueHash = Math.random().toString(36).substring(2, 6);
       const slug = `${slugify(title).slice(0, 65)}-${uniqueHash}`;
 
+      const rawAuthor = extractText(item.author) || extractText(item["dc:creator"]) || `${source.name} Editorial`;
+      const author = cleanHtml(rawAuthor) || `${source.name} Newsdesk`;
+
       // Synthesize Takeaways & Strategic DIY Signal
       const takeaway = generateActionableTakeaway(source.name, source.category, title);
       const bullets = generateBullets(source.name, source.category, title, cleanedSnippet);
@@ -98,11 +103,11 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
         originalUrl: link,
         imageUrl,
         publishedAt: isValidDate(pubDateStr) ? new Date(pubDateStr).toISOString() : new Date().toISOString(),
-        readTimeMinutes: Math.max(2, Math.min(8, Math.ceil(cleanedSnippet.split(" ").length / 45))),
+        readTimeMinutes: Math.max(2, Math.min(8, Math.ceil((cleanedSnippet.split(" ").length || 100) / 45))),
         isBreaking: title.toLowerCase().includes("breaking") || title.toLowerCase().includes("urgent"),
         tags: [source.name, source.category, "Music Business", "Independent Rights"],
-        content: cleanHtml(rawContent),
-        author: `${source.name} Newsdesk`,
+        content: cleanHtml(rawContent) || cleanedSnippet,
+        author,
       });
     }
 
@@ -118,6 +123,7 @@ function extractText(val: any): string {
   if (typeof val === "string") return val;
   if (val.__cdata) return val.__cdata;
   if (val["#text"]) return val["#text"];
+  if (val.name) return String(val.name);
   return String(val);
 }
 
@@ -127,6 +133,7 @@ function extractLink(item: any): string {
   if (Array.isArray(item.link)) {
     const alternate = item.link.find((l: any) => l["@_rel"] === "alternate" || !l["@_rel"]);
     if (alternate?.["@_href"]) return alternate["@_href"];
+    if (item.link[0]?.["@_href"]) return item.link[0]["@_href"];
   }
   if (item.guid && typeof item.guid === "string" && item.guid.startsWith("http")) return item.guid;
   if (item.guid?.["#text"] && item.guid["#text"].startsWith("http")) return item.guid["#text"];
@@ -140,14 +147,17 @@ function extractImage(item: any, rawContent: string): string | null {
     return item["media:content"][0]["@_url"];
   }
   // 2. Enclosure
-  if (item.enclosure?.["@_url"] && item.enclosure["@_type"]?.includes("image")) {
+  if (item.enclosure?.["@_url"] && (item.enclosure["@_type"]?.includes("image") || !item.enclosure["@_type"])) {
     return item.enclosure["@_url"];
   }
   // 3. Media thumbnail
   if (item["media:thumbnail"]?.["@_url"]) return item["media:thumbnail"]["@_url"];
+  if (Array.isArray(item["media:thumbnail"]) && item["media:thumbnail"][0]?.["@_url"]) {
+    return item["media:thumbnail"][0]["@_url"];
+  }
   // 4. Embedded HTML image tag
   const imgMatch = rawContent.match(/<img[^>]+src=["']([^"'>]+)["']/i);
-  if (imgMatch && imgMatch[1] && !imgMatch[1].includes("doubleclick") && !imgMatch[1].includes("feedburner") && !imgMatch[1].includes("gravatar")) {
+  if (imgMatch && imgMatch[1] && !imgMatch[1].includes("doubleclick") && !imgMatch[1].includes("feedburner") && !imgMatch[1].includes("gravatar") && !imgMatch[1].includes("tracking")) {
     return imgMatch[1];
   }
   return null;
@@ -162,12 +172,15 @@ function cleanHtml(htmlStr: any): string {
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&#8217;/g, "'")
     .replace(/&#8216;/g, "'")
     .replace(/&#8220;/g, '"')
     .replace(/&#8221;/g, '"')
+    .replace(/&#8211;/g, "-")
+    .replace(/&#8212;/g, "—")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -215,4 +228,3 @@ function defaultImageForCategory(category: CategoryType): string {
   };
   return images[category] || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80";
 }
-

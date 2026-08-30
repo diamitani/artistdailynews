@@ -1,6 +1,11 @@
 import { Article, FeedSource, Subscriber, PressPassApplication } from "./types";
 import { MOCK_ARTICLES } from "./mock-articles";
 import { INITIAL_FEEDS } from "./feeds-config";
+import REAL_ARTICLES_JSON from "../data/articles.json";
+
+const BASE_ARTICLES: Article[] = Array.isArray(REAL_ARTICLES_JSON) && REAL_ARTICLES_JSON.length > 0 
+  ? (REAL_ARTICLES_JSON as Article[]) 
+  : MOCK_ARTICLES;
 
 /**
  * Universal Database Layer for Artist Daily News (ADN)
@@ -17,7 +22,7 @@ declare global {
 }
 
 if (!global.__adn_articles_db) {
-  global.__adn_articles_db = [...MOCK_ARTICLES];
+  global.__adn_articles_db = [...BASE_ARTICLES];
 }
 
 if (!global.__adn_sources_db) {
