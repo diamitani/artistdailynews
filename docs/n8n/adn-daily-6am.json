@@ -1,0 +1,38 @@
+{
+  "name": "ADN Daily 6am Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 6 * * *"}]
+        }
+      },
+      "id": "schedule",
+      "name": "Daily 6am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://news.artispreneur.com/api/cron/rss-ingest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Authorization", "value": "Bearer {{$env.CRON_SECRET}}"}
+          ]
+        }
+      },
+      "id": "trigger",
+      "name": "Trigger Ingest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 300]
+    }
+  ],
+  "connections": {
+    "Daily 6am": {"main": [[{"node": "Trigger Ingest", "type": "main", "index": 0}]]}
+  },
+  "active": false
+}

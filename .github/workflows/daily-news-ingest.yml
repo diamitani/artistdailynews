@@ -1,0 +1,16 @@
+name: Daily News RSS Ingest
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 6am UTC daily
+  workflow_dispatch:
+
+jobs:
+  ingest-rss:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger RSS Ingest
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://news.artispreneur.com/api/cron/rss-ingest
