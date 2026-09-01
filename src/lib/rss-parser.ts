@@ -163,24 +163,31 @@ function extractImage(item: any, rawContent: string): string | null {
   return null;
 }
 
+function decodeHtmlEntities(str: string): string {
+  // Decode numeric entities (&#NNN; and &#xHHH;)
+  return str
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+}
+
 function cleanHtml(htmlStr: any): string {
   if (!htmlStr) return "";
   const str = typeof htmlStr === "object" ? htmlStr["#text"] || htmlStr.__cdata || "" : String(htmlStr);
-  return str
+  return decodeHtmlEntities(str)
     .replace(/<[^>]*>?/gm, "")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
-    .replace(/&#8217;/g, "'")
-    .replace(/&#8216;/g, "'")
-    .replace(/&#8220;/g, '"')
-    .replace(/&#8221;/g, '"')
-    .replace(/&#8211;/g, "-")
-    .replace(/&#8212;/g, "—")
+    .replace(/&mdash;/g, "—")
+    .replace(/&ndash;/g, "–")
+    .replace(/&ldquo;/g, '"')
+    .replace(/&rdquo;/g, '"')
+    .replace(/&lsquo;/g, "'")
+    .replace(/&rsquo;/g, "'")
+    .replace(/&hellip;/g, "…")
     .replace(/\s+/g, " ")
     .trim();
 }
