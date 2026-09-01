@@ -235,12 +235,12 @@ export default async function PremiumMediaHomepage() {
             </div>
           </div>
 
-          {/* Social Column */}
+          {/* Features Column */}
           <div>
             <SectionHeader
-              title="Social"
-              href="/topics/social"
-              color="#7C3AED"
+              title="Features"
+              href="/topics/features"
+              color="#8B5CF6"
               icon={<Star className="w-4 h-4" />}
             />
             <div className="space-y-6">
