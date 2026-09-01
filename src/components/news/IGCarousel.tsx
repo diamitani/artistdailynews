@@ -6,7 +6,7 @@ import React from 'react';
 export function IGSlide({ slideIndex, kicker, headline, body }: { slideIndex: number, kicker: string, headline?: string, body?: string }) {
   const bgNewsprint = "#F6F1E8";
   const textInk = "#111111";
-  const textRed = "#C1121F";
+  const textRed = "#C0272D";
 
   return (
     <div style={{

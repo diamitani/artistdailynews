@@ -29,7 +29,7 @@ export function ArtispreneurLogo({ size = "md", showText = true, className = "",
         <img
           src="/artispreneur-logo.png"
           alt="Artispreneur Logo"
-          className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(193,18,31,0.25)]"
+          className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(192,39,45,0.25)]"
         />
       </div>
 

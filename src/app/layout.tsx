@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Newsreader, Inter, JetBrains_Mono, Geist } from "next/font/google";
+import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -9,14 +9,19 @@ import { AudioPlayerBar } from "@/components/AudioPlayerBar";
 import { ReadingProgressBar } from "@/components/ReadingProgressBar";
 import { cn } from "@/lib/utils";
 
-const newsreader = Newsreader({
+const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-serif-headline",
   display: "swap",
 });
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -61,10 +66,10 @@ export const metadata: Metadata = {
     siteName: "Artispreneur · Artist Daily News",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80",
+        url: "https://artistdailynews.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Artispreneur · Artist Daily News",
+        alt: "Artist Daily News - Music Business Intelligence for Independent Artists",
       },
     ],
     locale: "en_US",
@@ -117,16 +122,11 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={cn("light", newsreader.variable, jetbrainsMono.variable, "font-sans", geist.variable)}>
+    <html lang="en" className={cn("light", playfairDisplay.variable, inter.variable, jetbrainsMono.variable, "font-sans")}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
-          crossOrigin="anonymous"
         />
       </head>
       <body className="min-h-screen flex flex-col font-sans antialiased">

@@ -79,7 +79,7 @@ export default async function NewsroomPage() {
       {/* Personalized Greeting Header */}
       <div className="bg-[#111111] text-[#F6F1E8] p-8 mb-12">
         <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4">Patrick's Newsroom</h2>
-        <div className="flex flex-wrap gap-2 font-sans text-xs font-bold uppercase tracking-widest text-[#C1121F]">
+        <div className="flex flex-wrap gap-2 font-sans text-xs font-bold uppercase tracking-widest text-[#C0272D]">
           <span className="bg-[#F6F1E8] px-2 py-1">Chicago</span>
           <span className="bg-[#F6F1E8] px-2 py-1">Hip-hop / EDM</span>
           <span className="bg-[#F6F1E8] px-2 py-1">Releasing</span>
@@ -96,7 +96,7 @@ export default async function NewsroomPage() {
         <h3 className="font-sans font-black text-2xl uppercase text-[#111111]">
           Your 7 · {currentDate}
         </h3>
-        <button className="font-sans text-sm font-bold uppercase text-[#C1121F] hover:underline flex items-center space-x-1">
+        <button className="font-sans text-sm font-bold uppercase text-[#C0272D] hover:underline flex items-center space-x-1">
           <span>🔗 Share this Newsroom</span>
         </button>
       </div>

@@ -36,7 +36,7 @@ export default async function DailyPostHomepage() {
       { title: "Universal Music Q2 earnings breakdown", platform: "Email", time: "4 hours ago" },
       { title: "Live Nation faces new regulatory scrutiny", platform: "Web", time: "8 hours ago" }
     ],
-    ideas: [
+    social: [
       { title: "Questlove on the anatomy of a groove", platform: "Podcast", time: "Yesterday" },
       { title: "How to build an email list from scratch", platform: "YouTube", time: "2 days ago" }
     ]
@@ -113,13 +113,13 @@ export default async function DailyPostHomepage() {
             </div>
           </div>
 
-          {/* Ideas Rail */}
+          {/* Social Rail */}
           <div className="card-brand p-6">
             <h3 className="font-serif font-bold text-xl uppercase border-b border-[var(--border-color)] pb-2 mb-4 text-[var(--accent-blue)]">
-              Ideas
+              Social
             </h3>
             <div className="space-y-4">
-              {rails.ideas?.map((item: any, idx: number) => (
+              {rails.social?.map((item: any, idx: number) => (
                 <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
               ))}
             </div>

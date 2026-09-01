@@ -47,7 +47,7 @@ export function LiveRail({ city, events }: LiveRailProps) {
               
               {/* Event Info */}
               <div className="p-3 flex-grow flex flex-col justify-center">
-                <h4 className="font-serif text-lg font-bold text-[#111111] leading-tight group-hover:text-[#C1121F]">
+                <h4 className="font-serif text-lg font-bold text-[#111111] leading-tight group-hover:text-[#C0272D]">
                   {event.artist}
                 </h4>
                 <div className="flex items-center text-xs font-sans font-semibold text-[#111111]/70 mt-1 uppercase tracking-wider">
@@ -61,7 +61,7 @@ export function LiveRail({ city, events }: LiveRailProps) {
                   href={event.ticketUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-xs font-bold uppercase text-[#C1121F] hover:underline"
+                  className="font-sans text-xs font-bold uppercase text-[#C0272D] hover:underline"
                 >
                   Tickets
                 </a>

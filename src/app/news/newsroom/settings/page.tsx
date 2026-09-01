@@ -29,7 +29,7 @@ export default function NewsroomSettingsPage() {
   return (
     <div className="max-w-2xl mx-auto py-8">
       <div className="mb-8">
-        <Link href="/news/newsroom" className="font-sans text-sm font-bold uppercase tracking-widest text-[#111111]/70 hover:text-[#C1121F]">
+        <Link href="/news/newsroom" className="font-sans text-sm font-bold uppercase tracking-widest text-[#111111]/70 hover:text-[#C0272D]">
           ← Back to Newsroom
         </Link>
       </div>
@@ -108,7 +108,7 @@ export default function NewsroomSettingsPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-[#C1121F] text-[#F6F1E8] px-6 py-4 font-sans font-bold uppercase tracking-wide hover:bg-red-800 transition-colors disabled:opacity-50"
+            className="w-full bg-[#C0272D] text-[#F6F1E8] px-6 py-4 font-sans font-bold uppercase tracking-wide hover:bg-red-800 transition-colors disabled:opacity-50"
           >
             {loading ? 'Saving...' : 'Save Preferences'}
           </button>

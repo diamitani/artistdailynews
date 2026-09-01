@@ -50,7 +50,7 @@ export default async function NewsroomSharePage({ params }: { params: Promise<{ 
   return (
     <div className="max-w-4xl mx-auto">
       {/* Share Card Header */}
-      <div className="bg-[#111111] text-[#F6F1E8] p-8 mb-12 text-center border-b-8 border-[#C1121F]">
+      <div className="bg-[#111111] text-[#F6F1E8] p-8 mb-12 text-center border-b-8 border-[#C0272D]">
         <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4">{userName}'s ADN · {currentDate}</h2>
         <p className="font-sans text-lg opacity-90 max-w-2xl mx-auto">
           A personalized daily brief from Artist Daily News. 
@@ -79,7 +79,7 @@ export default async function NewsroomSharePage({ params }: { params: Promise<{ 
         <p className="font-sans text-sm text-[#111111]/70 mb-4">
           Join Artispreneur to get a personalized daily brief for your career stage.
         </p>
-        <a href="/news" className="inline-block bg-[#111111] text-[#F6F1E8] px-8 py-3 font-sans font-bold uppercase tracking-wide hover:bg-[#C1121F] transition-colors">
+        <a href="/news" className="inline-block bg-[#111111] text-[#F6F1E8] px-8 py-3 font-sans font-bold uppercase tracking-wide hover:bg-[#C0272D] transition-colors">
           Get Started
         </a>
       </div>

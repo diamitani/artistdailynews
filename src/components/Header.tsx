@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Radio, Menu, X, BarChart3, Newspaper, Sparkles, Bot, User, TrendingUp, Gift, Mic2, BookOpen, Mail, ChevronDown } from "lucide-react";
+import { Search, Radio, Menu, X, BarChart3, Newspaper, Sparkles, Bot, User, TrendingUp, Gift, Mic2, Star, Mail, ChevronDown } from "lucide-react";
 import { CommandMenu } from "./CommandMenu";
 import { useAuth } from "./AuthContext";
 
@@ -13,8 +13,8 @@ interface HeaderProps {
 
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
-  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C1121F" },
-  { href: "/topics/tech-ai", label: "Ideas", icon: BookOpen, color: "#1D4ED8" },
+  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
+  { href: "/topics/features", label: "Features", icon: Star, color: "#8B5CF6" },
 ];
 
 const NAV_ITEMS = [
@@ -61,7 +61,7 @@ export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {
                 <span className="text-[var(--border-highlight)]">|</span>
                 <span className="text-[var(--accent-primary)] font-bold">Spotify $0.0035 ▼</span>
               </div>
-              <Link href="/network" className="flex items-center space-x-1.5 text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] transition-colors">
+              <Link href="/network" className="flex items-center space-x-1.5 text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] transition-colors">
                 <Gift className="w-3.5 h-3.5" />
                 <span className="font-bold hidden sm:inline">Partner Deals</span>
               </Link>

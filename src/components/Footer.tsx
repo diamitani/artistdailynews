@@ -3,12 +3,12 @@ import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, Tren
 
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
-  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C1121F" },
+  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
   { href: "/topics/tech-ai", label: "Ideas", icon: BookOpen, color: "#1D4ED8" },
 ];
 
 const ECOSYSTEM_LINKS = [
-  { href: "/network", label: "Partner Deals", icon: Gift, highlight: true },
+  { href: "/network", label: "Partner Deals", icon: Gift, highlight: true, gold: true },
   { href: "/tools", label: "Financial Lab", icon: BarChart3 },
   { href: "/chat", label: "AI Copilot", icon: Bot },
   { href: "/podcasts", label: "Podcasts", icon: Radio },
@@ -152,7 +152,9 @@ export function Footer() {
                   <Link
                     href={link.href}
                     className={`flex items-center space-x-2 text-sm transition-colors ${
-                      link.highlight
+                      link.gold
+                        ? 'text-[var(--color-gold)] font-medium hover:text-[var(--color-gold-hover)]'
+                        : link.highlight
                         ? 'text-[var(--accent-primary)] font-medium hover:text-[var(--accent-primary-hover)]'
                         : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                     }`}
@@ -195,11 +197,11 @@ export function Footer() {
               ))}
             </ul>
 
-            {/* VIP CTA */}
+            {/* VIP CTA — Gold for Premium Upgrade */}
             <div className="pt-4">
               <Link
                 href="/pricing"
-                className="inline-flex items-center gap-2 bg-[var(--accent-primary)] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[var(--accent-primary-hover)] transition-colors"
+                className="btn-brand-gold px-4 py-2 text-sm"
               >
                 <Sparkles className="w-4 h-4" />
                 Get VIP Pro

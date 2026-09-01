@@ -1,8 +1,11 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CATEGORIES } from "@/lib/feeds-config";
-import { MOCK_ARTICLES } from "@/lib/mock-articles";
+import { getArticles } from "@/lib/adn-db";
 import { TopicDeskClient } from "@/components/TopicDeskClient";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -38,6 +41,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// Map category slugs to pillar names used in the database
+const CATEGORY_TO_PILLAR: Record<string, string> = {
+  financial: "business",
+  streaming: "culture",
+  "tech-ai": "ideas",
+  marketing: "culture",
+  legal: "business",
+  podcasts: "culture",
+  tutorials: "ideas",
+  opportunities: "business",
+};
+
 export default async function TopicPage({ params }: Props) {
   const { category } = await params;
   const currentCat = CATEGORIES.find((c) => c.slug === category);
@@ -46,13 +61,20 @@ export default async function TopicPage({ params }: Props) {
     notFound();
   }
 
-  const categoryArticles = MOCK_ARTICLES.filter((a) => a.category === currentCat.id);
+  // Fetch all articles first
+  const allArticles = await getArticles(100);
+
+  // Filter by category field OR by mapped pillar
+  const pillar = CATEGORY_TO_PILLAR[currentCat.id];
+  const categoryArticles = allArticles.filter(
+    (a: any) => a.category === currentCat.id || a.pillar === pillar
+  );
 
   return (
     <TopicDeskClient
       currentCategory={currentCat}
       articles={categoryArticles}
-      allArticles={MOCK_ARTICLES}
+      allArticles={allArticles}
     />
   );
 }

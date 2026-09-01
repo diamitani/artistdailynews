@@ -8,7 +8,7 @@ import {
   Clock,
   TrendingUp,
   Mic2,
-  BookOpen,
+  Star,
   ChevronRight,
   Mail,
   Play,
@@ -27,18 +27,18 @@ export default async function PremiumMediaHomepage() {
   // Organize content by pillar
   const businessArticles = articles.filter(a => a.pillar === 'business');
   const cultureArticles = articles.filter(a => a.pillar === 'culture');
-  const ideasArticles = articles.filter(a => a.pillar === 'ideas');
+  const socialArticles = articles.filter(a => a.pillar === 'social');
 
   // Featured story (lead from issue or first business article)
   const featuredStory = issue?.lead_item || businessArticles[0];
 
   // Top stories for hero sidebar
-  const topStories = articles.slice(0, 5);
+  const topStories = articles.slice(0, 11);
 
   // Section content
   const businessSection = businessArticles.slice(0, 6);
   const cultureSection = cultureArticles.slice(0, 6);
-  const ideasSection = ideasArticles.slice(0, 4);
+  const socialSection = socialArticles.slice(0, 4);
 
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -149,7 +149,7 @@ export default async function PremiumMediaHomepage() {
               Top Stories
             </h3>
             <div className="space-y-5">
-              {topStories.slice(1, 6).map((article, idx) => (
+              {topStories.slice(1, 11).map((article, idx) => (
                 <article key={article.id || idx} className="group">
                   <div className="flex items-start gap-3">
                     <span className="font-mono text-2xl font-bold text-[var(--border-highlight)] group-hover:text-[var(--accent-primary)] transition-colors">
@@ -225,7 +225,7 @@ export default async function PremiumMediaHomepage() {
             <SectionHeader
               title="Culture"
               href="/topics/streaming"
-              color="#C1121F"
+              color="#C0272D"
               icon={<Mic2 className="w-4 h-4" />}
             />
             <div className="space-y-6">
@@ -235,21 +235,21 @@ export default async function PremiumMediaHomepage() {
             </div>
           </div>
 
-          {/* Ideas Column */}
+          {/* Social Column */}
           <div>
             <SectionHeader
-              title="Ideas"
-              href="/topics/tech-ai"
-              color="#1D4ED8"
-              icon={<BookOpen className="w-4 h-4" />}
+              title="Social"
+              href="/topics/social"
+              color="#7C3AED"
+              icon={<Star className="w-4 h-4" />}
             />
             <div className="space-y-6">
-              {ideasSection.map((article, idx) => (
+              {socialSection.map((article, idx) => (
                 <ArticleCard key={article.id || idx} article={article} featured={idx === 0} />
               ))}
             </div>
 
-            {/* Podcast Promo in Ideas Column */}
+            {/* Podcast Promo in Social Column */}
             <div className="mt-8 p-5 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 rounded-lg bg-[var(--accent-primary)] flex items-center justify-center">

@@ -26,7 +26,7 @@ export function EmailTemplate({
   // Styles inline for email compatibility
   const bgNewsprint = "#F6F1E8";
   const textInk = "#111111";
-  const textRed = "#C1121F";
+  const textRed = "#C0272D";
   const borderGray = "#D9D1C4";
 
   return (

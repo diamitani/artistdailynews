@@ -175,7 +175,11 @@
   @apply bg-[var(--color-gold)] text-[var(--color-charcoal)] rounded-lg;
   @apply transition-all duration-200 ease-out;
   @apply hover:bg-[var(--color-gold-hover)] hover:scale-[1.02];
-  @apply active:scale-[0.98] shadow-sm hover:shadow-md;
+  @apply active:scale-[0.98] shadow-sm;
+}
+
+.btn-brand-gold:hover {
+  box-shadow: 0 4px 16px rgba(245, 193, 0, 0.3);
 }
 
 .btn-brand-gold-outline {
@@ -213,6 +217,24 @@
   @apply bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm;
   @apply transition-all duration-200 ease-out;
   @apply hover:shadow-md hover:border-[var(--border-highlight)];
+}
+
+/* Premium Card with Gold Border */
+.card-brand-premium {
+  @apply bg-[var(--bg-card)] rounded-xl border-2 border-[var(--color-gold)] shadow-sm;
+  @apply transition-all duration-200 ease-out;
+}
+
+.card-brand-premium:hover {
+  box-shadow: 0 4px 16px rgba(245, 193, 0, 0.25);
+}
+
+/* Featured Card with Gold Top Border */
+.card-brand-featured {
+  @apply bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm;
+  @apply border-t-4 border-t-[var(--color-gold)];
+  @apply transition-all duration-200 ease-out;
+  @apply hover:shadow-md;
 }
 
 /* Drop Cap */

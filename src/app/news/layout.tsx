@@ -24,7 +24,7 @@ export default function NewsLayout({ children }: { children: React.ReactNode }) 
               {isAuthenticated ? (
                 <>
                   <Link href="/news/newsroom/settings" className="hover:text-[#111111]">Settings</Link>
-                  <Link href="/news/desk" className="hover:text-[#C1121F]">Desk</Link>
+                  <Link href="/news/desk" className="hover:text-[#C0272D]">Desk</Link>
                   <button className="hover:text-[#111111]">Sign Out</button>
                 </>
               ) : (
@@ -33,12 +33,12 @@ export default function NewsLayout({ children }: { children: React.ReactNode }) 
             </div>
             {/* Main nav */}
             <nav className="flex space-x-4 md:space-x-6 font-sans font-semibold text-sm uppercase">
-              <Link href="/news" className="hover:text-[#C1121F]">Today</Link>
-              <Link href="/news/articles?pillar=culture" className="hover:text-[#C1121F] hidden sm:block">Culture</Link>
-              <Link href="/news/articles?pillar=business" className="hover:text-[#C1121F] hidden sm:block">Business</Link>
-              <Link href="/news/articles?pillar=ideas" className="hover:text-[#C1121F] hidden sm:block">Ideas</Link>
-              <Link href="/news/articles" className="hover:text-[#C1121F]">Articles</Link>
-              <Link href="/news/newsroom" className="text-[#C1121F] hover:underline">My Newsroom</Link>
+              <Link href="/news" className="hover:text-[#C0272D]">Today</Link>
+              <Link href="/news/articles?pillar=culture" className="hover:text-[#C0272D] hidden sm:block">Culture</Link>
+              <Link href="/news/articles?pillar=business" className="hover:text-[#C0272D] hidden sm:block">Business</Link>
+              <Link href="/news/articles?pillar=ideas" className="hover:text-[#C0272D] hidden sm:block">Ideas</Link>
+              <Link href="/news/articles" className="hover:text-[#C0272D]">Articles</Link>
+              <Link href="/news/newsroom" className="text-[#C0272D] hover:underline">My Newsroom</Link>
             </nav>
           </div>
         </div>
@@ -50,8 +50,8 @@ export default function NewsLayout({ children }: { children: React.ReactNode }) 
       <footer className="border-t border-[#D9D1C4] mt-12 py-8 text-center text-sm font-sans text-[#111111]/70">
         <p>&copy; {new Date().getFullYear()} Artispreneur. Art means business.</p>
         <div className="mt-2 space-x-4">
-          <Link href="/news/about" className="hover:text-[#C1121F]">About</Link>
-          <Link href="/news/archive" className="hover:text-[#C1121F]">Archive</Link>
+          <Link href="/news/about" className="hover:text-[#C0272D]">About</Link>
+          <Link href="/news/archive" className="hover:text-[#C0272D]">Archive</Link>
         </div>
       </footer>
     </div>

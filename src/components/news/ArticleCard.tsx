@@ -42,7 +42,7 @@ export function ArticleCard({ platform, sourceName = 'Unknown Source', mediaType
           <span>{mediaType}</span>
           <span className="ml-auto text-[#111111]/50">{timestamp}</span>
         </div>
-        <h3 className="font-serif text-lg leading-snug font-bold text-[#111111] group-hover:text-[#C1121F] mb-1">
+        <h3 className="font-serif text-lg leading-snug font-bold text-[#111111] group-hover:text-[#C0272D] mb-1">
           {title}
         </h3>
         {dek && (
@@ -53,7 +53,7 @@ export function ArticleCard({ platform, sourceName = 'Unknown Source', mediaType
         {whyItMatters && (
           <div className="pt-2 border-t border-[#D9D1C4] mt-auto">
             <p className="font-sans text-xs font-semibold text-[#111111]">
-              <span className="text-[#C1121F]">Why it matters: </span>
+              <span className="text-[#C0272D]">Why it matters: </span>
               {whyItMatters}
             </p>
           </div>
@@ -64,7 +64,7 @@ export function ArticleCard({ platform, sourceName = 'Unknown Source', mediaType
       <div className="px-4 py-2 border-t border-[#D9D1C4] bg-white flex justify-between items-center text-xs font-sans mt-auto">
         <span className="font-bold text-[#111111]/70 truncate max-w-[70%]">{sourceName}</span>
         <button 
-          className="font-bold uppercase tracking-widest text-[#C1121F] hover:text-[#111111]"
+          className="font-bold uppercase tracking-widest text-[#C0272D] hover:text-[#111111]"
           title="Follow this source in your Newsroom"
           onClick={(e) => {
             e.preventDefault();
