@@ -6,7 +6,9 @@ export type CategoryType =
   | "legal"
   | "podcasts"
   | "tutorials"
-  | "opportunities";
+  | "opportunities"
+  | "social"
+  | "features";
 
 export interface CategoryInfo {
   id: CategoryType;
@@ -47,10 +49,11 @@ export interface FeedSource {
   url: string;
   category: CategoryType;
   website: string;
-  tier: "tier1" | "tier2" | "niche";
+  tier: "tier1" | "tier2" | "tier3" | "niche";
   enabled: boolean;
   lastFetchedAt?: string;
   status: "healthy" | "failing" | "pending";
+  priority?: number;
 }
 
 export interface PodcastEpisode {

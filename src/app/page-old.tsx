@@ -34,7 +34,7 @@ export default async function HomePage() {
           {items.map((item, idx) => (
             <article key={idx} className="group">
               <a href={item.url} target="_blank" rel="noopener noreferrer" className="block space-y-2">
-                <h3 className="font-serif text-2xl font-bold text-[#111111] group-hover:text-[#C1121F] leading-tight transition-colors">
+                <h3 className="font-serif text-2xl font-bold text-[#111111] group-hover:text-[#C0272D] leading-tight transition-colors">
                   {item.title}
                 </h3>
                 {item.dek && (
@@ -65,7 +65,7 @@ export default async function HomePage() {
       <header className="border-b-2 border-[#111111] py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-4">
         <div>
           <h1 className="font-sans font-black text-5xl uppercase tracking-tighter text-[#111111]">
-            Artis<span className="text-[#C1121F]">preneur</span>
+            Artis<span className="text-[#C0272D]">preneur</span>
           </h1>
           <p className="font-serif text-xl italic text-[#3D3D3D] mt-2">
             Intelligence for independent artists.
@@ -73,8 +73,8 @@ export default async function HomePage() {
         </div>
         
         <div className="flex space-x-6 font-mono text-sm uppercase tracking-wider font-bold">
-          <Link href="/news/desk" className="hover:text-[#C1121F] transition-colors">Operator Desk</Link>
-          <Link href="/news/newsroom" className="hover:text-[#C1121F] transition-colors">My Newsroom</Link>
+          <Link href="/news/desk" className="hover:text-[#C0272D] transition-colors">Operator Desk</Link>
+          <Link href="/news/newsroom" className="hover:text-[#C0272D] transition-colors">My Newsroom</Link>
         </div>
       </header>
 
@@ -82,7 +82,7 @@ export default async function HomePage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
           <PillarSection title="Business" items={businessItems} color="#111111" />
-          <PillarSection title="Culture" items={cultureItems} color="#C1121F" />
+          <PillarSection title="Culture" items={cultureItems} color="#C0272D" />
           <PillarSection title="Ideas" items={ideasItems} color="#111111" />
         </div>
       </main>
