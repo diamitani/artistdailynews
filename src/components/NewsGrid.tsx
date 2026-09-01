@@ -5,7 +5,7 @@ import { Article, CategoryType } from "@/lib/types";
 import { CATEGORIES } from "@/lib/feeds-config";
 import { ArticleCard } from "./ArticleCard";
 import { AdContainer } from "./AdContainer";
-import { Search, BookOpen, ArrowRight, Layers, Sparkles } from "lucide-react";
+import { Search, BookOpen, ArrowRight, Layers, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 interface NewsGridProps {
@@ -14,10 +14,13 @@ interface NewsGridProps {
   defaultCategory?: CategoryType | "all";
 }
 
+const ARTICLES_PER_PAGE = 12;
+
 export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all" }: NewsGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | "all">(defaultCategory);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"latest" | "breaking">("latest");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredArticles = useMemo(() => {
     let list = [...initialArticles];
@@ -43,8 +46,21 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
       list.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
     }
 
+    // Reset to page 1 when filters change
+    setCurrentPage(1);
+
     return list;
   }, [initialArticles, selectedCategory, searchQuery, sortBy]);
+
+  const totalPages = Math.ceil(filteredArticles.length / ARTICLES_PER_PAGE);
+  const startIndex = (currentPage - 1) * ARTICLES_PER_PAGE;
+  const endIndex = startIndex + ARTICLES_PER_PAGE;
+  const paginatedArticles = filteredArticles.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const bigReadStory = initialArticles.find((a) => a.category === "financial" && !a.isFeatured) || initialArticles[1];
 
@@ -153,76 +169,78 @@ export function NewsGrid({ initialArticles, onQuickRead, defaultCategory = "all"
         </div>
       ) : (
         <div className="space-y-8">
+          {/* Articles Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.slice(0, 6).map((article) => (
+            {paginatedArticles.map((article) => (
               <ArticleCard key={article.id} article={article} onQuickRead={onQuickRead} />
             ))}
           </div>
 
-          {/* "The Big Read" — Magazine Feature */}
-          {bigReadStory && selectedCategory === "all" && !searchQuery && (
-            <div className="card-brand p-6 sm:p-10 relative overflow-hidden group border-[var(--accent-primary)]/20">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="bg-[var(--accent-primary)] text-white text-[10px] font-mono font-bold px-3 py-1 rounded">
-                      ★ THE BIG READ
-                    </span>
-                    <span className="text-xs font-mono text-[var(--text-muted)]">
-                      Deep-Dive Investigation &bull; {bigReadStory.readTimeMinutes} min read
-                    </span>
-                  </div>
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center space-x-2 pt-8 border-t border-[var(--border-color)]">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
 
-                  <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight group-hover:text-[var(--accent-primary)] transition-colors">
-                    <Link href={`/news/${bigReadStory.slug}`}>{bigReadStory.title}</Link>
-                  </h3>
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage =
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1);
 
-                  <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
-                    {bigReadStory.summary}
-                  </p>
+                  const showEllipsis =
+                    (page === currentPage - 2 && currentPage > 3) ||
+                    (page === currentPage + 2 && currentPage < totalPages - 2);
 
-                  <div className="pull-quote text-xs sm:text-sm text-[var(--text-primary)] mt-2">
-                    {bigReadStory.takeaway}
-                  </div>
+                  if (showEllipsis) {
+                    return (
+                      <span key={page} className="px-2 text-[var(--text-muted)]">
+                        ...
+                      </span>
+                    );
+                  }
 
-                  <div className="pt-3 flex items-center space-x-4">
-                    <Link
-                      href={`/news/${bigReadStory.slug}`}
-                      className="btn-brand px-5 py-2.5 flex items-center space-x-1.5"
-                    >
-                      <span>Read Feature Essay</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
+                  if (!showPage) return null;
 
+                  return (
                     <button
-                      onClick={() => onQuickRead(bigReadStory)}
-                      className="btn-brand-ghost text-xs px-4 py-2.5 flex items-center space-x-1.5"
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`min-w-[36px] h-9 px-3 rounded-lg font-mono text-sm transition-colors ${
+                        currentPage === page
+                          ? "bg-[var(--accent-primary)] text-white font-bold"
+                          : "border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]"
+                      }`}
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                      <span>Quick Brief</span>
+                      {page}
                     </button>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5">
-                  <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)]">
-                    <img
-                      src={bigReadStory.imageUrl}
-                      alt={bigReadStory.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                </div>
+                  );
+                })}
               </div>
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           )}
 
-          {/* Remaining Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.slice(6).map((article) => (
-              <ArticleCard key={article.id} article={article} onQuickRead={onQuickRead} />
-            ))}
-          </div>
+          {/* Page Info */}
+          {filteredArticles.length > 0 && (
+            <div className="text-center text-xs font-mono text-[var(--text-muted)]">
+              Showing {startIndex + 1}-{Math.min(endIndex, filteredArticles.length)} of {filteredArticles.length} articles
+            </div>
+          )}
         </div>
       )}
     </section>
