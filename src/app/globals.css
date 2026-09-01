@@ -6,86 +6,112 @@
 
 @layer base {
   /* ═══════════════════════════════════════════════════════════════
-     ARTISPRENEUR DESIGN SYSTEM — UNIFIED PREMIUM BRANDING
-     "Bloomberg meets Forbes for Independent Creators"
+     ARTISPRENEUR DESIGN SYSTEM v1.0
+     Official Brand Guidelines · "Art Means Business."
      ═══════════════════════════════════════════════════════════════ */
 
   :root {
-    /* Typography */
-    --font-serif: var(--font-serif-headline), "Newsreader", "Georgia", "Times New Roman", serif;
-    --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* Typography — Playfair Display + Inter (Google Fonts) */
+    --font-serif: var(--font-serif-headline), "Playfair Display", "Georgia", "Times New Roman", serif;
+    --font-sans: var(--font-sans), "Inter", "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     --font-mono: var(--font-mono), "JetBrains Mono", "SF Mono", Menlo, Monaco, Consolas, monospace;
 
+    /* === ARTISPRENEUR BRAND COLORS === */
+
+    /* Primary Colors */
+    --color-red: #C0272D;           /* Artispreneur Red — Headlines, CTAs, logo */
+    --color-red-hover: #A12024;     /* Artispreneur Red (darker) */
+    --color-gold: #F5C100;          /* Artispreneur Gold — Borders, accents, laurel */
+    --color-gold-hover: #D9AB00;    /* Artispreneur Gold (darker) */
+    --color-white: #FFFFFF;         /* Pure White */
+
+    /* Supporting Colors */
+    --color-charcoal: #1A1A1A;      /* Charcoal Black — Body text, headings */
+    --color-warm-gray: #4A4A4A;     /* Warm Gray — Secondary text, captions */
+    --color-parchment: #F9F6EF;     /* Parchment — Card backgrounds, section fills */
+    --color-gold-tint: #FFF8D6;     /* Gold Tint — Callout boxes, highlights */
+
+    /* Semantic Colors */
+    --color-success: #16A34A;
+    --color-warning: #D97706;
+    --color-error: #C0272D;
+    --color-info: #2563EB;
+
     /* Backgrounds */
-    --bg-primary: #F6F1E8;
-    --bg-secondary: #EBE5D9;
-    --bg-card: #FFFFFF;
+    --bg-primary: var(--color-parchment);
+    --bg-secondary: #EDE8DD;
+    --bg-card: var(--color-white);
     --bg-card-hover: #FCFAF6;
     --bg-elevated: #FAFAF8;
-    --bg-dark: #111111;
-    
+    --bg-dark: var(--color-charcoal);
+
     /* Borders */
     --border-color: #D9D1C4;
-    --border-highlight: #C5BCAD;
+    --border-highlight: var(--color-gold);
     --border-subtle: rgba(0, 0, 0, 0.08);
-    
+    --border-gold: var(--color-gold);
+
     /* Text */
-    --text-primary: #111111;
-    --text-secondary: #3D3D3D;
+    --text-primary: var(--color-charcoal);
+    --text-secondary: var(--color-warm-gray);
     --text-muted: #6B7280;
-    --text-inverse: #F6F1E8;
-    
-    /* Brand Accent — Signal Red */
-    --accent-primary: #C1121F;
-    --accent-primary-hover: #9E0E19;
+    --text-inverse: var(--color-parchment);
+
+    /* Brand Accent — Artispreneur Red */
+    --accent-primary: var(--color-red);
+    --accent-primary-hover: var(--color-red-hover);
     --accent-primary-light: #FBE6E8;
-    --accent-primary-subtle: rgba(193, 18, 31, 0.08);
-    
+    --accent-primary-subtle: rgba(192, 39, 45, 0.08);
+
+    /* Brand Accent — Artispreneur Gold (Premium) */
+    --accent-gold: var(--color-gold);
+    --accent-gold-hover: var(--color-gold-hover);
+    --accent-gold-light: var(--color-gold-tint);
+    --accent-gold-subtle: rgba(245, 193, 0, 0.12);
+
     /* Status Colors */
-    --accent-emerald: #047857;
-    --accent-blue: #1D4ED8;
-    --accent-amber: #F59E0B;
-    
-    /* Legacy aliases */
-    --accent-gold: #C1121F;
-    --accent-gold-hover: #9E0E19;
-    --accent-crimson: #C1121F;
-    --accent-volt: #C1121F;
-    --accent-volt-hover: #9E0E19;
+    --accent-emerald: var(--color-success);
+    --accent-blue: var(--color-info);
+    --accent-amber: var(--color-warning);
+
+    /* Legacy aliases (for backwards compatibility) */
+    --accent-crimson: var(--color-red);
+    --accent-volt: var(--color-red);
+    --accent-volt-hover: var(--color-red-hover);
 
     /* Shadcn Theme Mapping */
-    --background: #F6F1E8;
-    --foreground: #111111;
-    --card: #FFFFFF;
-    --card-foreground: #111111;
-    --popover: #FFFFFF;
-    --popover-foreground: #111111;
-    --primary: #C1121F;
-    --primary-foreground: #FFFFFF;
-    --secondary: #EBE5D9;
-    --secondary-foreground: #111111;
-    --muted: #EBE5D9;
+    --background: var(--color-parchment);
+    --foreground: var(--color-charcoal);
+    --card: var(--color-white);
+    --card-foreground: var(--color-charcoal);
+    --popover: var(--color-white);
+    --popover-foreground: var(--color-charcoal);
+    --primary: var(--color-red);
+    --primary-foreground: var(--color-white);
+    --secondary: #EDE8DD;
+    --secondary-foreground: var(--color-charcoal);
+    --muted: #EDE8DD;
     --muted-foreground: #6B7280;
-    --accent: #FBE6E8;
-    --accent-foreground: #C1121F;
-    --destructive: #DC2626;
+    --accent: var(--color-gold-tint);
+    --accent-foreground: var(--color-red);
+    --destructive: var(--color-red);
     --border: #D9D1C4;
     --input: #D9D1C4;
-    --ring: #C1121F;
-    --radius: 0.625rem;
-    --chart-1: #C1121F;
-    --chart-2: #047857;
-    --chart-3: #1D4ED8;
-    --chart-4: #F59E0B;
+    --ring: var(--color-red);
+    --radius: 0.5rem;
+    --chart-1: var(--color-red);
+    --chart-2: var(--color-success);
+    --chart-3: var(--color-info);
+    --chart-4: var(--color-gold);
     --chart-5: #7C3AED;
-    --sidebar: #F6F1E8;
-    --sidebar-foreground: #111111;
-    --sidebar-primary: #C1121F;
-    --sidebar-primary-foreground: #FFFFFF;
-    --sidebar-accent: #EBE5D9;
-    --sidebar-accent-foreground: #111111;
+    --sidebar: var(--color-parchment);
+    --sidebar-foreground: var(--color-charcoal);
+    --sidebar-primary: var(--color-red);
+    --sidebar-primary-foreground: var(--color-white);
+    --sidebar-accent: #EDE8DD;
+    --sidebar-accent-foreground: var(--color-charcoal);
     --sidebar-border: #D9D1C4;
-    --sidebar-ring: #C1121F;
+    --sidebar-ring: var(--color-red);
   }
 
   * {
@@ -117,13 +143,13 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Brand Buttons */
+/* Brand Buttons — Artispreneur Red (Primary) */
 .btn-brand {
   @apply inline-flex items-center justify-center gap-2 px-6 py-3;
   @apply font-semibold text-sm tracking-tight;
-  @apply bg-[var(--accent-primary)] text-white rounded-lg;
+  @apply bg-[var(--color-red)] text-white rounded-lg;
   @apply transition-all duration-200 ease-out;
-  @apply hover:bg-[var(--accent-primary-hover)] hover:scale-[1.02];
+  @apply hover:bg-[var(--color-red-hover)] hover:scale-[1.02];
   @apply active:scale-[0.98] shadow-sm hover:shadow-md;
 }
 
@@ -140,6 +166,46 @@
   @apply font-medium text-sm bg-transparent text-[var(--text-secondary)] rounded-lg;
   @apply transition-all duration-200 ease-out;
   @apply hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)];
+}
+
+/* Brand Buttons — Artispreneur Gold (Premium/Upgrade) */
+.btn-brand-gold {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3;
+  @apply font-semibold text-sm tracking-tight;
+  @apply bg-[var(--color-gold)] text-[var(--color-charcoal)] rounded-lg;
+  @apply transition-all duration-200 ease-out;
+  @apply hover:bg-[var(--color-gold-hover)] hover:scale-[1.02];
+  @apply active:scale-[0.98] shadow-sm hover:shadow-md;
+}
+
+.btn-brand-gold-outline {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3;
+  @apply font-semibold text-sm tracking-tight bg-transparent;
+  @apply text-[var(--color-gold)] border-2 border-[var(--color-gold)] rounded-lg;
+  @apply transition-all duration-200 ease-out;
+  @apply hover:bg-[var(--color-gold)] hover:text-[var(--color-charcoal)] active:scale-[0.98];
+}
+
+/* Gold Accent Utilities */
+.border-gold {
+  border-color: var(--color-gold);
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+
+.bg-gold-tint {
+  background-color: var(--color-gold-tint);
+}
+
+/* Gold Glow Effects */
+.shadow-gold {
+  box-shadow: 0 4px 16px rgba(245, 193, 0, 0.25);
+}
+
+.shadow-red {
+  box-shadow: 0 4px 16px rgba(192, 39, 45, 0.25);
 }
 
 /* Cards */
