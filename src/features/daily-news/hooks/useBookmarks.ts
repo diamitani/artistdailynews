@@ -23,6 +23,8 @@ export function useBookmarks() {
       return;
     }
 
+    const currentUserId = user.id;
+
     async function fetchBookmarks() {
       setIsLoading(true);
       setError(null);
@@ -32,7 +34,7 @@ export function useBookmarks() {
         const { data, error: fetchError } = await supabase
           .from('adn_user_bookmarks')
           .select('*')
-          .eq('user_id', user.id)
+          .eq('user_id', currentUserId)
           .order('saved_at', { ascending: false });
 
         if (fetchError) throw fetchError;

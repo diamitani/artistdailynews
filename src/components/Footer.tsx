@@ -1,17 +1,63 @@
 import Link from "next/link";
-import { Ticket, Radio, Rss, ShieldCheck, Mail, ArrowUpRight, Gift, ExternalLink, Bot, BarChart3, Newspaper, Megaphone } from "lucide-react";
-import { CATEGORIES } from "@/lib/feeds-config";
-import { ArtispreneurLogo } from "./ArtispreneurLogo";
+import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, TrendingUp, Mic2, BookOpen, Sparkles } from "lucide-react";
+
+const SECTIONS = [
+  { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
+  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C1121F" },
+  { href: "/topics/tech-ai", label: "Ideas", icon: BookOpen, color: "#1D4ED8" },
+];
+
+const ECOSYSTEM_LINKS = [
+  { href: "/network", label: "Partner Deals", icon: Gift, highlight: true },
+  { href: "/tools", label: "Financial Lab", icon: BarChart3 },
+  { href: "/chat", label: "AI Copilot", icon: Bot },
+  { href: "/podcasts", label: "Podcasts", icon: Radio },
+  { href: "/newsletters", label: "Newsletter", icon: Mail },
+  { href: "/press-pass", label: "Press Credentials", icon: ShieldCheck },
+];
+
+const BUSINESS_LINKS = [
+  { href: "/pricing", label: "VIP Pro Membership" },
+  { href: "/advertise", label: "Advertise With Us" },
+  { href: "/advertise#sponsor-packages", label: "Sponsor Newsletter" },
+  { href: "/api/news/feed?format=rss", label: "RSS Feed", external: true, icon: Rss },
+];
 
 export function Footer() {
   return (
-    <footer className="bg-[var(--bg-primary)] border-t border-[var(--border-color)] text-[var(--text-secondary)] text-xs">
-      {/* Upper Grid */}
+    <footer className="bg-[var(--bg-primary)] border-t border-[var(--border-color)] text-[var(--text-secondary)]">
+      {/* Newsletter CTA */}
+      <div className="border-b border-[var(--border-color)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h3 className="font-serif text-xl font-bold text-[var(--text-primary)] mb-1">
+                Stay informed on the music business
+              </h3>
+              <p className="text-sm text-[var(--text-secondary)]">
+                Daily intelligence delivered at 6am. Join 35,000+ music professionals.
+              </p>
+            </div>
+            <form className="flex flex-col sm:flex-row gap-3 sm:w-auto w-full">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 sm:w-64 px-4 py-2.5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] text-sm"
+              />
+              <button className="btn-brand px-6 py-2.5 text-sm whitespace-nowrap">
+                Subscribe Free
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Footer Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          
-          {/* Col 1: Brand (2 cols) */}
-          <div className="lg:col-span-2 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+
+          {/* Brand Column */}
+          <div className="lg:col-span-2 space-y-5">
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative flex items-center">
                 <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex flex-col items-center justify-center text-white font-black shadow-sm group-hover:scale-105 transition-all">
@@ -31,97 +77,159 @@ export function Footer() {
               </div>
             </Link>
 
-            <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-sm">
-              The premier intelligence platform for independent musicians, managers, and indie labels worldwide. Aggregating 50+ music industry feeds with autonomous AI synthesis.
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-sm">
+              The premier intelligence platform for independent musicians, managers, and indie labels.
+              Aggregating 50+ music industry feeds with AI-powered synthesis.
             </p>
 
-            <div className="p-3.5 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] flex items-center justify-between">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-7 h-7 rounded-full bg-white p-0.5 border border-[var(--border-color)] flex items-center justify-center shrink-0">
-                  <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
+            <div className="p-4 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 rounded-full bg-white p-1 border border-[var(--border-color)] flex items-center justify-center shrink-0">
+                    <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-[var(--text-primary)]">Part of Artispreneur</div>
+                    <div className="text-[10px] font-mono text-[var(--text-muted)]">Music Business Operating System</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-[11px] font-bold text-[var(--text-primary)]">Powered by Artispreneur.com</div>
-                  <div className="text-[9px] font-mono text-[var(--text-muted)]">The Music Business Operating System</div>
-                </div>
+                <a
+                  href="https://artispreneur.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--accent-primary)] hover:underline font-mono text-[10px] font-bold flex items-center"
+                >
+                  <span>Visit</span>
+                  <ExternalLink className="w-3 h-3 ml-1" />
+                </a>
               </div>
-              <a
-                href="https://artispreneur.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--accent-primary)] hover:underline font-mono text-[10px] font-bold flex items-center"
-              >
-                <span>Artispreneur.com</span>
-                <ExternalLink className="w-3 h-3 ml-0.5" />
-              </a>
             </div>
 
-            <div className="flex items-center space-x-3 text-[11px] font-mono text-[var(--text-muted)] pt-1">
-              <span className="flex items-center text-[var(--text-secondary)]">
-                <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-400" /> Verified Press Entity
+            <div className="flex items-center space-x-4 text-[11px] font-mono text-[var(--text-muted)]">
+              <span className="flex items-center">
+                <ShieldCheck className="w-3.5 h-3.5 mr-1 text-[var(--accent-emerald)]" />
+                Verified Press Entity
               </span>
-              <span>&bull;</span>
-              <span className="text-[var(--text-secondary)]">ISSN Registered</span>
+              <span>·</span>
+              <span>ISSN Registered</span>
             </div>
           </div>
 
-          {/* Col 2: Channel Desks */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">Channel Desks</h4>
-            <ul className="space-y-2 text-xs">
-              {CATEGORIES.map((cat) => (
-                <li key={cat.id}>
-                  <Link href={`/topics/${cat.slug}`} className="hover:text-[#E2B547] transition-colors">{cat.name}</Link>
+          {/* Sections Column */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">
+              Sections
+            </h4>
+            <ul className="space-y-3">
+              {SECTIONS.map((section) => (
+                <li key={section.href}>
+                  <Link
+                    href={section.href}
+                    className="flex items-center space-x-2 text-sm hover:text-[var(--text-primary)] transition-colors"
+                    style={{ color: section.color }}
+                  >
+                    <section.icon className="w-4 h-4" />
+                    <span className="font-medium">{section.label}</span>
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/news" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                  Today's Briefing
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Ecosystem Column */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">
+              Creator Ecosystem
+            </h4>
+            <ul className="space-y-3">
+              {ECOSYSTEM_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={`flex items-center space-x-2 text-sm transition-colors ${
+                      link.highlight
+                        ? 'text-[var(--accent-primary)] font-medium hover:text-[var(--accent-primary-hover)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    }`}
+                  >
+                    <link.icon className="w-4 h-4" />
+                    <span>{link.label}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 3: Creator Ecosystem */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">Creator Ecosystem</h4>
-            <ul className="space-y-2 text-xs">
-              <li><Link href="/network" className="hover:text-[#E2B547] transition-colors text-[#E2B547] font-bold flex items-center space-x-1.5"><Gift className="w-3.5 h-3.5" /><span>Partner Deals</span></Link></li>
-              <li><Link href="/tools" className="hover:text-emerald-300 transition-colors text-emerald-400 flex items-center space-x-1.5"><BarChart3 className="w-3.5 h-3.5" /><span>Financial Lab</span></Link></li>
-              <li><Link href="/chat" className="hover:text-[#E2B547] transition-colors text-[#E2B547] flex items-center space-x-1.5"><Bot className="w-3.5 h-3.5" /><span>AI Copilot</span></Link></li>
-              <li><Link href="/podcasts" className="hover:text-cyan-300 transition-colors text-cyan-400 flex items-center space-x-1.5"><Radio className="w-3.5 h-3.5" /><span>Podcasts</span></Link></li>
-              <li><Link href="/newsletters" className="hover:text-slate-200 transition-colors"><span>Newsletter Archives</span></Link></li>
-              <li><Link href="/press-pass" className="hover:text-[#E2B547] transition-colors"><span>Press Credentials</span></Link></li>
-              <li><Link href="/pricing" className="hover:text-[#E2B547] transition-colors">VIP Membership</Link></li>
-              <li><Link href="/dashboard" className="hover:text-[#E2B547] transition-colors">Creator Dashboard</Link></li>
+          {/* Business Column */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">
+              For Business
+            </h4>
+            <ul className="space-y-3">
+              {BUSINESS_LINKS.map((link) => (
+                <li key={link.href}>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center space-x-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    >
+                      {link.icon && <link.icon className="w-4 h-4 text-orange-500" />}
+                      <span>{link.label}</span>
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
             </ul>
-          </div>
 
-          {/* Col 4: Monetization */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">Monetization & Press</h4>
-            <ul className="space-y-2 text-xs">
-              <li><Link href="/advertise" className="hover:text-[#E2B547] transition-colors">Media Kit & Rate Card</Link></li>
-              <li><Link href="/advertise#sponsor-packages" className="hover:text-[#E2B547] transition-colors">Newsletter Sponsorships</Link></li>
-              <li><Link href="/billing" className="hover:text-[#E2B547] transition-colors">Subscription Portal</Link></li>
-              <li><Link href="/admin/newsdesk" className="hover:text-[#E2B547] transition-colors">Newsroom Studio</Link></li>
-              <li><a href="/ads.txt" target="_blank" className="hover:text-[#E2B547] transition-colors font-mono text-[11px]">Google Ads.txt</a></li>
-              <li><a href="/api/news/feed?format=rss" target="_blank" className="hover:text-[#E2B547] transition-colors flex items-center space-x-1"><Rss className="w-3 h-3 text-orange-400" /><span>RSS Feed</span></a></li>
-            </ul>
+            {/* VIP CTA */}
+            <div className="pt-4">
+              <Link
+                href="/pricing"
+                className="inline-flex items-center gap-2 bg-[var(--accent-primary)] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[var(--accent-primary-hover)] transition-colors"
+              >
+                <Sparkles className="w-4 h-4" />
+                Get VIP Pro
+              </Link>
+            </div>
           </div>
-
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-[var(--border-subtle)] py-6 text-[var(--text-muted)] text-[11px]">
+      <div className="border-t border-[var(--border-color)] py-5 text-[var(--text-muted)] text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            &copy; {new Date().getFullYear()} ArtistDailyNews.com &bull; Powered by <a href="https://artispreneur.com" target="_blank" rel="noopener noreferrer" className="text-[#E2B547] hover:underline font-bold">Artispreneur.com</a>. All rights reserved.
+          <div className="text-center sm:text-left">
+            &copy; {new Date().getFullYear()} Artist Daily News · Powered by{" "}
+            <a
+              href="https://artispreneur.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--accent-primary)] hover:underline font-semibold"
+            >
+              Artispreneur
+            </a>
           </div>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <Link href="/" className="hover:text-slate-300">Home</Link>
-            <Link href="/network" className="hover:text-[#E2B547]">Partner Deals</Link>
-            <Link href="/podcasts" className="hover:text-cyan-300">Podcasts</Link>
-            <Link href="/press-pass" className="hover:text-slate-300">Press Pass</Link>
-            <Link href="/advertise" className="hover:text-slate-300">Advertise</Link>
-            <Link href="/pricing" className="hover:text-slate-300">VIP Pro</Link>
-            <span className="font-mono text-[var(--text-muted)]">v2.0.0-ARTISPRENEUR</span>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[var(--text-muted)]">
+            <Link href="/" className="hover:text-[var(--text-secondary)] transition-colors">Home</Link>
+            <Link href="/news" className="hover:text-[var(--text-secondary)] transition-colors">Today</Link>
+            <Link href="/podcasts" className="hover:text-[var(--text-secondary)] transition-colors">Podcasts</Link>
+            <Link href="/press-pass" className="hover:text-[var(--text-secondary)] transition-colors">Press Pass</Link>
+            <Link href="/advertise" className="hover:text-[var(--text-secondary)] transition-colors">Advertise</Link>
+            <span className="font-mono text-[10px] text-[var(--border-highlight)]">v3.0</span>
           </div>
         </div>
       </div>
