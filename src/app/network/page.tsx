@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { ArtispreneurLogo } from "@/components/ArtispreneurLogo";
@@ -18,65 +16,65 @@ export default function NetworkPage() {
     {
       name: "DistroKid Indie Distribution",
       category: "Distribution & DSPs",
-      badge: "0% COMMISSION",
-      deal: "20% Exclusive Discount",
-      code: "ARTISPRENEUR20",
-      description: "Upload unlimited albums & singles to Spotify, Apple Music, TikTok, and 150+ stores. Keep 100% of your royalties.",
-      url: "https://distrokid.com?vip=artispreneur",
+      deal: "10% OFF VIP Signup",
+      badge: "Preferred Partner",
+      description: "Fast track your songs to Spotify, Apple Music, TikTok, and 150+ stores. Keep 100% of your earnings.",
+      code: "ARTISPRENEUR10",
+      url: "https://distrokid.com/vip/artispreneur",
       icon: Disc,
       highlight: true,
     },
     {
       name: "LANDR Studio Pro AI Mastering",
-      category: "Audio & Production",
-      badge: "EXCLUSIVE PARTNER",
-      deal: "30% Off Annual Plan",
-      code: "ADNPRO30",
-      description: "Professional AI mastering engine engineered with Grammy-winning acoustic curves + 2M royalty-free samples.",
-      url: "https://landr.com?utm_source=artispreneur",
+      category: "AI Mastering & Plugins",
+      deal: "20% OFF Annual Studio",
+      badge: "Industry Standard",
+      description: "Instant pro-grade AI mastering, distribution, and over $2,000 in curated music production plugins.",
+      code: "LANDR-ADN-20",
+      url: "https://landr.com",
       icon: Zap,
       highlight: true,
     },
     {
       name: "Songtrust Global Publishing Admin",
-      category: "Royalties & Copyright",
-      badge: "WORLDWIDE RIGHTS",
-      deal: "20% Off Registration",
-      code: "ARTISPRENEURPUB",
-      description: "Collect mechanical and performance publishing royalties worldwide from 60+ global PROs and YouTube Content ID.",
+      category: "Global Publishing Admin",
+      deal: "15% Registration Credit",
+      badge: "Royalties",
+      description: "Collect your global mechanical and performance royalties directly from 60+ collection societies worldwide.",
+      code: "SONGTRUST-AP",
       url: "https://songtrust.com",
       icon: DollarSign,
       highlight: false,
     },
     {
-      name: "Soundcharts Market Intelligence",
-      category: "Analytics & Playlists",
-      badge: "DATA PARTNER",
-      deal: "14-Day Free Pro Trial",
-      code: "ARTISDATA",
-      description: "Track global airplay, playlist additions, TikTok velocity, and charting metrics across 5M+ artists.",
-      url: "https://soundcharts.com",
-      icon: Layers,
+      name: "Masterchannel Stem AI",
+      category: "Stem Mastering AI",
+      deal: "3 Free Master Credits",
+      badge: "Tech Partner",
+      description: "State-of-the-art spatial audio and multi-track mastering used by Grammy-winning producers.",
+      code: "ADN-FREE3",
+      url: "https://masterchannel.ai",
+      icon: Award,
       highlight: false,
     },
     {
-      name: "Bandzoogle Custom Artist Websites",
-      category: "Direct-to-Fan",
-      badge: "CREATOR TOOL",
-      deal: "15% Off + 30-Day Trial",
-      code: "ARTISPRENEURWEB",
-      description: "Sell merch, digital music, and crowdfunding subscriptions directly with 0% commission on sales.",
-      url: "https://bandzoogle.com",
+      name: "Chartmetric Market Analytics",
+      category: "Music Analytics",
+      deal: "Extended 30-Day Pro Trial",
+      badge: "Data Intelligence",
+      description: "Track your streaming growth, playlist adds, radio plays, and social momentum in one real-time dashboard.",
+      code: "CHARTMETRIC-VIP",
+      url: "https://chartmetric.com",
       icon: Globe,
       highlight: false,
     },
     {
       name: "Feature.fm Smart Links & Ads",
-      category: "Music Marketing",
-      badge: "GROWTH ENGINE",
-      deal: "Free Starter Account",
-      code: "ADNFREE",
-      description: "High-converting bio links, Spotify pre-save campaigns, and automated artist advertising suites.",
+      category: "Smart Links & Marketing",
+      deal: "15% Lifetime Discount",
+      badge: "Marketing",
+      description: "High-converting pre-save pages, smart landing links, and automated artist audience capture.",
+      code: "FEATURE-ADN",
       url: "https://feature.fm",
       icon: Sparkles,
       highlight: false,
@@ -85,7 +83,6 @@ export default function NetworkPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 w-full">
@@ -235,7 +232,6 @@ export default function NetworkPage() {
       </main>
 
       <NewsletterSignup />
-      <Footer />
     </div>
   );
 }

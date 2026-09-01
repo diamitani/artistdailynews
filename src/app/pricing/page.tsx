@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
-import { useAuth } from "@/components/AuthContext";
+import { useAuth, MembershipTier } from "@/components/AuthContext";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
-import { Sparkles, CheckCircle2, ArrowRight, Star, ShieldCheck } from "lucide-react";
+import { Sparkles, CheckCircle2, ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function PricingPage() {
@@ -16,15 +14,29 @@ export default function PricingPage() {
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState("");
 
-  const handleSubscribe = async (tier: "free" | "pro_insider" | "enterprise") => {
+  const handleSubscribe = async (tier: MembershipTier) => {
     setLoadingTier(tier);
     try {
+      if (tier === "free") {
+        if (upgradeTier) upgradeTier("free");
+        setSuccessMsg("Switched to Free DIY tier.");
+        return;
+      }
+
+      // Live Stripe Checkout Routing
+      const amount = tier === "pro_insider" 
+        ? (billingCycle === "annual" ? 18000 : 1900) 
+        : (billingCycle === "annual" ? 79000 : 9900);
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          packageId: tier === "pro_insider" ? "pro-insider" : "enterprise-roster",
-          sponsorEmail: user?.email || "artist@adn.media",
+          planId: tier,
+          planName: tier === "pro_insider" ? `Pro Insider (${billingCycle})` : `Enterprise Roster (${billingCycle})`,
+          amount,
+          interval: billingCycle === "annual" ? "year" : "month",
+          userEmail: user?.email || "subscriber@artispreneur.com",
         }),
       });
 
@@ -32,20 +44,30 @@ export default function PricingPage() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        upgradeTier(tier);
+        if (upgradeTier) upgradeTier(tier);
         setSuccessMsg(`Upgraded successfully to ${tier === "pro_insider" ? "Pro Artist Insider" : "Enterprise"}!`);
       }
     } catch {
-      upgradeTier(tier);
-      setSuccessMsg(`Upgraded successfully in test mode!`);
+      if (upgradeTier) upgradeTier(tier);
+      setSuccessMsg("Upgraded successfully in test mode!");
     } finally {
       setLoadingTier(null);
     }
   };
 
-  const plans = [
+  const plans: {
+    id: MembershipTier;
+    name: string;
+    priceMonthly: string;
+    priceAnnual: string;
+    period?: string;
+    description: string;
+    features: string[];
+    highlight: boolean;
+    cta: string;
+  }[] = [
     {
-      id: "free" as const,
+      id: "free",
       name: "Free DIY Edition",
       priceMonthly: "$0",
       priceAnnual: "$0",
@@ -61,7 +83,7 @@ export default function PricingPage() {
       cta: "Current Plan",
     },
     {
-      id: "pro_insider" as const,
+      id: "pro_insider",
       name: "Pro Artist Insider",
       priceMonthly: "$19",
       priceAnnual: "$15",
@@ -79,7 +101,7 @@ export default function PricingPage() {
       cta: "Upgrade to Pro Insider",
     },
     {
-      id: "enterprise" as const,
+      id: "enterprise",
       name: "Label & Roster Enterprise",
       priceMonthly: "$99",
       priceAnnual: "$79",
@@ -100,7 +122,6 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 w-full">
@@ -236,7 +257,6 @@ export default function PricingPage() {
       </main>
 
       <NewsletterSignup />
-      <Footer />
     </div>
   );
 }

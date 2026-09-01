@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { useAuth } from "@/components/AuthContext";
 import { Sparkles, Send, Bot, User, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
 
@@ -73,8 +71,6 @@ Select a prompt below or type your inquiry to get started!`,
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      <Header />
-
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 flex-1 w-full flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-4">
@@ -181,8 +177,6 @@ Select a prompt below or type your inquiry to get started!`,
           </form>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

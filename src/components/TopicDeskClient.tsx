@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsGrid } from "@/components/NewsGrid";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
@@ -28,9 +26,6 @@ export function TopicDeskClient({ currentCategory, articles, allArticles }: Topi
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      {/* Top 3-Tier Broadsheet Masthead */}
-      <Header />
-
       {/* Breaking News Marquee Ticker */}
       <BreakingTicker articles={allArticles} />
 
@@ -128,8 +123,6 @@ export function TopicDeskClient({ currentCategory, articles, allArticles }: Topi
         isOpen={vipModalOpen}
         onClose={() => setVipModalOpen(false)}
       />
-
-      <Footer />
     </div>
   );
 }

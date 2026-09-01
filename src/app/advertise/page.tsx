@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
 import { SPONSORSHIP_PACKAGES } from "@/lib/feeds-config";
-import { Megaphone, Users, Eye, Mail, CheckCircle2, ArrowRight, Sparkles, ShieldCheck } from "lucide-react";
+import { Megaphone, Users, Eye, Mail, CheckCircle2, ArrowRight, Sparkles, ShieldCheck, Download, Palette, FileText, Check } from "lucide-react";
 
 export default function AdvertisePage() {
   const [bookingPackage, setBookingPackage] = useState<string | null>(null);
@@ -46,7 +44,6 @@ export default function AdvertisePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 w-full">
@@ -192,10 +189,137 @@ export default function AdvertisePage() {
           </div>
         </div>
 
+        {/* Official Brand Identity & Media Kit Asset Downloads */}
+        <div className="card-brand p-8 sm:p-10 space-y-8 border-2 border-[var(--accent-primary)]/20">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[var(--border-color)] pb-6">
+            <div>
+              <div className="inline-flex items-center space-x-2 text-[var(--accent-primary)] text-xs font-mono font-bold uppercase tracking-wider mb-2">
+                <Palette className="w-4 h-4" />
+                <span>Artispreneur Ecosystem Brand Kit</span>
+              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
+                Official Brand Guidelines & Press Assets
+              </h2>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">
+                Approved high-resolution vectors, badge lockups, and color specifications for festival programs, sponsor banners, and accredited press releases.
+              </p>
+            </div>
+            <a
+              href="/artispreneur-logo.png"
+              download="artispreneur-brand-assets.png"
+              className="btn-brand text-xs px-6 py-3 shrink-0 flex items-center justify-center space-x-2"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Full Brand Kit</span>
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Color Palette Specification */}
+            <div className="space-y-3 bg-[var(--bg-secondary)] p-5 rounded-xl border border-[var(--border-color)]">
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">
+                Brand Palette
+              </h4>
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between p-2 rounded bg-[var(--bg-card)] border border-[var(--border-color)]">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-[#C0272D] border border-black/10"></span>
+                    <span className="font-bold">Artispreneur Crimson</span>
+                  </div>
+                  <span className="font-mono text-[11px] text-[var(--text-muted)]">#C0272D</span>
+                </div>
+                <div className="flex items-center justify-between p-2 rounded bg-[var(--bg-card)] border border-[var(--border-color)]">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-[#FED001] border border-black/10"></span>
+                    <span className="font-bold">Champagne Gold</span>
+                  </div>
+                  <span className="font-mono text-[11px] text-[var(--text-muted)]">#FED001</span>
+                </div>
+                <div className="flex items-center justify-between p-2 rounded bg-[var(--bg-card)] border border-[var(--border-color)]">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-[#0A0A0B] border border-black/10"></span>
+                    <span className="font-bold">Obsidian Black</span>
+                  </div>
+                  <span className="font-mono text-[11px] text-[var(--text-muted)]">#0A0A0B</span>
+                </div>
+                <div className="flex items-center justify-between p-2 rounded bg-[var(--bg-card)] border border-[var(--border-color)]">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-[#F6F1E8] border border-black/10"></span>
+                    <span className="font-bold">Editorial Bone</span>
+                  </div>
+                  <span className="font-mono text-[11px] text-[var(--text-muted)]">#F6F1E8</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Typography Tokens */}
+            <div className="space-y-3 bg-[var(--bg-secondary)] p-5 rounded-xl border border-[var(--border-color)]">
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">
+                Typography System
+              </h4>
+              <div className="space-y-2 text-xs">
+                <div className="p-2 rounded bg-[var(--bg-card)] border border-[var(--border-color)]">
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">Headlines & Display</span>
+                  <span className="font-serif text-base font-bold text-[var(--text-primary)]">Libre Baskerville / Newsreader</span>
+                </div>
+                <div className="p-2 rounded bg-[var(--bg-card)] border border-[var(--border-color)]">
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">Interface & Body</span>
+                  <span className="font-sans text-sm font-semibold text-[var(--text-primary)]">Inter / Plus Jakarta Sans</span>
+                </div>
+                <div className="p-2 rounded bg-[var(--bg-card)] border border-[var(--border-color)]">
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">Metrics & Tickers</span>
+                  <span className="font-mono text-xs font-bold text-[var(--accent-primary)]">JetBrains Mono (0123456789)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Official Logo Marks */}
+            <div className="space-y-3 bg-[var(--bg-secondary)] p-5 rounded-xl border border-[var(--border-color)]">
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">
+                Approved Logo Marks
+              </h4>
+              <div className="space-y-2 text-xs">
+                <a
+                  href="/artispreneur-logo.png"
+                  download="artispreneur-logo.png"
+                  className="flex items-center justify-between p-2 rounded bg-[var(--bg-card)] hover:bg-[var(--bg-elevated)] border border-[var(--border-color)] transition-colors group"
+                >
+                  <div className="flex items-center space-x-2">
+                    <img src="/artispreneur-logo.png" alt="Logo" className="w-5 h-5 object-contain" />
+                    <span className="font-medium group-hover:text-[var(--accent-primary)]">Official Laurel Badge</span>
+                  </div>
+                  <Download className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--accent-primary)]" />
+                </a>
+                <a
+                  href="/artispreneur-logo-knockout.png"
+                  download="artispreneur-logo-knockout.png"
+                  className="flex items-center justify-between p-2 rounded bg-[var(--bg-card)] hover:bg-[var(--bg-elevated)] border border-[var(--border-color)] transition-colors group"
+                >
+                  <div className="flex items-center space-x-2">
+                    <img src="/artispreneur-logo-knockout.png" alt="Knockout" className="w-5 h-5 object-contain" />
+                    <span className="font-medium group-hover:text-[var(--accent-primary)]">Transparent Knockout PNG</span>
+                  </div>
+                  <Download className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--accent-primary)]" />
+                </a>
+                <a
+                  href="/ds-logo.png"
+                  download="ds-logo.png"
+                  className="flex items-center justify-between p-2 rounded bg-[var(--bg-card)] hover:bg-[var(--bg-elevated)] border border-[var(--border-color)] transition-colors group"
+                >
+                  <div className="flex items-center space-x-2">
+                    <img src="/ds-logo.png" alt="DS Logo" className="w-5 h-5 object-contain" />
+                    <span className="font-medium group-hover:text-[var(--accent-primary)]">Diamond Seal Vector</span>
+                  </div>
+                  <Download className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--accent-primary)]" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </main>
 
       <NewsletterSignup />
-      <Footer />
     </div>
   );
 }

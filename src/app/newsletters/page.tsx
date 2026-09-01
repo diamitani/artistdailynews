@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
@@ -18,7 +16,6 @@ export default function NewslettersPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 w-full">
@@ -72,7 +69,6 @@ export default function NewslettersPage() {
       </main>
 
       <NewsletterSignup />
-      <Footer />
     </div>
   );
 }

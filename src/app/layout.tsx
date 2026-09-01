@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Newsreader, Inter, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AudioProvider } from "@/components/AudioContext";
 import { AuthProvider } from "@/components/AuthContext";
@@ -132,6 +133,7 @@ export default function RootLayout({
         <AuthProvider>
           <AudioProvider>
             <ReadingProgressBar />
+            <Header />
             <main className="flex-1 pb-20">{children}</main>
             <AudioPlayerBar />
             <Footer />

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header } from "@/components/Header";
 import { INITIAL_FEEDS } from "@/lib/feeds-config";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
 import { compileDailyNewsletterDigest } from "@/lib/ai-newsdesk";
@@ -50,8 +49,6 @@ export default function AdminNewsdeskPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#090A0F]">
-      <Header />
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         
         {/* Newsroom Status Header */}

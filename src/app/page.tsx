@@ -1,7 +1,6 @@
 import React from 'react';
 import { getArticles, getLatestIssue } from '@/lib/adn-db';
 import Link from 'next/link';
-import { Header } from '@/components/Header';
 import { BreakingTicker } from '@/components/BreakingTicker';
 import {
   ArrowRight,
@@ -50,8 +49,6 @@ export default async function PremiumMediaHomepage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
-      <Header />
-
       {/* Breaking News Ticker */}
       <BreakingTicker articles={articles.slice(0, 10)} />
 

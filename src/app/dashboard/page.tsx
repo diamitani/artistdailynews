@@ -1,7 +1,5 @@
 "use client";
 
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { useAuth } from "@/components/AuthContext";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
@@ -17,7 +15,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 w-full">
@@ -196,10 +193,7 @@ export default function DashboardPage() {
           </div>
 
         </div>
-
       </main>
-
-      <Footer />
     </div>
   );
 }

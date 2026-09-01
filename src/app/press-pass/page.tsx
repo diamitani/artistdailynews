@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { PressPassModal } from "@/components/PressPassModal";
 import { PressBadgeGenerator } from "@/components/PressBadgeGenerator";
@@ -15,7 +13,6 @@ export default function PressPassPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] justify-between">
-      <Header />
       <BreakingTicker articles={MOCK_ARTICLES} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 w-full">
@@ -94,8 +91,6 @@ export default function PressPassPage() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       />
-
-      <Footer />
     </div>
   );
 }
