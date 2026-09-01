@@ -55,6 +55,8 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
     podcasts: "LONDON BUREAU",
     tutorials: "AUSTIN DESK",
     opportunities: "GLOBAL MUSIC STRATEGY",
+    social: "COMMUNITY DESK",
+    features: "ARTIST SPOTLIGHT DESK",
   }[article.category] || "EDITORIAL NEWSDESK";
 
   return (

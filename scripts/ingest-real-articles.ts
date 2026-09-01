@@ -5,8 +5,11 @@ import { fetchAndParseFeed } from "../src/lib/rss-parser";
 import { Article } from "../src/lib/types";
 
 // Helper to determine pillar from category and content
-function determinePillar(art: Article): "business" | "culture" | "ideas" {
+// Pillars: business (deals, royalties, legal), culture (news, releases, tours), social (features, community, tutorials)
+function determinePillar(art: Article): "business" | "culture" | "social" {
   const text = (art.title + " " + art.summary).toLowerCase();
+
+  // BUSINESS: Financial, legal, streaming economics, deals
   if (
     art.category === "financial" ||
     art.category === "legal" ||
@@ -18,27 +21,39 @@ function determinePillar(art: Article): "business" | "culture" | "ideas" {
     text.includes("contract") ||
     text.includes("earnings") ||
     text.includes("valuation") ||
-    text.includes("market")
+    text.includes("market") ||
+    text.includes("acquisition") ||
+    text.includes("investment") ||
+    text.includes("copyright") ||
+    text.includes("lawsuit") ||
+    text.includes("settlement")
   ) {
     return "business";
   }
 
+  // SOCIAL: Features, tutorials, podcasts, community, production tips
   if (
-    art.category === "tech-ai" ||
+    art.category === "social" ||
     art.category === "tutorials" ||
     art.category === "podcasts" ||
-    text.includes("ai") ||
-    text.includes("tech") ||
+    art.category === "opportunities" ||
+    art.category === "tech-ai" ||
+    text.includes("interview") ||
+    text.includes("feature") ||
+    text.includes("spotlight") ||
     text.includes("guide") ||
-    text.includes("strategy") ||
-    text.includes("algorithm") ||
-    text.includes("production") ||
-    text.includes("mastering") ||
-    text.includes("future")
+    text.includes("how to") ||
+    text.includes("tips") ||
+    text.includes("masterclass") ||
+    text.includes("producer") ||
+    text.includes("behind the") ||
+    text.includes("making of") ||
+    text.includes("community")
   ) {
-    return "ideas";
+    return "social";
   }
 
+  // CULTURE: Everything else - releases, tours, news, reviews
   return "culture";
 }
 
@@ -129,7 +144,7 @@ async function main() {
   console.log(`\nBreakdown by Pillar:`);
   console.log(`- Business: ${adnItems.filter(i => i.pillar === 'business').length}`);
   console.log(`- Culture: ${adnItems.filter(i => i.pillar === 'culture').length}`);
-  console.log(`- Ideas: ${adnItems.filter(i => i.pillar === 'ideas').length}`);
+  console.log(`- Social: ${adnItems.filter(i => i.pillar === 'social').length}`);
   console.log(`\n✅ Ingest Complete!`);
 }
 

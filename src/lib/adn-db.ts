@@ -55,7 +55,7 @@ export async function getLatestIssue() {
     url: i.url,
   }));
 
-  const ideasRail = SEED_ITEMS.filter((i) => i.pillar === "ideas").slice(0, 4).map((i) => ({
+  const socialRail = SEED_ITEMS.filter((i) => i.pillar === "social").slice(0, 4).map((i) => ({
     title: i.title,
     platform: i.platform || i.source_name || "Web",
     time: "Today",
@@ -70,7 +70,7 @@ export async function getLatestIssue() {
     rails: {
       culture: cultureRail,
       business: businessRail,
-      ideas: ideasRail,
+      social: socialRail,
     },
   };
 }
