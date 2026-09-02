@@ -1,10 +1,11 @@
 import { MetadataRoute } from "next";
 import { CATEGORIES } from "@/lib/feeds-config";
+import { MOCK_ARTICLES } from "@/lib/mock-articles";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://artistdailynews.com";
 
-  // Core editorial routes - highest priority
+  // Core editorial routes
   const coreRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -16,61 +17,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/news`,
       lastModified: new Date(),
       changeFrequency: "hourly",
-      priority: 1.0,
-    },
-  ];
-
-  // Section pages - editorial pillars
-  const sectionRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/topics/financial`,
-      lastModified: new Date(),
-      changeFrequency: "hourly",
       priority: 0.95,
     },
     {
-      url: `${baseUrl}/topics/streaming`,
+      url: `${baseUrl}/news-home`,
       lastModified: new Date(),
-      changeFrequency: "hourly",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/topics/social`,
-      lastModified: new Date(),
-      changeFrequency: "hourly",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/topics/tech-ai`,
-      lastModified: new Date(),
-      changeFrequency: "hourly",
+      changeFrequency: "daily",
       priority: 0.85,
     },
   ];
 
-  // Premium content routes
-  const premiumRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/press-pass`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-  ];
-
-  // Media & engagement routes
+  // Multimedia & Hubs
   const mediaRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/podcasts`,
       lastModified: new Date(),
       changeFrequency: "daily",
-      priority: 0.85,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/newsletters`,
@@ -86,49 +49,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Tools & utility routes
-  const toolRoutes: MetadataRoute.Sitemap = [
+  // Creator Business & Tools
+  const creatorRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/pricing`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/press-pass`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
     {
       url: `${baseUrl}/tools`,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.8,
+      priority: 0.85,
     },
     {
       url: `${baseUrl}/network`,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.75,
+      priority: 0.8,
     },
-  ];
-
-  // Business routes
-  const businessRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/advertise`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.7,
+      priority: 0.75,
     },
   ];
 
-  // User routes (lower priority for SEO)
-  const userRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/dashboard`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/billing`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.4,
-    },
-  ];
-
-  // Category/topic routes from config
+  // Category/topic channels from feeds configuration
   const categoryRoutes: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
     url: `${baseUrl}/topics/${cat.slug}`,
     lastModified: new Date(),
@@ -136,14 +91,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [
+  // Featured article routes
+  const articleRoutes: MetadataRoute.Sitemap = MOCK_ARTICLES.slice(0, 20).map((art) => ({
+    url: `${baseUrl}/news/${art.slug}`,
+    lastModified: new Date(art.publishedAt),
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  }));
+
+  // Combine and deduplicate by URL
+  const allRoutes = [
     ...coreRoutes,
-    ...sectionRoutes,
-    ...premiumRoutes,
     ...mediaRoutes,
-    ...toolRoutes,
-    ...businessRoutes,
-    ...userRoutes,
+    ...creatorRoutes,
     ...categoryRoutes,
+    ...articleRoutes,
   ];
+
+  const seenUrls = new Set<string>();
+  return allRoutes.filter((route) => {
+    if (seenUrls.has(route.url)) {
+      return false;
+    }
+    seenUrls.add(route.url);
+    return true;
+  });
 }
