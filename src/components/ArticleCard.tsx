@@ -7,7 +7,7 @@ import { Sparkles, Clock, ArrowUpRight, Zap } from "lucide-react";
 
 interface ArticleCardProps {
   article: Article;
-  onQuickRead: (article: Article) => void;
+  onQuickRead?: (article: Article) => void;
   featured?: boolean;
 }
 
@@ -82,13 +82,23 @@ export function ArticleCard({ article, onQuickRead, featured }: ArticleCardProps
 
       {/* Footer Quick Actions */}
       <div className="px-5 pb-4 pt-3 border-t border-[var(--border-color)] flex items-center justify-between">
-        <button
-          onClick={() => onQuickRead(article)}
-          className="inline-flex items-center space-x-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent-primary)] font-semibold transition-colors py-1"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-          <span>30s Briefing</span>
-        </button>
+        {onQuickRead ? (
+          <button
+            onClick={() => onQuickRead(article)}
+            className="inline-flex items-center space-x-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent-primary)] font-semibold transition-colors py-1"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
+            <span>30s Briefing</span>
+          </button>
+        ) : (
+          <Link
+            href={`/news/${article.slug}`}
+            className="inline-flex items-center space-x-1.5 text-xs font-mono text-[var(--accent-primary)] hover:underline font-semibold py-1"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Read Briefing</span>
+          </Link>
+        )}
 
         <Link
           href={`/news/${article.slug}`}

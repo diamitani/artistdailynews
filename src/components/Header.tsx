@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Menu, X, Newspaper, Sparkles, User, TrendingUp, Gift, Mic2, ChevronDown } from "lucide-react";
+import { Search, Menu, X, Newspaper, Sparkles, User, TrendingUp, Gift, Mic2, ChevronDown, Layers, Tv, Radio } from "lucide-react";
 import { CommandMenu } from "./CommandMenu";
 import { useAuth } from "./AuthContext";
 
@@ -14,6 +14,8 @@ interface HeaderProps {
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
   { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
+  { href: "/#news-by-platform", label: "By Platform", icon: Layers, color: "#2563EB" },
+  { href: "/podcasts", label: "Audio & Video", icon: Tv, color: "#7C3AED" },
 ];
 
 interface NavItem {

@@ -70,6 +70,22 @@ export interface PodcastEpisode {
   tags: string[];
 }
 
+export interface VideoItem {
+  id: string;
+  title: string;
+  channelName: string;
+  channelUrl?: string;
+  videoUrl: string;
+  embedUrl: string;
+  thumbnailUrl: string;
+  duration: string;
+  publishedAt: string;
+  category: "essay" | "masterclass" | "interview" | "documentary";
+  viewsFormatted?: string;
+  description: string;
+  tags: string[];
+}
+
 export interface PressPassApplication {
   id: string;
   applicantName: string;

@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, TrendingUp, Mic2, Sparkles } from "lucide-react";
+import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, TrendingUp, Mic2, Sparkles, Layers, Tv } from "lucide-react";
 
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
   { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
+  { href: "/#news-by-platform", label: "By Platform", icon: Layers, color: "#2563EB" },
+  { href: "/podcasts", label: "Audio & Video", icon: Tv, color: "#7C3AED" },
 ];
 
 const ECOSYSTEM_LINKS = [
