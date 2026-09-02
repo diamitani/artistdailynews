@@ -9,7 +9,7 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
   const params = await searchParams;
   
   // Fetch from DB
-  const fetchedArticles = await getArticles(30, params?.pillar, params?.platform);
+  const fetchedArticles = await getArticles(60, params?.pillar, params?.platform);
 
   // Mock data for articles fallback
   const mockArticles = [

@@ -128,9 +128,9 @@ export default async function DailyPostHomepage() {
 
         {/* Newsroom CTA */}
         <section className="bg-[var(--bg-dark)] p-8 text-center text-white rounded-3xl">
-          <h2 className="font-serif text-3xl font-bold mb-4">Make this about your catalog</h2>
+          <h2 className="font-serif text-3xl font-bold mb-4">Personalize Your Music Newsfeed</h2>
           <p className="font-sans text-base mb-6 max-w-xl mx-auto text-white/80">
-            Get a personalized digest filtered by your genre and city. Never miss an opportunity in your scene.
+            Get a personalized daily digest filtered by your genre, region, and industry role. Never miss a scene breakthrough or tour booking.
           </p>
           <Link href="/news/newsroom" className="btn-brand text-xs px-8 py-3.5 inline-block">
             Go to Newsroom

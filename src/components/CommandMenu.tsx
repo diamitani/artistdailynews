@@ -34,7 +34,7 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
   const quickActions = [
     { title: "ADN Music Business AI Copilot", icon: Sparkles, href: "/chat", category: "AI Assistant" },
     { title: "Artispreneur Partner Deals & Discounts", icon: Sparkles, href: "/network", category: "Deals" },
-    { title: "Streaming Royalty & NPS Calculator", icon: Calculator, href: "/tools", category: "Financial Lab" },
+    { title: "YouTube Video Masterclasses & Essays", icon: Sparkles, href: "/podcasts", category: "Video Desk" },
     { title: "Apply for Official Press Pass", icon: Ticket, href: "/press-pass", category: "Credentials" },
     { title: "VIP Pro Membership Plans", icon: Sparkles, href: "/pricing", category: "Memberships" },
     { title: "Music Business Podcasts", icon: Radio, href: "/podcasts", category: "Audio Hub" },
@@ -100,7 +100,7 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
           <input
             type="text"
             autoFocus
-            placeholder="Search news, royalty calculators, press passes, topics..."
+            placeholder="Search news, platforms, video masterclasses, press passes, topics..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-transparent text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none"

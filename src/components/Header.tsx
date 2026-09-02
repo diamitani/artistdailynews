@@ -60,10 +60,10 @@ export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {
             </div>
             <div className="flex items-center space-x-4 shrink-0">
               <div className="hidden xl:flex items-center space-x-2 font-mono text-[10px] bg-[var(--bg-primary)] px-2 py-0.5 rounded border border-[var(--border-color)]">
-                <span className="text-[var(--text-muted)]">DSP:</span>
-                <span className="text-[var(--accent-emerald)] font-bold">Apple $0.0078 ▲</span>
+                <span className="text-[var(--text-muted)]">WIRE:</span>
+                <span className="text-[var(--accent-primary)] font-bold">50+ Feeds Synced</span>
                 <span className="text-[var(--border-highlight)]">|</span>
-                <span className="text-[var(--accent-primary)] font-bold">Spotify $0.0035 ▼</span>
+                <span className="text-[var(--accent-emerald)] font-bold">Continuous Aggregation</span>
               </div>
               <Link href="/network" className="flex items-center space-x-1.5 text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] transition-colors">
                 <Gift className="w-3.5 h-3.5" />

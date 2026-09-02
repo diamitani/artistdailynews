@@ -3,11 +3,11 @@ import { CategoryInfo, FeedSource, SponsorshipPackage } from "./types";
 export const CATEGORIES: CategoryInfo[] = [
   {
     id: "financial",
-    name: "Royalties & Catalogues",
+    name: "Industry & Business",
     slug: "financial",
     icon: "BadgeDollarSign",
     color: "#10B981",
-    description: "Publishing rights, catalogue sales benchmarks, streaming payouts, sync licenses, and artist equity.",
+    description: "Label deals, executive moves, independent distribution, festival bookings, and music business trends.",
   },
   {
     id: "streaming",

@@ -35,14 +35,14 @@ export const metadata: Metadata = {
     template: "%s | Artist Daily News (ADN) · Powered by Artispreneur",
   },
   description:
-    "Join 35,000+ independent artists, managers, and labels. Daily music business intelligence, streaming royalty calculators, catalogue valuation data, AI copilot, press credentials, and exclusive partner deals.",
+    "Join 35,000+ independent artists, managers, and labels. Daily music industry news, culture dispatches, video masterclasses, podcasts, press credentials, and exclusive partner deals.",
   keywords: [
     "music business news",
     "independent artist platform",
-    "music publishing",
-    "streaming royalties",
+    "music journalism",
+    "music industry news",
     "spotify algorithm",
-    "catalogue valuation",
+    "music videos and podcasts",
     "music press pass",
     "artist grants",
     "music industry intelligence",

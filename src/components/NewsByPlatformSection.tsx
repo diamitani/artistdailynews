@@ -139,10 +139,10 @@ export function NewsByPlatformSection({ articles, onQuickRead }: NewsByPlatformS
 
   const filteredArticles = useMemo(() => {
     if (selectedPlatform.id === "all") {
-      return articles.slice(0, 6);
+      return articles.slice(0, 12);
     }
     const matched = articles.filter(selectedPlatform.matches);
-    return matched.length > 0 ? matched.slice(0, 6) : articles.slice(0, 4);
+    return matched.length > 0 ? matched.slice(0, 12) : articles.slice(0, 9);
   }, [articles, selectedPlatform]);
 
   const countsByPlatform = useMemo(() => {
