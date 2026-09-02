@@ -18,9 +18,9 @@ const ECOSYSTEM_LINKS = [
 ];
 
 const BUSINESS_LINKS = [
-  { href: "/pricing", label: "VIP Pro Membership" },
   { href: "/advertise", label: "Advertise With Us" },
-  { href: "/advertise#sponsor-packages", label: "Sponsor Newsletter" },
+  { href: "/newsletters", label: "Daily Newsletter" },
+  { href: "/press-pass", label: "Press Pass Accreditation" },
   { href: "/api/news/feed?format=rss", label: "RSS Feed", external: true, icon: Rss },
 ];
 
@@ -197,17 +197,6 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-
-            {/* VIP CTA — Gold for Premium Upgrade */}
-            <div className="pt-4">
-              <Link
-                href="/pricing"
-                className="btn-brand-gold px-4 py-2 text-sm"
-              >
-                <Sparkles className="w-4 h-4" />
-                Get VIP Pro
-              </Link>
-            </div>
           </div>
         </div>
       </div>

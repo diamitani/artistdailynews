@@ -141,17 +141,12 @@ export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {
                 <kbd className="hidden lg:inline-flex h-5 items-center rounded border border-[var(--border-highlight)] bg-[var(--bg-primary)] px-1.5 font-mono text-[10px] text-[var(--text-muted)]">⌘K</kbd>
               </button>
 
-              {user ? (
+              {user && (
                 <Link href="/dashboard" className="flex items-center space-x-2 bg-[var(--bg-secondary)] hover:bg-[var(--border-color)] text-[var(--text-primary)] px-3 py-1.5 rounded-lg border border-[var(--border-color)] transition-colors">
                   <div className="w-6 h-6 rounded-full bg-[var(--accent-primary)] flex items-center justify-center text-white text-xs font-bold">
                     {user.name?.[0] || "U"}
                   </div>
                   <span className="text-sm font-medium hidden sm:inline">Dashboard</span>
-                </Link>
-              ) : (
-                <Link href="/pricing" className="flex items-center space-x-1.5 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-sm hover:shadow-md transition-all">
-                  <Sparkles className="w-4 h-4" />
-                  <span>Subscribe</span>
                 </Link>
               )}
 
@@ -222,9 +217,9 @@ export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {
                     <Gift className="w-4 h-4" />
                     <span>Partner Deals</span>
                   </Link>
-                  <Link href="/pricing" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded bg-[var(--accent-primary)] text-white flex items-center space-x-2">
-                    <Sparkles className="w-4 h-4" />
-                    <span>Upgrade to VIP Pro</span>
+                  <Link href="/podcasts" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded hover:bg-[var(--bg-secondary)] flex items-center space-x-2 text-[var(--text-secondary)]">
+                    <Tv className="w-4 h-4" />
+                    <span>Audio & Video</span>
                   </Link>
                 </nav>
               </div>

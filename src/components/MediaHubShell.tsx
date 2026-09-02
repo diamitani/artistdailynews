@@ -90,12 +90,6 @@ export function MediaHubShell({ articles }: MediaHubShellProps) {
         isOpen={pressPassModalOpen}
         onClose={() => setPressPassModalOpen(false)}
       />
-
-      {/* VIP Subscription Modal */}
-      <SubscriptionModal
-        isOpen={vipModalOpen}
-        onClose={() => setVipModalOpen(false)}
-      />
     </div>
   );
 }

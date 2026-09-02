@@ -67,13 +67,6 @@ export function TopicDeskClient({ currentCategory, articles, allArticles }: Topi
                 <Ticket className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Media Credentials</span>
               </button>
-              <button
-                onClick={() => setVipModalOpen(true)}
-                className="btn-brand text-xs px-4 py-2.5 flex items-center space-x-1.5"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>VIP Pro Data</span>
-              </button>
             </div>
           </div>
 
@@ -116,12 +109,6 @@ export function TopicDeskClient({ currentCategory, articles, allArticles }: Topi
       <PressPassModal
         isOpen={pressPassModalOpen}
         onClose={() => setPressPassModalOpen(false)}
-      />
-
-      {/* VIP Pro Subscription Modal */}
-      <SubscriptionModal
-        isOpen={vipModalOpen}
-        onClose={() => setVipModalOpen(false)}
       />
     </div>
   );

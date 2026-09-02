@@ -283,28 +283,15 @@ export function NewsByPlatformSection({ articles, onQuickRead }: NewsByPlatformS
                   </span>
                 </div>
 
-                {/* Article Image Preview */}
-                {article.imageUrl && (
-                  <div className="aspect-[16/9] rounded-xl overflow-hidden bg-[var(--bg-secondary)] relative">
-                    <img
-                      src={article.imageUrl}
-                      alt={article.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
-                  </div>
-                )}
-
                 {/* Title */}
-                <h3 className="font-serif font-bold text-lg text-[var(--text-primary)] leading-snug group-hover:text-[var(--accent-primary)] transition-colors line-clamp-2">
-                  <Link href={`/news/${article.slug}`}>
+                <h3 className="font-serif font-bold text-base sm:text-lg text-[var(--text-primary)] leading-snug group-hover:text-[var(--accent-primary)] transition-colors line-clamp-2">
+                  <a href={article.originalUrl} target="_blank" rel="noopener noreferrer">
                     {article.title}
-                  </Link>
+                  </a>
                 </h3>
 
                 {/* Summary */}
-                <p className="text-xs text-[var(--text-secondary)] line-clamp-2 leading-relaxed">
+                <p className="text-xs text-[var(--text-secondary)] line-clamp-3 leading-relaxed">
                   {article.summary}
                 </p>
               </div>
