@@ -8,7 +8,6 @@ import {
   Clock,
   TrendingUp,
   Mic2,
-  Star,
   ChevronRight,
   Mail,
   Play,
@@ -48,7 +47,10 @@ export default async function PremiumMediaHomepage() {
   });
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-[100dvh] bg-[var(--bg-primary)]">
+      {/* Texture Overlay */}
+      <div className="noise-overlay" aria-hidden="true"></div>
+
       {/* Breaking News Ticker */}
       <BreakingTicker articles={articles.slice(0, 10)} />
 
@@ -91,9 +93,9 @@ export default async function PremiumMediaHomepage() {
 
           {/* Featured Story - 2 columns */}
           <div className="lg:col-span-2">
-            <article className="group">
+            <article className="group relative">
               {featuredStory?.image_url && (
-                <div className="aspect-[16/9] rounded-xl overflow-hidden mb-6 bg-[var(--bg-secondary)]">
+                <div className="aspect-[16/9] rounded-xl overflow-hidden bg-[var(--bg-secondary)]">
                   <img
                     src={featuredStory.image_url}
                     alt={featuredStory.title}
@@ -101,43 +103,45 @@ export default async function PremiumMediaHomepage() {
                   />
                 </div>
               )}
-              <div className="flex items-center gap-3 mb-3">
-                <span className="px-2.5 py-1 bg-[var(--accent-primary)] text-white text-[10px] font-bold uppercase tracking-wider rounded">
-                  {featuredStory?.pillar || 'Featured'}
-                </span>
-                <span className="text-xs font-mono text-[var(--text-muted)]">
-                  {featuredStory?.source_name}
-                </span>
-              </div>
-              <a
-                href={featuredStory?.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
-              >
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] leading-tight mb-4 group-hover:text-[var(--accent-primary)] transition-colors">
-                  {featuredStory?.title}
-                </h2>
-              </a>
-              {featuredStory?.dek && (
-                <p className="text-lg text-[var(--text-secondary)] leading-relaxed mb-4 max-w-2xl">
-                  {featuredStory.dek}
-                </p>
-              )}
-              <div className="flex items-center gap-4 text-sm text-[var(--text-muted)]">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" />
-                  {formatTimeAgo(featuredStory?.freshness)}
-                </span>
+              <div className="relative -mt-16 sm:-mt-24 lg:-mt-32 ml-4 sm:ml-8 mr-4 mb-6 z-10 p-6 sm:p-8 rounded-xl bg-white/90 backdrop-blur-md border border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="px-2.5 py-1 bg-[var(--accent-primary)] text-white text-[10px] font-bold uppercase tracking-wider rounded">
+                    {featuredStory?.pillar || 'Featured'}
+                  </span>
+                  <span className="text-xs font-mono text-[var(--text-muted)]">
+                    {featuredStory?.source_name}
+                  </span>
+                </div>
                 <a
                   href={featuredStory?.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[var(--accent-primary)] font-medium hover:underline"
+                  className="block"
                 >
-                  Read Full Story
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] leading-tight mb-4 group-hover:text-[var(--accent-primary)] transition-colors">
+                    {featuredStory?.title}
+                  </h2>
                 </a>
+                {featuredStory?.dek && (
+                  <p className="text-lg text-[var(--text-secondary)] leading-relaxed mb-4 max-w-2xl text-pretty">
+                    {featuredStory.dek}
+                  </p>
+                )}
+                <div className="flex items-center gap-4 text-sm text-[var(--text-muted)]">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-4 h-4" />
+                    {formatTimeAgo(featuredStory?.freshness)}
+                  </span>
+                  <a
+                    href={featuredStory?.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-[var(--accent-primary)] font-medium hover:underline"
+                  >
+                    Read Full Story
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </article>
           </div>
@@ -202,46 +206,50 @@ export default async function PremiumMediaHomepage() {
           </div>
         </section>
 
-        {/* Three-Column Editorial Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {/* Asymmetric Editorial Grid */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+          
+          <div className="lg:col-span-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Business Column */}
+              <div>
+                <SectionHeader
+                  title="Business"
+                  href="/topics/financial"
+                  color="#047857"
+                  icon={<TrendingUp className="w-4 h-4" />}
+                />
+                <div className="space-y-6">
+                  {businessSection.map((article, idx) => (
+                    <ArticleCard key={article.id || idx} article={article} featured={idx === 0} />
+                  ))}
+                </div>
+              </div>
 
-          {/* Business Column */}
-          <div>
-            <SectionHeader
-              title="Business"
-              href="/topics/financial"
-              color="#047857"
-              icon={<TrendingUp className="w-4 h-4" />}
-            />
-            <div className="space-y-6">
-              {businessSection.map((article, idx) => (
-                <ArticleCard key={article.id || idx} article={article} featured={idx === 0} />
-              ))}
+              {/* Culture Column */}
+              <div>
+                <SectionHeader
+                  title="Culture"
+                  href="/topics/streaming"
+                  color="#C0272D"
+                  icon={<Mic2 className="w-4 h-4" />}
+                />
+                <div className="space-y-6">
+                  {cultureSection.map((article, idx) => (
+                    <ArticleCard key={article.id || idx} article={article} featured={idx === 0} />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Culture Column */}
-          <div>
+          {/* Community Column (Sidebar style) */}
+          <div className="lg:col-span-4 lg:border-l lg:border-[var(--border-color)] lg:pl-8">
             <SectionHeader
-              title="Culture"
-              href="/topics/streaming"
-              color="#C0272D"
-              icon={<Mic2 className="w-4 h-4" />}
-            />
-            <div className="space-y-6">
-              {cultureSection.map((article, idx) => (
-                <ArticleCard key={article.id || idx} article={article} featured={idx === 0} />
-              ))}
-            </div>
-          </div>
-
-          {/* Features Column */}
-          <div>
-            <SectionHeader
-              title="Features"
-              href="/topics/features"
+              title="Community"
+              href="/topics/social"
               color="#8B5CF6"
-              icon={<Star className="w-4 h-4" />}
+              icon={<Sparkles className="w-4 h-4" />}
             />
             <div className="space-y-6">
               {socialSection.map((article, idx) => (
@@ -250,28 +258,33 @@ export default async function PremiumMediaHomepage() {
             </div>
 
             {/* Podcast Promo in Social Column */}
-            <div className="mt-8 p-5 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-[var(--accent-primary)] flex items-center justify-center">
-                  <Play className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                  Podcast
-                </span>
+            <div className="mt-8 p-6 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Play className="w-24 h-24 text-[var(--accent-primary)]" />
               </div>
-              <h4 className="font-serif text-lg font-bold text-[var(--text-primary)] mb-2">
-                The Artispreneur Show
-              </h4>
-              <p className="text-sm text-[var(--text-secondary)] mb-4">
-                Weekly conversations with indie artists, managers, and label executives.
-              </p>
-              <Link
-                href="/podcasts"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--accent-primary)] hover:underline"
-              >
-                Listen Now
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--accent-primary)] flex items-center justify-center">
+                    <Play className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
+                    Podcast
+                  </span>
+                </div>
+                <h4 className="font-serif text-xl font-bold text-[var(--text-primary)] mb-2">
+                  The Artispreneur Show
+                </h4>
+                <p className="text-sm text-[var(--text-secondary)] mb-6 text-pretty">
+                  Weekly conversations with indie artists, managers, and label executives.
+                </p>
+                <Link
+                  href="/podcasts"
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] transition-colors group/link"
+                >
+                  Listen Now
+                  <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </div>
           </div>
         </section>

@@ -7,8 +7,7 @@ export type CategoryType =
   | "podcasts"
   | "tutorials"
   | "opportunities"
-  | "social"
-  | "features";
+  | "social";
 
 export interface CategoryInfo {
   id: CategoryType;

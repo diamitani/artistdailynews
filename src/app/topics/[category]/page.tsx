@@ -51,6 +51,7 @@ const CATEGORY_TO_PILLAR: Record<string, string> = {
   podcasts: "culture",
   tutorials: "ideas",
   opportunities: "business",
+  social: "social",
 };
 
 export default async function TopicPage({ params }: Props) {

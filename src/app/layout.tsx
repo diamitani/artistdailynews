@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
+import { Playfair_Display, Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -17,13 +17,13 @@ const playfairDisplay = Playfair_Display({
   display: "swap",
 });
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
@@ -122,7 +122,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={cn("light", playfairDisplay.variable, inter.variable, jetbrainsMono.variable, "font-sans")}>
+    <html lang="en" className={cn("light", playfairDisplay.variable, outfit.variable, geistMono.variable, "font-sans")}>
       <head>
         <script
           type="application/ld+json"

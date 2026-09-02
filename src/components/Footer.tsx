@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, TrendingUp, Mic2, Star, Sparkles } from "lucide-react";
+import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, TrendingUp, Mic2, Sparkles } from "lucide-react";
 
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
   { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
-  { href: "/topics/features", label: "Features", icon: Star, color: "#8B5CF6" },
 ];
 
 const ECOSYSTEM_LINKS = [
