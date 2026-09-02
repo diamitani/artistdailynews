@@ -86,6 +86,19 @@ export interface VideoItem {
   tags: string[];
 }
 
+export interface ChannelResource {
+  id: string;
+  name: string;
+  handle: string;
+  category: "Business & A&R" | "Production & Mixing" | "Marketing & Growth" | "Culture & Documentaries" | "Gear & Tech";
+  subscribers?: string;
+  description: string;
+  youtubeUrl: string;
+  rssFeedUrl?: string;
+  websiteUrl?: string;
+  featuredTopic: string;
+}
+
 export interface PressPassApplication {
   id: string;
   applicantName: string;
