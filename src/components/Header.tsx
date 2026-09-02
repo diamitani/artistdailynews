@@ -16,7 +16,14 @@ const SECTIONS = [
   { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
 ];
 
-const NAV_ITEMS = [
+interface NavItem {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  highlight?: boolean;
+}
+
+const NAV_ITEMS: NavItem[] = [
   { href: "/news", label: "Today", icon: Newspaper },
 ];
 
