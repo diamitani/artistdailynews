@@ -164,9 +164,9 @@ export default async function ExecutiveTextAggregatorHomepage() {
                 <Layers className="w-3.5 h-3.5 text-blue-600" />
                 <span>News by Platform</span>
               </Link>
-              <Link href="/podcasts" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/library" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
                 <Tv className="w-3.5 h-3.5 text-indigo-600" />
-                <span>27+ Video Channels</span>
+                <span>27+ Channel Library</span>
               </Link>
               <Link href="/news" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
                 <Newspaper className="w-3.5 h-3.5 text-emerald-600" />

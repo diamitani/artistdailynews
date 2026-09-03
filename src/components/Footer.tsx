@@ -218,6 +218,7 @@ export function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[var(--text-muted)]">
             <Link href="/" className="hover:text-[var(--text-secondary)] transition-colors">Home</Link>
             <Link href="/news" className="hover:text-[var(--text-secondary)] transition-colors">Today</Link>
+            <Link href="/library" className="hover:text-[var(--text-secondary)] transition-colors">27+ Channels</Link>
             <Link href="/podcasts" className="hover:text-[var(--text-secondary)] transition-colors">Podcasts</Link>
             <Link href="/press-pass" className="hover:text-[var(--text-secondary)] transition-colors">Press Pass</Link>
             <Link href="/advertise" className="hover:text-[var(--text-secondary)] transition-colors">Advertise</Link>

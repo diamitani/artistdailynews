@@ -30,6 +30,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Multimedia & Hubs
   const mediaRoutes: MetadataRoute.Sitemap = [
     {
+      url: `${baseUrl}/library`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.95,
+    },
+    {
       url: `${baseUrl}/podcasts`,
       lastModified: new Date(),
       changeFrequency: "daily",

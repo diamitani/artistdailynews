@@ -15,7 +15,7 @@ const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
   { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
   { href: "/#news-by-platform", label: "By Platform", icon: Layers, color: "#2563EB" },
-  { href: "/podcasts", label: "Audio & Video", icon: Tv, color: "#7C3AED" },
+  { href: "/library", label: "27+ Channels & Videos", icon: Tv, color: "#7C3AED" },
 ];
 
 interface NavItem {
