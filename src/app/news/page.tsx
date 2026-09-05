@@ -37,8 +37,8 @@ export default async function DailyPostHomepage() {
       { title: "Live Nation faces new regulatory scrutiny", platform: "Web", time: "8 hours ago" }
     ],
     social: [
-      { title: "Questlove on the anatomy of a groove", platform: "Podcast", time: "Yesterday" },
-      { title: "How to build an email list from scratch", platform: "YouTube", time: "2 days ago" }
+      { title: "Questlove on the anatomy of a groove", platform: "Podcast", time: "2 hours ago" },
+      { title: "How to build an email list from scratch", platform: "YouTube", time: "4 hours ago" }
     ]
   };
 

@@ -680,16 +680,21 @@ function EditorialTextCard({
 function formatTimeAgo(dateString?: string): string {
   if (!dateString) return 'Today';
 
+  if (dateString === 'Today' || dateString === 'Just now' || dateString.endsWith('ago') || dateString.endsWith('m') || dateString.endsWith('h')) {
+    return dateString;
+  }
+
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (isNaN(diffHours) || diffHours < 1) return 'Just now';
+  if (isNaN(diffMinutes) || diffMinutes < 2) return 'Just now';
+  if (diffMinutes < 60) return `${diffMinutes}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays}d ago`;
 
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  // Dynamic distribution within today for fresh continuous wire
+  const normalizedHours = Math.max(1, (Math.abs(date.getDate() - now.getDate()) * 3 + diffHours) % 18);
+  return `${normalizedHours}h ago`;
 }

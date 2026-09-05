@@ -14,30 +14,26 @@ const RAW_SEED_ITEMS: any[] = Array.isArray(REAL_ITEMS_JSON) ? REAL_ITEMS_JSON :
 
 /**
  * Normalizes all items so that every article has a realistic publication timestamp
- * anchored to TODAY (the current calendar day/hour), distributed cleanly across the past 24 hours.
+ * anchored to TODAY (the current calendar day/hour), distributed cleanly across today.
  */
 function normalizeItemsToToday(items: any[]): any[] {
   const now = Date.now();
   
   return items.map((item, index) => {
-    // Offset calculation: Spread items across the current day
-    // Index 0: 3-8 minutes ago
-    // Index 1-5: 10-45 minutes ago
-    // Index 6-15: 1-3 hours ago
-    // Index 16-40: 3-8 hours ago
-    // Index 40+: 8-22 hours ago
+    // Spread items across today (from 3 mins ago to a few hours ago)
     let minutesAgo = 4;
-    if (index === 0) minutesAgo = 5;
-    else if (index <= 5) minutesAgo = 8 + index * 7;
-    else if (index <= 15) minutesAgo = 45 + (index - 5) * 12;
-    else if (index <= 40) minutesAgo = 160 + (index - 15) * 15;
-    else minutesAgo = 500 + Math.min(index * 8, 800);
+    if (index === 0) minutesAgo = 4;
+    else if (index <= 3) minutesAgo = 8 + index * 5;
+    else if (index <= 10) minutesAgo = 25 + (index - 3) * 8;
+    else if (index <= 30) minutesAgo = 90 + (index - 10) * 10;
+    else if (index <= 70) minutesAgo = 280 + (index - 30) * 6;
+    else minutesAgo = 520 + Math.min(index * 3, 300);
 
     const calculatedTime = new Date(now - minutesAgo * 60 * 1000).toISOString();
 
-    // Check if original timestamp is valid and within the last 24h
+    // Only preserve pubDate if it was published in the last 6 hours
     let pubDate = item.freshness || item.published_at;
-    const isValidAndRecent = pubDate && !isNaN(new Date(pubDate).getTime()) && (now - new Date(pubDate).getTime() < 86400000);
+    const isValidAndRecent = pubDate && !isNaN(new Date(pubDate).getTime()) && (now - new Date(pubDate).getTime() < 6 * 3600 * 1000);
 
     const finalFreshness = isValidAndRecent ? pubDate : calculatedTime;
 
@@ -45,6 +41,7 @@ function normalizeItemsToToday(items: any[]): any[] {
       ...item,
       freshness: finalFreshness,
       published_at: finalFreshness,
+      publishedAt: finalFreshness,
     };
   });
 }

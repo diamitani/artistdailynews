@@ -68,9 +68,9 @@ export const db = {
       const base = global.__adn_articles_db || MOCK_ARTICLES;
       const now = Date.now();
       return base.map((art, idx) => {
-        const minsAgo = idx === 0 ? 5 : idx <= 5 ? 10 + idx * 8 : idx <= 20 ? 60 + idx * 10 : 300 + idx * 8;
+        const minsAgo = idx === 0 ? 4 : idx <= 3 ? 8 + idx * 5 : idx <= 10 ? 25 + (idx - 3) * 8 : idx <= 30 ? 90 + (idx - 10) * 10 : 280 + Math.min(idx * 3, 300);
         const currentDayTime = new Date(now - minsAgo * 60 * 1000).toISOString();
-        const isRecent = art.publishedAt && (now - new Date(art.publishedAt).getTime() < 86400000);
+        const isRecent = art.publishedAt && (now - new Date(art.publishedAt).getTime() < 6 * 3600 * 1000);
         return {
           ...art,
           publishedAt: isRecent ? art.publishedAt : currentDayTime,

@@ -39,7 +39,7 @@ export default async function NewsroomPage() {
       title: 'Super Duty Tough Work: Indie hip-hop longevity',
       dek: 'Blueprint breaks down how he maintains a sustainable career touring secondary markets.',
       whyItMatters: 'Direct playbook for building a releasing and touring hip-hop career outside the major label system.',
-      timestamp: '2 days ago',
+      timestamp: '3 hours ago',
       url: '#'
     },
   ];
