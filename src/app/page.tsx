@@ -176,15 +176,8 @@ export default async function ExecutiveTextAggregatorHomepage() {
 
             <div className="flex items-center space-x-3">
               <Link
-                href="/press-pass"
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent-primary)] transition-colors text-[11px]"
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent-emerald)]" />
-                <span>Press Pass Accreditation</span>
-              </Link>
-              <Link
                 href="/newsletters"
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] transition-colors text-[11px]"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] transition-colors text-[11px]"
               >
                 <Mail className="w-3.5 h-3.5" />
                 <span>Daily Newsletter</span>
@@ -560,13 +553,13 @@ export default async function ExecutiveTextAggregatorHomepage() {
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2 font-mono text-xs">
-                <Link href="/press-pass" className="px-5 py-2.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] font-bold transition-colors flex items-center space-x-1.5">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Apply for Press Pass</span>
-                </Link>
-                <Link href="/newsletters" className="px-5 py-2.5 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent-primary)] font-bold transition-colors flex items-center space-x-1.5">
+                <Link href="/newsletters" className="px-5 py-2.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] font-bold transition-colors flex items-center space-x-1.5">
                   <Mail className="w-4 h-4" />
                   <span>Get Morning Dispatch</span>
+                </Link>
+                <Link href="/library" className="px-5 py-2.5 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent-primary)] font-bold transition-colors flex items-center space-x-1.5">
+                  <Tv className="w-4 h-4" />
+                  <span>Explore 27+ Media Library</span>
                 </Link>
               </div>
             </div>
@@ -584,11 +577,11 @@ export default async function ExecutiveTextAggregatorHomepage() {
 
               <div className="bg-[var(--bg-card)] p-4 rounded-xl border border-[var(--border-color)] flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">Official Media Badge</span>
-                  <span className="font-serif text-sm font-bold text-[var(--color-gold)]">Festival Press Pass 2026</span>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">Curated Resource Hub</span>
+                  <span className="font-serif text-sm font-bold text-[var(--text-primary)]">27+ Channels & Masterclasses</span>
                 </div>
-                <Link href="/press-pass" className="text-xs font-mono font-bold text-[var(--color-gold)] hover:underline">
-                  Apply &rarr;
+                <Link href="/library" className="text-xs font-mono font-bold text-[var(--accent-primary)] hover:underline">
+                  Browse Library &rarr;
                 </Link>
               </div>
 

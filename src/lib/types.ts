@@ -136,3 +136,80 @@ export interface Subscriber {
   tier: "free" | "pro_insider" | "enterprise";
   subscribedAt: string;
 }
+
+// ── Top 100 Platforms & Resource Database Schema ──
+export type PlatformPillar =
+  | "Trade & Business Journalism"
+  | "Indie Strategy & D2C"
+  | "Streaming, Metadata & Rights"
+  | "Audio Engineering & Production"
+  | "Culture, Editorial & Discovery"
+  | "Podcasts & Video Channels";
+
+export type PlatformTier = "tier1" | "tier2" | "tier3";
+export type PlatformContentType = "Articles" | "Podcasts" | "Videos" | "Multi-Format" | "Research & Data";
+
+export interface PlatformResource {
+  id: string;
+  name: string;
+  slug: string;
+  pillar: PlatformPillar;
+  category: CategoryType;
+  tier: PlatformTier;
+  websiteUrl: string;
+  rssFeedUrl?: string;
+  youtubeChannelUrl?: string;
+  youtubeChannelId?: string;
+  contentType: PlatformContentType;
+  dailyPostFrequency: number;
+  scrapeStatus: "active" | "manual" | "partner" | "paused";
+  priorityRank: number;
+  description: string;
+  editorialNotes?: string;
+}
+
+// ── Daily Article Ingestion Record (Upload Sheet) ──
+export interface DailyArticleIngestRecord {
+  articleId: string;
+  dateIngested: string; // YYYY-MM-DD
+  platformId: string;
+  platformName: string;
+  articleTitle: string;
+  originalUrl: string;
+  author: string;
+  summaryDek: string;
+  takeawayBullet1: string;
+  takeawayBullet2: string;
+  takeawayBullet3: string;
+  category: CategoryType;
+  tags: string[];
+  readTimeMinutes: number;
+  status: "published" | "staged" | "draft" | "archived";
+}
+
+// ── Daily YouTube Video Ingestion Record (Upload Sheet) ──
+export type VideoQueryCategory =
+  | "music_business_news"
+  | "music_industry_news"
+  | "music_podcasts"
+  | "music_production_masterclasses"
+  | "artist_interviews"
+  | "streaming_analytics";
+
+export interface DailyVideoIngestRecord {
+  videoId: string;
+  youtubeVideoId: string; // 11-char verified ID
+  title: string;
+  channelName: string;
+  channelHandle: string;
+  channelUrl: string;
+  searchQueryCategory: VideoQueryCategory;
+  duration: string;
+  thumbnailUrl: string;
+  embedUrl: string;
+  videoUrl: string;
+  publishedDate: string; // YYYY-MM-DD or ISO
+  keyTakeaway: string;
+  viewsEstimate: string;
+  status: "published" | "staged" | "draft";
+}

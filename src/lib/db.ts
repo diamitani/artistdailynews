@@ -65,7 +65,17 @@ export const db = {
         }
       }
 
-      return global.__adn_articles_db || MOCK_ARTICLES;
+      const base = global.__adn_articles_db || MOCK_ARTICLES;
+      const now = Date.now();
+      return base.map((art, idx) => {
+        const minsAgo = idx === 0 ? 5 : idx <= 5 ? 10 + idx * 8 : idx <= 20 ? 60 + idx * 10 : 300 + idx * 8;
+        const currentDayTime = new Date(now - minsAgo * 60 * 1000).toISOString();
+        const isRecent = art.publishedAt && (now - new Date(art.publishedAt).getTime() < 86400000);
+        return {
+          ...art,
+          publishedAt: isRecent ? art.publishedAt : currentDayTime,
+        };
+      });
     },
 
     async getBySlug(slug: string): Promise<Article | null> {

@@ -59,15 +59,6 @@ export function TopicDeskClient({ currentCategory, articles, allArticles }: Topi
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <button
-                onClick={() => setPressPassModalOpen(true)}
-                className="btn-brand-outline text-xs px-4 py-2.5 flex items-center space-x-1.5"
-              >
-                <Ticket className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span>Media Credentials</span>
-              </button>
-            </div>
           </div>
 
           {/* Quick Desk Navigation Pills */}
@@ -103,12 +94,6 @@ export function TopicDeskClient({ currentCategory, articles, allArticles }: Topi
       <SummaryDrawer
         article={selectedArticleForDrawer}
         onClose={() => setSelectedArticleForDrawer(null)}
-      />
-
-      {/* Official Press Pass Accreditation Modal */}
-      <PressPassModal
-        isOpen={pressPassModalOpen}
-        onClose={() => setPressPassModalOpen(false)}
       />
     </div>
   );

@@ -35,7 +35,7 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
     { title: "ADN Music Business AI Copilot", icon: Sparkles, href: "/chat", category: "AI Assistant" },
     { title: "Artispreneur Partner Deals & Discounts", icon: Sparkles, href: "/network", category: "Deals" },
     { title: "YouTube Video Masterclasses & Essays", icon: Sparkles, href: "/podcasts", category: "Video Desk" },
-    { title: "Apply for Official Press Pass", icon: Ticket, href: "/press-pass", category: "Credentials" },
+    { title: "27+ Channel Media & Learning Library", icon: Sparkles, href: "/library", category: "Library" },
     { title: "Full 2,000+ Article News Wire", icon: Newspaper, href: "/news", category: "Wire" },
     { title: "Music Business Podcasts", icon: Radio, href: "/podcasts", category: "Audio Hub" },
     { title: "Daily Newsletter Archives", icon: Newspaper, href: "/newsletters", category: "Dispatches" },
@@ -69,7 +69,7 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
         a.title.toLowerCase().includes(q) ||
         a.summary.toLowerCase().includes(q) ||
         a.sourceName.toLowerCase().includes(q) ||
-        a.tags.some((t) => t.toLowerCase().includes(q))
+        a.tags?.some((t: string) => t.toLowerCase().includes(q))
     );
 
     return {

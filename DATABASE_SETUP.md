@@ -13,11 +13,20 @@ This project uses the **existing Artispreneur Supabase project** with shared aut
 - `public.profiles` - User profiles (shared across all Artispreneur products)
 
 ### Artist Daily News Tables (Namespaced)
+- `adn_platforms` - Top 100 Platforms & Resource Directory (Categories, Tiers, RSS & YouTube URLs, Frequencies)
+- `adn_daily_articles` - Daily Article Ingestion Table (Ready for automated daily uploads with summary deks & 3 key bullets)
+- `adn_daily_videos` - Daily YouTube Video Ingestion Table (100% verified real YouTube IDs mapped to query categories)
 - `adn_items` - News articles/content items
 - `adn_sources` - RSS feed sources
 - `adn_user_bookmarks` - User-saved articles
 - `adn_user_reading_history` - Reading tracking
 - `adn_newsletter_subscriptions` - Newsletter preferences
+
+### Daily Ingestion & Export Endpoints
+- **Top 100 Platforms Export**: `/api/resources?type=platforms&format=csv` (or `.json`)
+- **Daily Articles Sheet Export**: `/api/resources?type=articles&format=csv` (or `.json`)
+- **Daily Videos Sheet Export**: `/api/resources?type=videos&format=csv` (or `.json`)
+- **Live Interactive Dashboard**: `/resources`
 
 ---
 

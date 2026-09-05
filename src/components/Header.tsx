@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Menu, X, Newspaper, Sparkles, User, TrendingUp, Gift, Mic2, ChevronDown, Layers, Tv, Radio } from "lucide-react";
+import { Search, Menu, X, Newspaper, Sparkles, User, TrendingUp, Gift, Mic2, ChevronDown, Layers, Tv, Radio, Database } from "lucide-react";
 import { CommandMenu } from "./CommandMenu";
 import { useAuth } from "./AuthContext";
 
@@ -15,6 +15,7 @@ const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
   { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
   { href: "/#news-by-platform", label: "By Platform", icon: Layers, color: "#2563EB" },
+  { href: "/resources", label: "Top 100 Resources & Sheets", icon: Database, color: "#00E599" },
   { href: "/library", label: "27+ Channels & Videos", icon: Tv, color: "#7C3AED" },
 ];
 
@@ -27,6 +28,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/news", label: "Today", icon: Newspaper },
+  { href: "/resources", label: "Data Sheets", icon: Database },
 ];
 
 export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {

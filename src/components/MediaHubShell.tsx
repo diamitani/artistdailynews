@@ -84,12 +84,6 @@ export function MediaHubShell({ articles }: MediaHubShellProps) {
         article={selectedArticleForDrawer}
         onClose={() => setSelectedArticleForDrawer(null)}
       />
-
-      {/* Press Pass Modal */}
-      <PressPassModal
-        isOpen={pressPassModalOpen}
-        onClose={() => setPressPassModalOpen(false)}
-      />
     </div>
   );
 }
