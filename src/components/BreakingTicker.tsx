@@ -18,11 +18,16 @@ interface BreakingTickerProps {
 }
 
 export function BreakingTicker({ articles }: BreakingTickerProps) {
-  if (!articles || articles.length === 0) {
+  const hasValidUrl = (url?: string) =>
+    !!url && url.trim() !== "" && /^https?:\/\//i.test(url.trim());
+
+  const validArticles = (articles || []).filter((a) => hasValidUrl(a.url));
+
+  if (validArticles.length === 0) {
     return null;
   }
 
-  const tickerItems = articles.slice(0, 8);
+  const tickerItems = validArticles.slice(0, 8);
 
   return (
     <div className="bg-[var(--bg-secondary)] border-b border-[var(--border-color)] overflow-hidden">
@@ -39,7 +44,7 @@ export function BreakingTicker({ articles }: BreakingTickerProps) {
             {[...tickerItems, ...tickerItems].map((article, idx) => {
               const category = article.pillar || article.category || 'news';
               const source = article.source_name || article.sourceName || 'ADN';
-              const url = article.url || '#';
+              const url = (article.url || '').trim();
 
               return (
                 <a

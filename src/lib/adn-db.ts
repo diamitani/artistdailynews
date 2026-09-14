@@ -12,39 +12,22 @@ export const adnDb = createClient(supabaseUrl, supabaseKey);
 
 const RAW_SEED_ITEMS: any[] = Array.isArray(REAL_ITEMS_JSON) ? REAL_ITEMS_JSON : [];
 
-/**
- * Normalizes all items so that every article has a realistic publication timestamp
- * anchored to TODAY (the current calendar day/hour), distributed cleanly across today.
- */
-function normalizeItemsToToday(items: any[]): any[] {
-  const now = Date.now();
-  
-  return items.map((item, index) => {
-    // Spread items across today (from 3 mins ago to a few hours ago)
-    let minutesAgo = 4;
-    if (index === 0) minutesAgo = 4;
-    else if (index <= 3) minutesAgo = 8 + index * 5;
-    else if (index <= 10) minutesAgo = 25 + (index - 3) * 8;
-    else if (index <= 30) minutesAgo = 90 + (index - 10) * 10;
-    else if (index <= 70) minutesAgo = 280 + (index - 30) * 6;
-    else minutesAgo = 520 + Math.min(index * 3, 300);
+// ── Quarantine (Phase 1 trust gate) ─────────────────────────────
+// Same policy as lib/db.ts: quarantined IDs never reach public queries.
+import QUARANTINE_JSON from "../data/quarantine.json";
+const QUARANTINED_IDS: Set<string> = new Set(
+  Array.isArray((QUARANTINE_JSON as any)?.items)
+    ? (QUARANTINE_JSON as any).items.map((q: any) => q.id)
+    : []
+);
 
-    const calculatedTime = new Date(now - minutesAgo * 60 * 1000).toISOString();
-
-    // Only preserve pubDate if it was published in the last 6 hours
-    let pubDate = item.freshness || item.published_at;
-    const isValidAndRecent = pubDate && !isNaN(new Date(pubDate).getTime()) && (now - new Date(pubDate).getTime() < 6 * 3600 * 1000);
-
-    const finalFreshness = isValidAndRecent ? pubDate : calculatedTime;
-
-    return {
-      ...item,
-      freshness: finalFreshness,
-      published_at: finalFreshness,
-      publishedAt: finalFreshness,
-    };
-  });
+function excludeQuarantined(items: any[]): any[] {
+  return items.filter((i) => !QUARANTINED_IDS.has(i?.id));
 }
+
+// NOTE (Phase 1): the old helper that rewrote every item's timestamp to
+// "today" was deliberately removed. Timestamps are now rendered exactly as
+// stored; see lib/utils.ts formatTimeAgo.
 
 // In-memory cache for live parsed RSS feeds (refreshed every 5 mins)
 let LIVE_RSS_CACHE: {
@@ -89,8 +72,8 @@ async function fetchLatestLivePlatformFeeds(): Promise<any[]> {
             why_it_matters: art.takeaway || art.summary,
             bullets: art.bullets,
             takeaway: art.takeaway,
-            freshness: art.publishedAt || new Date().toISOString(),
-            published_at: art.publishedAt || new Date().toISOString(),
+            freshness: art.publishedAt || "",
+            published_at: art.publishedAt || "",
             image_url: art.imageUrl,
             read_time_minutes: art.readTimeMinutes || 3,
             is_breaking: art.isBreaking || false,
@@ -115,7 +98,7 @@ async function fetchLatestLivePlatformFeeds(): Promise<any[]> {
 }
 
 export async function getLatestIssue() {
-  const seedWithToday = normalizeItemsToToday(RAW_SEED_ITEMS);
+  const seedItems = excludeQuarantined(RAW_SEED_ITEMS);
 
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     try {
@@ -138,7 +121,7 @@ export async function getLatestIssue() {
   }
 
   // Dynamic Issue generated from top real items
-  const leadItem = seedWithToday[0] || {
+  const leadItem = seedItems[0] || {
     id: "lead-01",
     title: "Music Industry Royalties & Rights Overhaul",
     dek: "Independent artists and catalogue owners navigate shifting streaming payout policies and mechanical licensing standards.",
@@ -148,21 +131,21 @@ export async function getLatestIssue() {
     action: "Check ASCAP/BMI split sheets and audit distributor royalty payout thresholds.",
   };
 
-  const cultureRail = seedWithToday.filter((i) => i.pillar === "culture").slice(0, 4).map((i) => ({
+  const cultureRail = seedItems.filter((i) => i.pillar === "culture").slice(0, 4).map((i) => ({
     title: i.title,
     platform: i.platform || i.source_name || "Web",
     time: "Today",
     url: i.url,
   }));
 
-  const businessRail = seedWithToday.filter((i) => i.pillar === "business").slice(0, 4).map((i) => ({
+  const businessRail = seedItems.filter((i) => i.pillar === "business").slice(0, 4).map((i) => ({
     title: i.title,
     platform: i.platform || i.source_name || "Web",
     time: "Today",
     url: i.url,
   }));
 
-  const socialRail = seedWithToday.filter((i) => i.pillar === "social").slice(0, 4).map((i) => ({
+  const socialRail = seedItems.filter((i) => i.pillar === "social").slice(0, 4).map((i) => ({
     title: i.title,
     platform: i.platform || i.source_name || "Web",
     time: "Today",
@@ -245,7 +228,7 @@ export async function getArticles(limit = 150, filterPillar?: string, filterPlat
   }
 
   // Apply Today's dynamic freshness normalizer
-  let normalized = normalizeItemsToToday(combined);
+  let normalized = excludeQuarantined(combined);
 
   if (filterPillar && filterPillar !== 'All') {
     normalized = normalized.filter((i) => i.pillar?.toLowerCase() === filterPillar.toLowerCase());
@@ -259,7 +242,7 @@ export async function getArticles(limit = 150, filterPillar?: string, filterPlat
 }
 
 export async function getNewsroomForUser(userId: string) {
-  const seedWithToday = normalizeItemsToToday(RAW_SEED_ITEMS);
+  const seedItems = excludeQuarantined(RAW_SEED_ITEMS);
 
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     try {
@@ -280,7 +263,7 @@ export async function getNewsroomForUser(userId: string) {
   }
 
   // Fallback personal newsroom package
-  const topItems = seedWithToday.slice(0, 12);
+  const topItems = seedItems.slice(0, 12);
   return {
     id: `newsroom-${userId}`,
     user_id: userId,

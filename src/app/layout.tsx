@@ -7,6 +7,7 @@ import { AudioProvider } from "@/components/AudioContext";
 import { AuthProvider } from "@/components/AuthContext";
 import { AudioPlayerBar } from "@/components/AudioPlayerBar";
 import { ReadingProgressBar } from "@/components/ReadingProgressBar";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 import { cn } from "@/lib/utils";
 
 const playfairDisplay = Playfair_Display({
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     template: "%s | Artist Daily News (ADN) · Powered by Artispreneur",
   },
   description:
-    "Join 35,000+ independent artists, managers, and labels. Daily music industry news, culture dispatches, video masterclasses, podcasts, press credentials, and exclusive partner deals.",
+    "Daily music business intelligence for independent artists, managers, and labels. News briefs, culture dispatches, video masterclasses, podcasts, press credentials, and partner deals.",
   keywords: [
     "music business news",
     "independent artist platform",
@@ -133,6 +134,7 @@ export default function RootLayout({
         <AuthProvider>
           <AudioProvider>
             <ReadingProgressBar />
+            <AnalyticsTracker />
             <Header />
             <main className="flex-1 pb-20">{children}</main>
             <AudioPlayerBar />

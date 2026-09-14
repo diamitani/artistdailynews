@@ -12,6 +12,7 @@ export function AudioPlayerBar() {
     playbackRate,
     isExpanded,
     togglePlay,
+    stopTrack,
     seek,
     setPlaybackRate,
     setIsExpanded,
@@ -40,7 +41,15 @@ export function AudioPlayerBar() {
         
         {/* Minimized Bubble when collapsed */}
         {!isExpanded ? (
-          <div className="flex justify-end">
+          <div className="flex justify-end items-center gap-2">
+            <button
+              onClick={stopTrack}
+              title="Dismiss Player"
+              aria-label="Dismiss audio player"
+              className="bg-[#121420]/95 hover:bg-[#161828] border border-[#2D3145] text-slate-400 hover:text-white p-2.5 rounded-2xl shadow-2xl backdrop-blur-md transition-transform active:scale-95"
+            >
+              <X className="w-4 h-4" />
+            </button>
             <button
               onClick={() => setIsExpanded(true)}
               className="bg-[#121420]/95 hover:bg-[#161828] border border-[#2D3145] text-white p-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-md transition-transform active:scale-95 group"
@@ -152,6 +161,15 @@ export function AudioPlayerBar() {
                   className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
                 >
                   <ChevronDown className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={stopTrack}
+                  title="Dismiss Player"
+                  aria-label="Dismiss audio player"
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+                >
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 

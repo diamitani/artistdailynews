@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { PodcastEpisode } from "@/lib/types";
-import { MOCK_PODCASTS } from "@/lib/mock-articles";
 
 export interface AudioTrack {
   id: string;
@@ -23,6 +22,7 @@ interface AudioContextType {
   playTrack: (track: AudioTrack) => void;
   togglePlay: () => void;
   pause: () => void;
+  stopTrack: () => void;
   seek: (seconds: number) => void;
   setPlaybackRate: (rate: number) => void;
   setIsExpanded: (expanded: boolean) => void;
@@ -33,16 +33,9 @@ interface AudioContextType {
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {
-  const [currentTrack, setCurrentTrack] = useState<AudioTrack | null>({
-    id: "track-default",
-    title: MOCK_PODCASTS[0].title,
-    artistOrShow: `${MOCK_PODCASTS[0].showName} (feat. ${MOCK_PODCASTS[0].host})`,
-    durationStr: "58:00",
-    durationSeconds: 3480,
-    imageUrl: MOCK_PODCASTS[0].imageUrl,
-  });
+  const [currentTrack, setCurrentTrack] = useState<AudioTrack | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progressSeconds, setProgressSeconds] = useState(145);
+  const [progressSeconds, setProgressSeconds] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -76,6 +69,12 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const pause = () => {
     setIsPlaying(false);
+  };
+
+  const stopTrack = () => {
+    setIsPlaying(false);
+    setProgressSeconds(0);
+    setCurrentTrack(null);
   };
 
   const seek = (seconds: number) => {
@@ -115,6 +114,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         playTrack,
         togglePlay,
         pause,
+        stopTrack,
         seek,
         setPlaybackRate,
         setIsExpanded,

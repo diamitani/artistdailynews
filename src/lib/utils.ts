@@ -5,31 +5,34 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Date formatting utilities
+// Date formatting utilities.
+//
+// TRUST RULE: timestamps are never fabricated. Relative labels are computed
+// at render time from the real stored date. Anything older than 7 days
+// renders as an absolute date. We never "normalize" old stories to look fresh.
+/** Honest relative time, computed at render time from a real timestamp. */
 export function formatTimeAgo(dateString?: string): string {
-  if (!dateString) return 'Just now';
-
-  // If already a relative or short label
-  if (dateString === 'Today' || dateString === 'Just now' || dateString.endsWith('ago') || dateString.endsWith('m') || dateString.endsWith('h')) {
-    return dateString;
-  }
+  if (!dateString) return "";
 
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
 
-  if (isNaN(diffMs)) return 'Today';
+  if (isNaN(diffMs)) return "";
+
+  // Future-dated (clock skew / bad data): show the absolute date, never "in X".
+  if (diffMs < 0) return formatDate(dateString);
 
   const seconds = Math.floor(diffMs / 1000);
-  if (seconds < 60) return 'Just now';
+  if (seconds < 60) return "Just now";
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m ago`;
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
 
-  // Always keep daily wire articles fresh for today
-  const normalizedHours = Math.max(1, (Math.abs(date.getDate() - now.getDate()) * 3 + hours) % 18);
-  return `${normalizedHours}h ago`;
+  return formatDate(dateString);
 }
 
 export function formatDate(dateString: string): string {

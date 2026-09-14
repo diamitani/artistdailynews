@@ -2,10 +2,47 @@ import { Article, FeedSource, Subscriber, PressPassApplication } from "./types";
 import { MOCK_ARTICLES } from "./mock-articles";
 import { INITIAL_FEEDS } from "./feeds-config";
 import REAL_ARTICLES_JSON from "../data/articles.json";
+import QUARANTINE_JSON from "../data/quarantine.json";
 
 const BASE_ARTICLES: Article[] = Array.isArray(REAL_ARTICLES_JSON) && REAL_ARTICLES_JSON.length > 0 
   ? (REAL_ARTICLES_JSON as Article[]) 
   : MOCK_ARTICLES;
+
+// ── Quarantine (Phase 1 trust gate) ─────────────────────────────
+// Items in quarantine.json are suspected-unverifiable and are EXCLUDED
+// from every public query. They are retained in the dataset for editor
+// review — never hard-deleted, never rendered on production routes.
+interface QuarantineEntry { id: string; title: string; reason: string }
+const QUARANTINE: QuarantineEntry[] = Array.isArray((QUARANTINE_JSON as any)?.items)
+  ? (QUARANTINE_JSON as any).items
+  : [];
+const QUARANTINED_IDS = new Set(QUARANTINE.map((q) => q.id));
+const QUARANTINE_REASONS = new Map(QUARANTINE.map((q) => [q.id, q.reason]));
+
+function applyQuarantine(articles: Article[]): Article[] {
+  return articles
+    .filter((a) => a.editorialStatus !== "quarantined" && !QUARANTINED_IDS.has(a.id))
+    .map((a) => ({ ...a, editorialStatus: a.editorialStatus || "published" as const }));
+}
+
+/** Normalized title for deduplication: lowercase, no punctuation, collapsed whitespace. */
+export function normalizeTitle(title: string): string {
+  return (title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Conservative near-duplicate check: exact normalized match, or long-title containment. */
+function isNearDuplicateTitle(a: string, b: string): boolean {
+  const na = normalizeTitle(a);
+  const nb = normalizeTitle(b);
+  if (!na || !nb) return false;
+  if (na === nb) return true;
+  if (na.length > 50 && nb.length > 50 && (na.includes(nb) || nb.includes(na))) return true;
+  return false;
+}
 
 /**
  * Universal Database Layer for Artist Daily News (ADN)
@@ -57,7 +94,7 @@ export const db = {
           if (res.ok) {
             const data = await res.json();
             if (Array.isArray(data) && data.length > 0) {
-              return data.map(mapSupabaseArticle);
+              return applyQuarantine(data.map(mapSupabaseArticle));
             }
           }
         } catch (err) {
@@ -65,17 +102,16 @@ export const db = {
         }
       }
 
+      // Fallback: seed data. Timestamps are rendered EXACTLY as stored —
+      // we never rewrite publishedAt to fake recency (removed Phase 1).
       const base = global.__adn_articles_db || MOCK_ARTICLES;
-      const now = Date.now();
-      return base.map((art, idx) => {
-        const minsAgo = idx === 0 ? 4 : idx <= 3 ? 8 + idx * 5 : idx <= 10 ? 25 + (idx - 3) * 8 : idx <= 30 ? 90 + (idx - 10) * 10 : 280 + Math.min(idx * 3, 300);
-        const currentDayTime = new Date(now - minsAgo * 60 * 1000).toISOString();
-        const isRecent = art.publishedAt && (now - new Date(art.publishedAt).getTime() < 6 * 3600 * 1000);
-        return {
+      return applyQuarantine(
+        base.map((art) => ({
           ...art,
-          publishedAt: isRecent ? art.publishedAt : currentDayTime,
-        };
-      });
+          sourcePublishedAt: art.sourcePublishedAt || art.publishedAt,
+          ingestedAt: art.ingestedAt || art.publishedAt,
+        }))
+      );
     },
 
     async getBySlug(slug: string): Promise<Article | null> {
@@ -94,6 +130,7 @@ export const db = {
 
       const current = global.__adn_articles_db || [];
       const currentUrlMap = new Map(current.map((a) => [a.originalUrl, a]));
+      const currentTitles = current.map((a) => normalizeTitle(a.title));
 
       for (const art of newArticles) {
         if (currentUrlMap.has(art.originalUrl)) {
@@ -103,9 +140,13 @@ export const db = {
             current[idx] = { ...current[idx], ...art };
             updated++;
           }
+        } else if (currentTitles.some((t) => isNearDuplicateTitle(t, art.title))) {
+          // Near-duplicate headline (same story, different URL): skip insert.
+          updated++;
         } else {
           // Insert new at the top
           current.unshift(art);
+          currentTitles.unshift(normalizeTitle(art.title));
           inserted++;
         }
       }
@@ -218,6 +259,10 @@ function mapSupabaseArticle(row: any): Article {
     isSponsored: row.is_sponsored || false,
     author: row.author || "ADN Newsdesk",
     tags: Array.isArray(row.tags) ? row.tags : [],
+    sourcePublishedAt: row.source_published_at || row.published_at,
+    ingestedAt: row.ingested_at || row.created_at || row.published_at,
+    editorialStatus: row.editorial_status || "published",
+    quarantineReason: row.quarantine_reason || undefined,
   };
 }
 
@@ -242,5 +287,9 @@ function mapArticleToSupabase(art: Article): any {
     is_sponsored: !!art.isSponsored,
     author: art.author || "ADN Newsdesk",
     tags: art.tags || [],
+    source_published_at: art.sourcePublishedAt || art.publishedAt,
+    ingested_at: art.ingestedAt || new Date().toISOString(),
+    editorial_status: art.editorialStatus || "published",
+    quarantine_reason: art.quarantineReason || null,
   };
 }

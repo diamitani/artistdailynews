@@ -36,7 +36,7 @@ export function Footer() {
                 Stay informed on the music business
               </h3>
               <p className="text-sm text-[var(--text-secondary)]">
-                Daily intelligence delivered at 6am. Join 35,000+ music professionals.
+                A weekday brief on the music business, written for independent artists.
               </p>
             </div>
             <form className="flex flex-col sm:flex-row gap-3 sm:w-auto w-full">
@@ -79,8 +79,9 @@ export function Footer() {
             </Link>
 
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-sm">
-              The premier intelligence platform for independent musicians, managers, and indie labels.
-              Aggregating 50+ music industry feeds with AI-powered synthesis.
+              A daily editorial brief on the music business for independent
+              artists — original summaries with links to the canonical source
+              of every story.
             </p>
 
             <div className="p-4 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
@@ -106,14 +107,6 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4 text-[11px] font-mono text-[var(--text-muted)]">
-              <span className="flex items-center">
-                <ShieldCheck className="w-3.5 h-3.5 mr-1 text-[var(--accent-emerald)]" />
-                Verified Press Entity
-              </span>
-              <span>·</span>
-              <span>ISSN Registered</span>
-            </div>
           </div>
 
           {/* Sections Column */}
@@ -223,6 +216,13 @@ export function Footer() {
             <Link href="/press-pass" className="hover:text-[var(--text-secondary)] transition-colors">Press Pass</Link>
             <Link href="/advertise" className="hover:text-[var(--text-secondary)] transition-colors">Advertise</Link>
             <span className="font-mono text-[10px] text-[var(--border-highlight)]">v3.0</span>
+            <span aria-hidden="true" className="opacity-40">|</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">Trust</span>
+            <Link href="/about" className="hover:text-[var(--text-secondary)] transition-colors">About</Link>
+            <Link href="/editorial-standards" className="hover:text-[var(--text-secondary)] transition-colors">Editorial Standards</Link>
+            <Link href="/corrections" className="hover:text-[var(--text-secondary)] transition-colors">Corrections</Link>
+            <Link href="/privacy" className="hover:text-[var(--text-secondary)] transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-[var(--text-secondary)] transition-colors">Terms</Link>
           </div>
         </div>
       </div>

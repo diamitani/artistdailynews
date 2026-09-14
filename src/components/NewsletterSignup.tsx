@@ -97,6 +97,7 @@ export function NewsletterSignup() {
                 <button
                   type="submit"
                   disabled={status === "loading"}
+                  data-track-event="signup"
                   className="btn-brand px-6 py-3 shrink-0"
                 >
                   <span>{status === "loading" ? "Subscribing..." : "Join Free"}</span>

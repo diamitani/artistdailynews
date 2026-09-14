@@ -4,6 +4,7 @@ import { BreakingTicker } from "@/components/BreakingTicker";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { ArticleDetailView } from "@/components/ArticleDetailView";
 import { db } from "@/lib/db";
+import { getArticleStats } from "@/lib/analytics";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -96,7 +97,6 @@ export default async function ArticlePage({ params }: Props) {
       {
         "@type": "Person",
         name: article.author || "ADN Editorial",
-        jobTitle: "Senior Music Business Editor",
         worksFor: {
           "@type": "Organization",
           name: "Artist Daily News",
@@ -132,6 +132,7 @@ export default async function ArticlePage({ params }: Props) {
       <ArticleDetailView
         article={article}
         relatedArticles={relatedArticles}
+        readStats={await getArticleStats(slug)}
       />
 
       <NewsletterSignup />

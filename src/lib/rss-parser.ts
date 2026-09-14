@@ -61,19 +61,27 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
       if (!title || title.length < 6) continue;
 
       const link = extractLink(item) || source.website;
-      const pubDateStr =
+      // Require a valid HTTP(S) canonical URL — no canonical, no story.
+      if (!/^https?:\/\//i.test(link)) continue;
+
+      // TRUST RULE: preserve the publisher's date. If the feed gives no
+      // parseable date, leave it empty — never substitute "now".
+      const rawPubDate =
         item.pubDate ||
         item.published ||
         item.updated ||
         item["dc:date"] ||
-        new Date().toISOString();
+        "";
+      const sourcePublishedAt = isValidDate(rawPubDate)
+        ? new Date(rawPubDate).toISOString()
+        : "";
 
       const rawContent =
         extractText(item["content:encoded"]) ||
         extractText(item.content) ||
         extractText(item.description) ||
         extractText(item.summary) ||
-        "";
+ "";
 
       const cleanedSnippet = cleanHtml(rawContent).slice(0, 320);
       const imageUrl = extractImage(item, rawContent) || defaultImageForCategory(source.category);
@@ -84,9 +92,10 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
       const rawAuthor = extractText(item.author) || extractText(item["dc:creator"]) || `${source.name} Editorial`;
       const author = cleanHtml(rawAuthor) || `${source.name} Newsdesk`;
 
-      // Synthesize Takeaways & Strategic DIY Signal
-      const takeaway = generateActionableTakeaway(source.name, source.category, title);
-      const bullets = generateBullets(source.name, source.category, title, cleanedSnippet);
+      // Briefing points derived from the actual feed snippet — no fabricated
+      // "verified" claims. Human editorial approval still required before public.
+      const takeaway = buildHonestTakeaway(cleanedSnippet, source.name);
+      const bullets = buildHonestBullets(cleanedSnippet, source.name);
 
       articles.push({
         id: `art-${slugify(source.name)}-${Date.now()}-${uniqueHash}`,
@@ -94,7 +103,7 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
         slug,
         summary:
           cleanedSnippet ||
-          `Exclusive coverage and market intelligence reported by ${source.name} regarding independent music rights, streaming discovery, and creator economics.`,
+          `Reported by ${source.name}. Summary pending editorial review.`,
         bullets,
         takeaway,
         category: source.category,
@@ -102,7 +111,11 @@ export async function fetchAndParseFeed(source: FeedSource): Promise<Article[]> 
         sourceUrl: source.website,
         originalUrl: link,
         imageUrl,
-        publishedAt: isValidDate(pubDateStr) ? new Date(pubDateStr).toISOString() : new Date().toISOString(),
+        publishedAt: sourcePublishedAt || "",
+        sourcePublishedAt: sourcePublishedAt || "",
+        ingestedAt: new Date().toISOString(),
+        // Editorial gate: fresh ingestions enter as drafts until a human approves.
+        editorialStatus: "draft",
         readTimeMinutes: Math.max(2, Math.min(8, Math.ceil((cleanedSnippet.split(" ").length || 100) / 45))),
         isBreaking: title.toLowerCase().includes("breaking") || title.toLowerCase().includes("urgent"),
         tags: [source.name, source.category, "Music Business", "Independent Rights"],
@@ -197,29 +210,28 @@ function isValidDate(d: any): boolean {
   return !isNaN(time);
 }
 
-function generateActionableTakeaway(sourceName: string, category: CategoryType, title: string): string {
-  switch (category) {
-    case "financial":
-      return `Review catalogue split sheets and ensure master recordings have registered ISRC/ISWC codes to capture all international mechanical royalties.`;
-    case "streaming":
-      return `Optimize your 4-week pre-save window and algorithmic pitch metadata in Spotify for Artists to maximize Release Radar momentum.`;
-    case "tech-ai":
-      return `Integrate AI-assisted mastering and automated stems workflow while retaining 100% human songwriting copyright ownership.`;
-    case "marketing":
-      return `Focus short-form video hooks on the 15-second chorus climax to increase TikTok audio save rates and algorithmic sound page adds.`;
-    case "legal":
-      return `Audit all producer contracts for work-for-hire provisions and cap distributor recoupment percentages to safeguard catalogue equity.`;
-    default:
-      return `Align release schedules and rights distribution with the industry trends and market indicators documented by ${sourceName}.`;
+// Honest briefing builders: derive bullets/takeaways from the actual feed
+// snippet. Never claim verification or invent facts not present in the feed.
+function buildHonestTakeaway(snippet: string, sourceName: string): string {
+  if (snippet) {
+    const first = snippet.split(/(?<=[.!?])\s/)[0] || snippet;
+    return first.slice(0, 220);
   }
+  return `Reported by ${sourceName}. Editorial summary pending.`;
 }
 
-function generateBullets(sourceName: string, category: CategoryType, title: string, snippet: string): string[] {
-  return [
-    `Primary dispatch verified directly from ${sourceName}.`,
-    `Direct strategic impact on ${category} policy and independent artist revenue streams.`,
-    `Independent rights holders advised to review distributor agreements and schedule compliance.`,
-  ];
+function buildHonestBullets(snippet: string, sourceName: string): string[] {
+  const bullets = [`Reported by ${sourceName}.`];
+  if (snippet) {
+    const sentences = snippet
+      .split(/(?<=[.!?])\s/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 20);
+    for (const s of sentences.slice(0, 2)) {
+      bullets.push(s.length > 200 ? s.slice(0, 200).trimEnd() + "…" : s);
+    }
+  }
+  return bullets;
 }
 
 function defaultImageForCategory(category: CategoryType): string {
