@@ -36,7 +36,7 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
     { title: "Artispreneur Partner Deals & Discounts", icon: Sparkles, href: "/network", category: "Deals" },
     { title: "YouTube Video Masterclasses & Essays", icon: Sparkles, href: "/podcasts", category: "Video Desk" },
     { title: "27+ Channel Media & Learning Library", icon: Sparkles, href: "/library", category: "Library" },
-    { title: "Full 2,000+ Article News Wire", icon: Newspaper, href: "/news", category: "Wire" },
+    { title: "Chronological News Wire", icon: Newspaper, href: "/news", category: "Wire" },
     { title: "Music Business Podcasts", icon: Radio, href: "/podcasts", category: "Audio Hub" },
     { title: "Daily Newsletter Archives", icon: Newspaper, href: "/newsletters", category: "Dispatches" },
     { title: "Advertise / Media Kit & Rate Card", icon: Sparkles, href: "/advertise", category: "Sponsorship" },

@@ -131,26 +131,17 @@ export async function getLatestIssue() {
     action: "Check ASCAP/BMI split sheets and audit distributor royalty payout thresholds.",
   };
 
-  const cultureRail = seedItems.filter((i) => i.pillar === "culture").slice(0, 4).map((i) => ({
+  // TRUST RULE: rail timestamps use the stored date as-is — never "Today".
+  const toRail = (i: any) => ({
     title: i.title,
     platform: i.platform || i.source_name || "Web",
-    time: "Today",
+    time: i.freshness || i.published_at || "",
     url: i.url,
-  }));
+  });
 
-  const businessRail = seedItems.filter((i) => i.pillar === "business").slice(0, 4).map((i) => ({
-    title: i.title,
-    platform: i.platform || i.source_name || "Web",
-    time: "Today",
-    url: i.url,
-  }));
-
-  const socialRail = seedItems.filter((i) => i.pillar === "social").slice(0, 4).map((i) => ({
-    title: i.title,
-    platform: i.platform || i.source_name || "Web",
-    time: "Today",
-    url: i.url,
-  }));
+  const cultureRail = seedItems.filter((i) => i.pillar === "culture").slice(0, 4).map(toRail);
+  const businessRail = seedItems.filter((i) => i.pillar === "business").slice(0, 4).map(toRail);
+  const socialRail = seedItems.filter((i) => i.pillar === "social").slice(0, 4).map(toRail);
 
   return {
     id: "adn-issue-live",

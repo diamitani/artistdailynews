@@ -75,7 +75,7 @@ export default function PressPassPage() {
             <Video className="w-6 h-6 text-[var(--accent-blue)]" />
             <h3 className="font-serif font-bold text-[var(--text-primary)] text-lg">Syndicated Dispatch Distribution</h3>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Published festival reviews, interviews, and photo galleries are syndicated to 35,000+ daily readers and indexed in Google News.
+              Published festival reviews, interviews, and photo galleries are distributed through our dispatch channels.
             </p>
           </div>
         </div>

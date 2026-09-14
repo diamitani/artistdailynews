@@ -18,9 +18,6 @@ export default function DeskLayout({ children }: { children: React.ReactNode }) 
         {/* Sidebar Nav */}
         <aside className="w-64 min-h-[calc(100vh-52px)] bg-white border-r border-gray-200 p-6 flex flex-col space-y-2 text-sm font-medium">
           <Link href="/news/desk" className="bg-gray-100 text-black px-3 py-2 rounded">Today's Issue (Pending)</Link>
-          <Link href="#" className="text-gray-600 hover:text-black px-3 py-2">All Items Pool</Link>
-          <Link href="#" className="text-gray-600 hover:text-black px-3 py-2">Archives</Link>
-          <Link href="#" className="text-gray-600 hover:text-black px-3 py-2">Sources Config</Link>
         </aside>
 
         {/* Main Content */}

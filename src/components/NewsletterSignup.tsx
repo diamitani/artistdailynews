@@ -56,7 +56,7 @@ export function NewsletterSignup() {
           </h2>
 
           <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto">
-            Join <strong className="text-[var(--text-primary)]">35,000+ independent artists, managers, attorneys, and indie labels</strong> receiving daily breakdowns on streaming payout shifts, catalogue valuation benchmarks, sync leads, and release strategy.
+            Join <strong className="text-[var(--text-primary)]">independent artists, managers, attorneys, and indie labels</strong> receiving daily breakdowns on streaming payout shifts, catalogue valuation benchmarks, sync leads, and release strategy.
           </p>
 
           {/* Form */}

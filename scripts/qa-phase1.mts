@@ -84,6 +84,9 @@ const banned: Array<[string, string]> = [
 ];
 const deadLinkFiles = [
   "src/app/page.tsx",
+  "src/app/news/page.tsx",
+  "src/app/news/desk/layout.tsx",
+  "src/app/auth/login/page.tsx",
   "src/components/BreakingTicker.tsx",
   "src/components/NewsByPlatformSection.tsx",
   "src/components/Footer.tsx",
@@ -96,7 +99,15 @@ for (const [file] of banned) {
 for (const file of deadLinkFiles) {
   check(`${file} has no href="#"`, !read(file).includes('href="#"'));
 }
-const claimFiles = ["src/app/page.tsx", "src/components/Footer.tsx", "src/app/layout.tsx"];
+const claimFiles = [
+  "src/app/page.tsx",
+  "src/app/advertise/page.tsx",
+  "src/app/press-pass/page.tsx",
+  "src/components/NewsletterSignup.tsx",
+  "src/components/CommandMenu.tsx",
+  "src/components/Footer.tsx",
+  "src/app/layout.tsx",
+];
 for (const file of claimFiles) {
   const src = read(file);
   const found = falseClaims.filter((c) => src.toLowerCase().includes(c.toLowerCase()));
