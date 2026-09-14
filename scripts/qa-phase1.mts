@@ -173,6 +173,49 @@ for (const p of ["/about", "/editorial-standards", "/corrections"]) {
   check(`footer links ${p}`, footer.includes(p));
 }
 
+// ── 7. Freshness: date-aware hero selection ──────────────────────
+console.log("\n[7] Freshness (hero selection)");
+const { isCurrentStory, newestValidStory, pickFeaturedStory } = await import("../src/lib/utils.js");
+
+const now = Date.now();
+const H = 3600_000;
+const story = (title: string, hoursAgo: number | null, extra: any = {}) => ({
+  id: `t-${title}`,
+  title,
+  publishedAt:
+    hoursAgo === null ? "not-a-date" : new Date(now - hoursAgo * H).toISOString(),
+  ...extra,
+});
+
+const staleLead = story("Stale lead from Sep 1", 13 * 24); // 13 days old
+const freshStory = story("Fresh story", 2); // 2 hours old
+const currentLead = story("Editorial lead, still current", 5); // 5 hours old
+const futureStory = { id: "t-future", title: "Future story", publishedAt: new Date(now + 24 * H).toISOString() };
+const invalidStory = story("Invalid date story", null);
+
+check("stale issue lead loses to a newer valid story",
+  pickFeaturedStory(staleLead, [staleLead, freshStory])?.id === freshStory.id);
+check("current editorial lead remains featured",
+  pickFeaturedStory(currentLead, [currentLead, freshStory])?.id === currentLead.id);
+check("future-dated story cannot win the hero",
+  pickFeaturedStory(null, [futureStory, freshStory])?.id === freshStory.id);
+check("invalid-date story cannot win the hero",
+  pickFeaturedStory(null, [invalidStory, freshStory])?.id === freshStory.id);
+check("no valid stories -> no hero (never fabricates)",
+  pickFeaturedStory(null, [futureStory, invalidStory]) === null);
+check("isCurrentStory uses a 72h window",
+  isCurrentStory(story("x", 71)) === true && isCurrentStory(story("x", 73)) === false);
+check("newestValidStory rejects future dates",
+  newestValidStory([futureStory, freshStory])?.id === freshStory.id);
+
+// Merged data files: newest item must be current (within 24h)
+const newestItem = items
+  .map((i: any) => ({ d: new Date(i.freshness || i.published_at || 0).getTime(), t: i.title }))
+  .filter((x: any) => !isNaN(x.d))
+  .sort((a: any, b: any) => b.d - a.d)[0];
+check("adn_items.json newest item is current (<24h old)",
+  now - newestItem.d < 24 * H, newestItem.t?.slice(0, 60));
+
 // ── Summary ─────────────────────────────────────────────────────
 console.log(failures === 0 ? "\nALL PHASE 1 QA CHECKS PASSED" : `\n${failures} CHECK(S) FAILED`);
 process.exit(failures === 0 ? 0 : 1);

@@ -83,9 +83,9 @@ export function newestValidStory<T>(articles: T[]): T | undefined {
  * Pick the hero story: keep an editorial lead item only while it is current;
  * otherwise fall back to the newest item with a valid, non-future date.
  */
-export function pickFeaturedStory<T>(leadItem: T | null | undefined, articles: T[]): T | undefined {
+export function pickFeaturedStory<T>(leadItem: T | null | undefined, articles: T[]): T | null {
   if (leadItem && isCurrentStory(leadItem)) return leadItem;
-  return newestValidStory(articles) ?? (articles.length ? articles[0] : leadItem ?? undefined);
+  return newestValidStory(articles) ?? null;
 }
 
 // Slug generation
