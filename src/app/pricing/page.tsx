@@ -94,7 +94,7 @@ export default function PricingPage() {
         "Comprehensive YouTube Video Masterclass & Essay Library",
         "Early 48-hour grant & festival showcase alerts",
         "ADN AI Music News & Copilot Assistant (unlimited queries)",
-        "Priority VIP Festival Press Pass review & Letter of Assignment",
+        "Priority VIP digital creator-badge issuance",
         "Exportable 6-Week Release Campaign Blueprints",
       ],
       highlight: true,
@@ -110,7 +110,7 @@ export default function PricingPage() {
       features: [
         "Everything in Pro Insider for up to 10 team seats",
         "Automated White-Label Daily PDF Briefing for your roster",
-        "Dedicated Press Accreditation Concierge liaison",
+        "Dedicated creator-badge support for your roster",
         "Direct API Feed Access for internal CRM & Slack feeds",
         "Quarterly 1-on-1 Artist Career & Strategy Consultation",
         "Featured Artist Spotlight discount (50% off)",

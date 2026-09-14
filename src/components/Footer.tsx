@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NewsletterInlineForm } from "@/components/NewsletterInlineForm";
 import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, TrendingUp, Mic2, Sparkles, Layers, Tv } from "lucide-react";
 
 const SECTIONS = [
@@ -14,13 +15,13 @@ const ECOSYSTEM_LINKS = [
   { href: "/chat", label: "AI Copilot", icon: Bot },
   { href: "/podcasts", label: "Podcasts", icon: Radio },
   { href: "/newsletters", label: "Newsletter", icon: Mail },
-  { href: "/press-pass", label: "Press Credentials", icon: ShieldCheck },
+  { href: "/press-pass", label: "Creator Badge", icon: ShieldCheck },
 ];
 
 const BUSINESS_LINKS = [
   { href: "/advertise", label: "Advertise With Us" },
   { href: "/newsletters", label: "Daily Newsletter" },
-  { href: "/press-pass", label: "Press Pass Accreditation" },
+  { href: "/press-pass", label: "Creator Badge" },
   { href: "/api/news/feed?format=rss", label: "RSS Feed", external: true, icon: Rss },
 ];
 
@@ -39,16 +40,7 @@ export function Footer() {
                 A weekday brief on the music business, written for independent artists.
               </p>
             </div>
-            <form className="flex flex-col sm:flex-row gap-3 sm:w-auto w-full">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 sm:w-64 px-4 py-2.5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] text-sm"
-              />
-              <button className="btn-brand px-6 py-2.5 text-sm whitespace-nowrap">
-                Subscribe Free
-              </button>
-            </form>
+            <NewsletterInlineForm variant="light" />
           </div>
         </div>
       </div>
@@ -213,7 +205,7 @@ export function Footer() {
             <Link href="/news" className="hover:text-[var(--text-secondary)] transition-colors">Today</Link>
             <Link href="/library" className="hover:text-[var(--text-secondary)] transition-colors">27+ Channels</Link>
             <Link href="/podcasts" className="hover:text-[var(--text-secondary)] transition-colors">Podcasts</Link>
-            <Link href="/press-pass" className="hover:text-[var(--text-secondary)] transition-colors">Press Pass</Link>
+            <Link href="/press-pass" className="hover:text-[var(--text-secondary)] transition-colors">Creator Badge</Link>
             <Link href="/advertise" className="hover:text-[var(--text-secondary)] transition-colors">Advertise</Link>
             <span className="font-mono text-[10px] text-[var(--border-highlight)]">v3.0</span>
             <span aria-hidden="true" className="opacity-40">|</span>

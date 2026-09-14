@@ -92,7 +92,16 @@ const deadLinkFiles = [
   "src/components/Footer.tsx",
   "src/components/ArticleDetailView.tsx",
 ];
-const falseClaims = ["35,000+", "2,000+", "50+ OUTLETS", "50+ Verified", "ISSN", "Verified Press Entity", "50+ outlets synced"];
+const falseClaims = [
+  "35,000+", "10,000+", "2,000+", "50+ OUTLETS", "50+ Verified", "ISSN", "Verified Press Entity", "50+ outlets synced",
+  // credential-flavored authority claims (asserting press power the site does not hold)
+  "Official Press Pass", "Official Media Pass", "Official Credential Card",
+  "Verified Independent Press", "Accredited Journalist", "Accredited Press Arm",
+  "Letter of Assignment", "Press Pass Accreditation", "Active Press Accreditation",
+  "Press Pass Credentials", "verified music professionals", "verified musicians",
+  "cryptographic QR code", "STATUS: VERIFIED",
+  "Apply for Credentials", "Apply for Official",
+];
 for (const [file] of banned) {
   check(`${file} has no ${"normalizeItemsToToday/normalizedHours"}`, !read(file).includes("normalizeItemsToToday") && !read(file).includes("normalizedHours"));
 }
@@ -107,12 +116,44 @@ const claimFiles = [
   "src/components/CommandMenu.tsx",
   "src/components/Footer.tsx",
   "src/app/layout.tsx",
+  // extended sweep: every public surface that carried inflated audience / credential claims
+  "src/components/HeroHeadline.tsx",
+  "src/components/AdContainer.tsx",
+  "src/lib/feeds-config.ts",
+  "src/app/news-home/page.tsx",
+  "src/components/PressPassModal.tsx",
+  "src/components/PressBadgeGenerator.tsx",
+  "src/components/ArticleDetailView.tsx",
+  "src/app/network/page.tsx",
+  "src/app/pricing/page.tsx",
+  "src/app/dashboard/page.tsx",
 ];
 for (const file of claimFiles) {
   const src = read(file);
   const found = falseClaims.filter((c) => src.toLowerCase().includes(c.toLowerCase()));
   check(`${file} has no fabricated volume/credential claims`, found.length === 0, found.join(", "));
 }
+
+// ── 5b. Newsletter signup feedback wiring ───────────────────────
+console.log("\n[5b] Newsletter feedback wiring");
+const newsletterSignup = read("src/components/NewsletterSignup.tsx");
+check("NewsletterSignup has no false-positive success message",
+  !newsletterSignup.includes("You're in! Watch your inbox"));
+check("NewsletterSignup shows real error on failure",
+  newsletterSignup.includes("Something went wrong on our end"));
+check("Footer newsletter form wired with inline feedback",
+  read("src/components/Footer.tsx").includes("NewsletterInlineForm"));
+check("news-home newsletter form wired with inline feedback",
+  read("src/app/news-home/page.tsx").includes("NewsletterInlineForm"));
+check("no bare <form> without onSubmit remains on public pages",
+  ["src/components/Footer.tsx", "src/app/news-home/page.tsx"].every((f) => {
+    const src = read(f);
+    const forms = src.match(/<form[\s\S]*?>/g) || [];
+    return forms.every((tag) => tag.includes("onSubmit"));
+  }),
+  "a form tag without onSubmit reloads the page with no feedback");
+check("PressPassModal no longer promises an official letter of assignment",
+  !read("src/components/PressPassModal.tsx").toLowerCase().includes("official letter of assignment"));
 
 // publishedAt must never default to "now" (ingestedAt may — that IS now)
 for (const file of ["src/app/page.tsx", "src/lib/adn-db.ts", "src/lib/db.ts", "src/lib/rss-parser.ts"]) {

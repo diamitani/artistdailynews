@@ -62,7 +62,7 @@ export function AdContainer({ slotType, adClient, adSlot, className = "" }: AdCo
           </div>
           <h4 className="font-serif font-bold text-sm text-[var(--text-primary)]">The Front Page of the Artist World</h4>
           <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-            Get your plugins, services, or events in front of 35,000+ verified music professionals.
+            Get your plugins, services, or events in front of independent artists and music professionals.
           </p>
         </div>
         <Link

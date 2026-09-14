@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     template: "%s | Artist Daily News (ADN) · Powered by Artispreneur",
   },
   description:
-    "Daily music business intelligence for independent artists, managers, and labels. News briefs, culture dispatches, video masterclasses, podcasts, press credentials, and partner deals.",
+    "Daily music business intelligence for independent artists, managers, and labels. News briefs, culture dispatches, video masterclasses, podcasts, and partner deals.",
   keywords: [
     "music business news",
     "independent artist platform",
@@ -113,7 +113,7 @@ export default function RootLayout({
       "https://artispreneur.com",
       "https://twitter.com/artistdailynews",
     ],
-    publishingPrinciples: "https://artistdailynews.com/press-pass",
+    publishingPrinciples: "https://artistdailynews.com/editorial-standards",
     foundingDate: "2024",
     parentOrganization: {
       "@type": "Organization",

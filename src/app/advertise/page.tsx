@@ -201,7 +201,7 @@ export default function AdvertisePage() {
                 Official Brand Guidelines & Press Assets
               </h2>
               <p className="text-sm text-[var(--text-secondary)] mt-1">
-                Approved high-resolution vectors, badge lockups, and color specifications for festival programs, sponsor banners, and accredited press releases.
+                Approved high-resolution vectors, badge lockups, and color specifications for festival programs, sponsor banners, and press releases.
               </p>
             </div>
             <a

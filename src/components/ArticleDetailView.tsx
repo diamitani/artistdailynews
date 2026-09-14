@@ -328,18 +328,18 @@ export function ArticleDetailView({ article, relatedArticles, readStats }: Artic
       <div className="bg-[var(--bg-dark)] text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
         <div className="space-y-1.5 text-center sm:text-left">
           <span className="text-[10px] font-mono text-[var(--accent-primary)] font-bold uppercase tracking-wider bg-white/10 px-2 py-0.5 rounded border border-white/20">
-            Official Accreditation
+            Creator Badge
           </span>
-          <h3 className="font-serif text-xl font-bold text-white">Cover Major Tours & Festivals for Artist Daily News</h3>
+          <h3 className="font-serif text-xl font-bold text-white">Get Your ADN Creator Badge</h3>
           <p className="text-xs text-white/70">
-            Apply for an official media pass to report from the press pit at SXSW, A2IM Indie Week, and global music conferences.
+            Generate a free digital media badge for your EPK and socials. Self-issued by Artist Daily News — not official festival accreditation.
           </p>
         </div>
         <Link
           href="/press-pass"
           className="btn-brand px-6 py-3 shrink-0"
         >
-          Apply for Press Pass &rarr;
+          Get Your Badge &rarr;
         </Link>
       </div>
 

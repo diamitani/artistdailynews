@@ -2,6 +2,7 @@ import React from 'react';
 import { getArticles } from '@/lib/adn-db';
 import Link from 'next/link';
 import { ArrowRight, Radio, Newspaper, TrendingUp } from 'lucide-react';
+import { NewsletterInlineForm } from '@/components/NewsletterInlineForm';
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
@@ -199,21 +200,11 @@ export default async function NewsHomePage() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">Get the Daily Briefing</h2>
           <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-            Music business intelligence delivered to your inbox every morning at 6am EST. Join 10,000+ independent creators.
+            Music business intelligence delivered to your inbox every morning at 6am EST — written for independent creators.
           </p>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="flex-1 px-6 py-4 rounded-md bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
-            />
-            <button
-              type="submit"
-              className="bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white px-10 py-4 rounded-md font-bold text-lg transition-all whitespace-nowrap"
-            >
-              Subscribe Free
-            </button>
-          </form>
+          <div className="max-w-xl mx-auto">
+            <NewsletterInlineForm variant="dark" />
+          </div>
           <p className="text-xs text-white/50 mt-4">No spam. Unsubscribe anytime. Powered by Artispreneur.</p>
         </div>
       </section>

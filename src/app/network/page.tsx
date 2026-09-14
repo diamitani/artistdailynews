@@ -99,7 +99,7 @@ export default function NetworkPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              <strong>Artispreneur.com</strong> is the parent global intelligence and creator entrepreneurship network. We combine autonomous daily music industry journalism with institutional publishing tools, distribution discounts, and verified press pass credentials for the DIY artist class.
+              <strong>Artispreneur.com</strong> is the parent global intelligence and creator entrepreneurship network. We combine autonomous daily music industry journalism with institutional publishing tools, distribution discounts, and free digital creator badges for the DIY artist class.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -130,9 +130,9 @@ export default function NetworkPage() {
             <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary-light)] border border-[var(--accent-primary)]/20 flex items-center justify-center text-[var(--accent-primary)]">
               <Award className="w-5 h-5" />
             </div>
-            <h3 className="font-serif font-bold text-[var(--text-primary)] text-lg">Media & Credential Authority</h3>
+            <h3 className="font-serif font-bold text-[var(--text-primary)] text-lg">Media & Creator Tools</h3>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Artist Daily News serves as the flagship editorial and accredited press arm of Artispreneur, issuing Letters of Assignment for festivals and summits.
+              Artist Daily News is the editorial arm of Artispreneur — a daily music-business brief plus free creator tools like the digital media badge.
             </p>
           </div>
 

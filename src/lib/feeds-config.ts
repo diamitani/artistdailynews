@@ -1207,7 +1207,7 @@ export const SPONSORSHIP_PACKAGES: SponsorshipPackage[] = [
     priceFormatted: "$149",
     priceCents: 14900,
     period: "one-time",
-    description: "Top-of-fold featured placement in the Artist Daily News morning intelligence email blast sent to 35,000+ verified musicians & managers.",
+    description: "Top-of-fold featured placement in the Artist Daily News morning intelligence email blast, sent to our list of musicians and managers.",
     features: [
       "Top Hero Banner (600x150) with tracking link",
       "75-word sponsor shoutout & CTA copy",

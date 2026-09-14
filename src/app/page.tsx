@@ -566,22 +566,22 @@ export default async function ExecutiveTextAggregatorHomepage() {
           </div>
         </section>
 
-        {/* ── 7. EXECUTIVE PRESS ACCREDITATION & NEWSLETTER SUITE ── */}
+        {/* ── 7. DAILY BRIEF & NEWSLETTER SUITE ── */}
         <section className="p-8 sm:p-12 rounded-2xl bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] shadow-sm relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             
             <div className="lg:col-span-7 space-y-4">
               <span className="inline-flex items-center space-x-2 px-3 py-1 bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border border-[var(--accent-primary)]/20 text-xs font-mono font-bold uppercase tracking-wider rounded-md">
                 <ShieldCheck className="w-4 h-4" />
-                <span>Verified Independent Press Network</span>
+                <span>Independent Music News</span>
               </span>
 
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight">
-                Authoritative Music Journalism & Press Credentials
+                The Daily Brief for Independent Artists
               </h2>
 
               <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed max-w-xl">
-                Daily executive intelligence delivered directly to your inbox. Apply for official festival Press Pass credentials and access curated partner discounts for independent artists and producers.
+                A weekday morning briefing on streaming, sync, releases, and the deals shaping independent careers — plus partner discounts and free creator tools.
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2 font-mono text-xs">
