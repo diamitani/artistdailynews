@@ -11,11 +11,11 @@ export const CATEGORIES: CategoryInfo[] = [
   },
   {
     id: "streaming",
-    name: "Streaming & Playlists",
+    name: "Streaming & Releases",
     slug: "streaming",
     icon: "Radio",
     color: "#3B82F6",
-    description: "Spotify algorithm updates, Apple Music discovery, editorial playlist strategies, and DSP threshold policy.",
+    description: "Streaming platforms, playlist strategy, new releases, and live music.",
   },
   {
     id: "tech-ai",

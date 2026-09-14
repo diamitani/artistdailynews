@@ -155,35 +155,35 @@ export default async function ExecutiveTextAggregatorHomepage() {
           </div>
 
           {/* Sub-Masthead Navigation Bar (Clean & Focused) */}
-          <div className="border-t border-[var(--border-color)] pt-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono font-bold">
-            <div className="flex items-center gap-4 sm:gap-6 flex-wrap text-[var(--text-secondary)]">
-              <Link href="/topics/financial" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+          <div className="border-t border-[var(--border-color)] pt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs font-mono font-bold">
+            <div className="flex items-center gap-4 sm:gap-6 flex-nowrap overflow-x-auto text-[var(--text-secondary)] py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <Link href="/topics/financial" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Industry & Business</span>
               </Link>
-              <Link href="/topics/streaming" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/topics/streaming" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Mic2 className="w-3.5 h-3.5 text-rose-600" />
-                <span>Culture & Releases</span>
+                <span>Streaming & Releases</span>
               </Link>
-              <Link href="/topics/social" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/topics/social" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                 <span>Tech & Studio</span>
               </Link>
-              <Link href="/#news-by-platform" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/#news-by-platform" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Layers className="w-3.5 h-3.5 text-blue-600" />
                 <span>News by Platform</span>
               </Link>
-              <Link href="/library" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/library" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Tv className="w-3.5 h-3.5 text-indigo-600" />
                 <span>27+ Channel Library</span>
               </Link>
-              <Link href="/news" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/news" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Newspaper className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Full Chronological Wire</span>
               </Link>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 shrink-0 self-start sm:self-auto">
               <Link
                 href="/newsletters"
                 className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] transition-colors text-[11px]"
@@ -412,7 +412,7 @@ export default async function ExecutiveTextAggregatorHomepage() {
               </h2>
             </div>
             <p className="text-xs text-[var(--text-muted)] font-mono">
-              In-Depth Dispatches across Industry &bull; Culture &bull; Studio Tech
+              In-Depth Dispatches across Industry &bull; Streaming &bull; Studio Tech
             </p>
           </div>
 
@@ -433,10 +433,10 @@ export default async function ExecutiveTextAggregatorHomepage() {
               </div>
             </div>
 
-            {/* Column 2: Culture & Critical Wire (10 articles) */}
+            {/* Column 2: Streaming & Releases Desk (10 articles) */}
             <div className="space-y-4">
               <SectionHeader
-                title="Culture & Critical Wire"
+                title="Streaming & Releases"
                 href="/topics/streaming"
                 color="#C0272D"
                 icon={<Mic2 className="w-4 h-4" />}

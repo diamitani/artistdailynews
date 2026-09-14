@@ -3,7 +3,17 @@ import { ArticleCard } from '@/components/news/ArticleCard';
 import { getArticles } from '@/lib/adn-db';
 
 export default async function ArticlesPage({ searchParams }: { searchParams: Promise<{ pillar?: string, platform?: string }> }) {
-  const filters = ['All', 'Culture', 'Business', 'Ideas', 'Web', 'TikTok', 'YouTube', 'Podcast', 'Instagram'];
+  const filters: { label: string; param: "pillar" | "platform" | ""; value: string }[] = [
+    { label: "All", param: "", value: "" },
+    { label: "Streaming & Releases", param: "pillar", value: "culture" },
+    { label: "Business", param: "pillar", value: "business" },
+    { label: "Ideas", param: "pillar", value: "ideas" },
+    { label: "Web", param: "platform", value: "web" },
+    { label: "TikTok", param: "platform", value: "tiktok" },
+    { label: "YouTube", param: "platform", value: "youtube" },
+    { label: "Podcast", param: "platform", value: "podcast" },
+    { label: "Instagram", param: "platform", value: "instagram" },
+  ];
   
   // Await searchParams for Next.js 15
   const params = await searchParams;
@@ -60,9 +70,9 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
         <h2 className="font-serif font-bold text-4xl text-[#111111]">Articles</h2>
         <div className="hidden md:flex space-x-2">
           {filters.map(f => (
-            <a key={f} href={`/news/articles?${['Culture', 'Business', 'Ideas'].includes(f) ? `pillar=${f.toLowerCase()}` : `platform=${f.toLowerCase()}`}`} 
-               className={`px-3 py-1 font-sans text-xs font-bold uppercase tracking-wider border ${(params?.pillar === f.toLowerCase() || params?.platform === f.toLowerCase() || (!params?.pillar && !params?.platform && f === 'All')) ? 'bg-[#111111] text-[#F6F1E8] border-[#111111]' : 'border-[#D9D1C4] text-[#111111] hover:border-[#111111]'}`}>
-              {f}
+            <a key={f.label} href={f.param ? `/news/articles?${f.param}=${f.value}` : `/news/articles`}
+               className={`px-3 py-1 font-sans text-xs font-bold uppercase tracking-wider border ${((f.param === "pillar" && params?.pillar === f.value) || (f.param === "platform" && params?.platform === f.value) || (f.param === "" && !params?.pillar && !params?.platform)) ? 'bg-[#111111] text-[#F6F1E8] border-[#111111]' : 'border-[#D9D1C4] text-[#111111] hover:border-[#111111]'}`}>
+              {f.label}
             </a>
           ))}
         </div>
@@ -71,7 +81,7 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
       {/* Mobile filter dropdown */}
       <div className="md:hidden mb-6">
         <select className="w-full border-2 border-[#111111] bg-[#F6F1E8] p-2 font-sans font-bold uppercase text-sm">
-          {filters.map(f => <option key={f}>{f}</option>)}
+          {filters.map(f => <option key={f.label}>{f.label}</option>)}
         </select>
       </div>
 

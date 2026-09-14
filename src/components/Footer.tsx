@@ -4,7 +4,7 @@ import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, Tren
 
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
-  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
+  { href: "/topics/streaming", label: "Streaming & Releases", icon: Mic2, color: "#C0272D" },
   { href: "/#news-by-platform", label: "By Platform", icon: Layers, color: "#2563EB" },
   { href: "/podcasts", label: "Audio & Video", icon: Tv, color: "#7C3AED" },
 ];
@@ -52,22 +52,14 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-5">
             <Link href="/" className="flex items-center space-x-3 group">
-              <div className="relative flex items-center">
-                <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex flex-col items-center justify-center text-white font-black shadow-sm group-hover:scale-105 transition-all">
-                  <span className="text-[13px] tracking-wider leading-none font-mono font-black">ADN</span>
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] p-0.5 shadow-sm overflow-hidden flex items-center justify-center">
-                  <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-black text-lg text-[var(--text-primary)] tracking-tight">
-                  ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
-                </span>
-                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase">
-                  Powered by <strong className="text-[var(--accent-primary)]">Artispreneur</strong>
-                </span>
-              </div>
+              <img
+                src="/artispreneur-logo.png"
+                alt="Artispreneur — Artist Daily News"
+                className="w-10 h-10 object-contain shrink-0 transition-transform group-hover:scale-105"
+              />
+              <span className="font-black text-lg text-[var(--text-primary)] tracking-tight whitespace-nowrap">
+                ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
+              </span>
             </Link>
 
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-sm">

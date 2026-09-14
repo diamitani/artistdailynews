@@ -154,9 +154,9 @@ export default async function NewsHomePage() {
               </div>
             </div>
 
-            {/* Culture Column */}
+            {/* Streaming & Releases Column */}
             <div className="border-t-4 border-[var(--accent-emerald)] pt-8">
-              <h3 className="font-bold text-3xl uppercase tracking-wider text-[var(--accent-emerald)] mb-8">Culture</h3>
+              <h3 className="font-bold text-3xl uppercase tracking-wider text-[var(--accent-emerald)] mb-8">Streaming & Releases</h3>
               <div className="space-y-6">
                 {cultureItems.map((item, idx) => (
                   <article key={idx} className="group">

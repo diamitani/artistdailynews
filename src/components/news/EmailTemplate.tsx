@@ -37,7 +37,7 @@ export function EmailTemplate({
           {/* Header */}
           <tr>
             <td style={{ borderBottom: `4px solid ${textInk}`, paddingBottom: "20px" }}>
-              <h1 style={{ fontSize: "36px", margin: "0 0 5px 0", textTransform: "uppercase", letterSpacing: "-1px" }}>ADN</h1>
+              <img src="https://artistdailynews.com/artispreneur-logo.png" alt="Artist Daily News" width="44" height="44" style={{ display: "block", margin: "0 0 8px 0" }} />
               <p style={{ margin: 0, fontSize: "14px", textTransform: "uppercase", letterSpacing: "1px", color: `${textInk}B3` }}>
                 Artist Daily News · {issueDate}
               </p>
@@ -69,9 +69,9 @@ export function EmailTemplate({
               <table width="100%" cellPadding="0" cellSpacing="0">
                 <tbody>
                   <tr>
-                    {/* Culture */}
+                    {/* Streaming & Releases */}
                     <td width="33%" valign="top" style={{ paddingRight: "10px" }}>
-                      <h3 style={{ borderBottom: `1px solid ${borderGray}`, paddingBottom: "5px", textTransform: "uppercase", fontSize: "14px", margin: "0 0 15px 0" }}>Culture</h3>
+                      <h3 style={{ borderBottom: `1px solid ${borderGray}`, paddingBottom: "5px", textTransform: "uppercase", fontSize: "14px", margin: "0 0 15px 0" }}>Streaming & Releases</h3>
                       {cultureLinks.map((link, i) => (
                         <p key={i} style={{ margin: "0 0 10px 0", fontSize: "13px", lineHeight: "1.4" }}>
                           <a href={link.url} style={{ color: textInk, textDecoration: "none", fontWeight: "bold" }}>{link.title}</a>

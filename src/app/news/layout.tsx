@@ -34,7 +34,7 @@ export default function NewsLayout({ children }: { children: React.ReactNode }) 
             {/* Main nav */}
             <nav className="flex space-x-4 md:space-x-6 font-sans font-semibold text-sm uppercase">
               <Link href="/news" className="hover:text-[#C0272D]">Today</Link>
-              <Link href="/news/articles?pillar=culture" className="hover:text-[#C0272D] hidden sm:block">Culture</Link>
+              <Link href="/news/articles?pillar=culture" className="hover:text-[#C0272D] hidden sm:block">Streaming & Releases</Link>
               <Link href="/news/articles?pillar=business" className="hover:text-[#C0272D] hidden sm:block">Business</Link>
               <Link href="/news/articles?pillar=ideas" className="hover:text-[#C0272D] hidden sm:block">Ideas</Link>
               <Link href="/news/articles" className="hover:text-[#C0272D]">Articles</Link>

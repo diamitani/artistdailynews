@@ -98,10 +98,10 @@ export default async function DailyPostHomepage() {
 
         {/* Rails */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-[var(--border-color)] pt-8">
-          {/* Culture Rail */}
+          {/* Streaming & Releases Rail */}
           <div className="card-brand p-6">
             <h3 className="font-serif font-bold text-xl uppercase border-b border-[var(--border-color)] pb-2 mb-4 text-[var(--accent-primary)]">
-              Culture
+              Streaming & Releases
             </h3>
             <div className="space-y-4">
               {rails.culture?.map((item: any, idx: number) => (
