@@ -64,7 +64,7 @@ export default function DeskDashboardPage() {
 
       <div className="grid grid-cols-3 gap-6 mb-8">
         <div className="bg-white shadow rounded-lg border border-gray-200 p-4">
-          <h3 className="text-sm font-bold text-gray-800 mb-1">Culture Rail</h3>
+          <h3 className="text-sm font-bold text-gray-800 mb-1">Streaming & Releases Rail</h3>
           <p className="text-gray-500 text-sm">{proposedIssue.rails.culture} items selected</p>
           <button className="text-xs text-blue-600 mt-2">Edit Items</button>
         </div>
@@ -85,7 +85,7 @@ export default function DeskDashboardPage() {
         <ul className="list-disc list-inside space-y-1">
           <li><strong>adn.ingest:</strong> 34 items pulled from 18 sources.</li>
           <li><strong>adn.classify:</strong> Categories mapped. No rights risks detected.</li>
-          <li><strong>adn.editor:</strong> Package built. Week balance: 2 Culture, 2 Business, 1 Idea.</li>
+          <li><strong>adn.editor:</strong> Package built. Week balance: 2 Streaming & Releases, 2 Business, 1 Idea.</li>
         </ul>
       </div>
     </div>

@@ -13,7 +13,7 @@ interface HeaderProps {
 
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
-  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
+  { href: "/topics/streaming", label: "Streaming & Releases", icon: Mic2, color: "#C0272D" },
   { href: "/#news-by-platform", label: "By Platform", icon: Layers, color: "#2563EB" },
   { href: "/resources", label: "Top 100 Resources & Sheets", icon: Database, color: "#00E599" },
   { href: "/library", label: "27+ Channels & Videos", icon: Tv, color: "#7C3AED" },
@@ -78,25 +78,16 @@ export function Header({ onSearchOpen, onSubscribeClick }: HeaderProps) {
         {/* Main Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-3 group shrink-0">
-              <div className="relative flex items-center">
-                <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex flex-col items-center justify-center text-white font-black shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all">
-                  <span className="text-[13px] tracking-wider leading-none font-mono font-black">ADN</span>
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[var(--bg-primary)] border border-[var(--border-color)] p-0.5 shadow-sm overflow-hidden flex items-center justify-center">
-                  <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
-                </div>
-              </div>
-
-              <div className="flex flex-col">
-                <span className="font-black text-lg tracking-tight leading-none text-[var(--text-primary)]">
-                  ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
-                </span>
-                <span className="text-[9px] font-mono tracking-wider text-[var(--text-muted)] uppercase">
-                  Powered by <span className="font-bold text-[var(--accent-primary)]">ARTISPRENEUR</span>
-                </span>
-              </div>
+            {/* Logo — Artispreneur mark + publication wordmark */}
+            <Link href="/" className="flex items-center space-x-2.5 sm:space-x-3 group shrink-0 min-w-0">
+              <img
+                src="/artispreneur-logo.png"
+                alt="Artispreneur — Artist Daily News"
+                className="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0 transition-transform group-hover:scale-105"
+              />
+              <span className="font-black text-[15px] sm:text-lg tracking-tight leading-none text-[var(--text-primary)] whitespace-nowrap">
+                ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
+              </span>
             </Link>
 
             {/* Section Navigation (Desktop) */}

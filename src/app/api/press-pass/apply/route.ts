@@ -7,32 +7,27 @@ export async function POST(req: Request) {
       applicantName,
       artistOrOutletName,
       email,
-      phone,
       role,
-      targetEvent,
-      eventDate,
-      portfolioUrl,
-      coveragePitch,
     } = body;
 
-    if (!applicantName || !email || !targetEvent) {
+    if (!applicantName || !email) {
       return NextResponse.json(
-        { error: "Name, email, and target event are required." },
+        { error: "Name and email are required." },
         { status: 400 }
       );
     }
 
-    console.log(`[Press Pass Application] ${applicantName} (${role}) applied for ${targetEvent}`);
+    console.log(`[Creator Badge Request] ${applicantName} (${artistOrOutletName || "Independent"} / ${role || "Creator"}) requested a badge.`);
 
     return NextResponse.json({
       success: true,
-      message: "Press pass application submitted successfully.",
-      applicationId: `ADN-PRESS-${Date.now().toString().slice(-6)}`,
-      status: "pending",
+      message: "Creator badge request submitted successfully.",
+      applicationId: `ADN-BADGE-${Date.now().toString().slice(-6)}`,
+      status: "received",
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Failed to submit press pass application." },
+      { error: error.message || "Failed to submit creator badge request." },
       { status: 500 }
     );
   }

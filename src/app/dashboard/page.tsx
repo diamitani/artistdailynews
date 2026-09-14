@@ -3,7 +3,7 @@
 import { BreakingTicker } from "@/components/BreakingTicker";
 import { useAuth } from "@/components/AuthContext";
 import { MOCK_ARTICLES } from "@/lib/mock-articles";
-import { Sparkles, Bookmark, Ticket, Rocket, Calculator, Bot, ArrowRight, ShieldCheck, User, LogOut, CheckCircle2 } from "lucide-react";
+import { Sparkles, Bookmark, Ticket, Rocket, Calculator, Bot, ArrowRight, ShieldCheck, User, LogOut } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -95,9 +95,9 @@ export default function DashboardPage() {
               <Ticket className="w-4 h-4" />
             </div>
             <h3 className="font-serif font-bold text-[var(--text-primary)] text-base group-hover:text-[var(--accent-blue)] transition-colors">
-              Press Pass Credentials
+              Creator Badge
             </h3>
-            <p className="text-xs text-[var(--text-muted)]">Apply for SXSW & festival photo pit access</p>
+            <p className="text-xs text-[var(--text-muted)]">Get your free ADN digital media badge</p>
           </Link>
 
           <Link
@@ -150,28 +150,28 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Right: Press Pass & Release Status (5 cols) */}
+          {/* Right: Creator Badge & Release Status (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
             {/* Press Pass Status Card */}
             <div className="card-brand p-6 space-y-4">
               <div className="border-b border-[var(--border-color)] pb-3">
                 <h3 className="text-sm font-mono uppercase font-bold text-[var(--text-primary)] flex items-center space-x-2">
                   <Ticket className="w-4 h-4 text-[var(--accent-primary)]" />
-                  <span>Active Press Accreditation</span>
+                  <span>Creator Badge</span>
                 </h3>
               </div>
 
               <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-4 rounded-xl space-y-2">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-[var(--text-primary)] font-bold">SXSW 2026 Music Festival</span>
-                  <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-mono font-bold px-2 py-0.5 rounded">
-                    UNDER REVIEW
-                  </span>
+                  <span className="text-[var(--text-primary)] font-bold">No badge yet</span>
+                  <Link
+                    href="/press-pass"
+                    className="bg-[var(--accent-primary)] text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded"
+                  >
+                    GET YOURS
+                  </Link>
                 </div>
-                <p className="text-[11px] text-[var(--text-muted)] font-mono">Assignment ID: ADN-PRESS-892147</p>
-                <div className="text-[11px] text-emerald-700 font-mono flex items-center pt-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Letter of Assignment drafting in progress
-                </div>
+                <p className="text-[11px] text-[var(--text-muted)] font-mono">Free digital media badge for your EPK & socials — self-issued, not official accreditation.</p>
               </div>
             </div>
 

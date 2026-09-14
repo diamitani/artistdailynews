@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "generated": "2026-09-14",
+  "policy": "Quarantined pending human editorial verification. These items are excluded from all public routes but retained in the dataset for review. Do not delete.",
+  "items": [
+    {
+      "id": "art-dj-mag-1788253583302-y05l",
+      "title": "Dolly Parton RIP: electronic and dance artists pay tribute to late country music icon",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-pitchfork-news-1788253578052-cyfq",
+      "title": "Half Japanese\u2019s David Fair Dies at 74",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-rolling-stone-music-1788253578002-xdk9",
+      "title": "David Fair, Co-Founder of Art Rock Innovators Half Japanese, Dead at 74",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-stereogum-1788253578341-i8o9",
+      "title": "Half Japanese\u2019s David Fair Dead At 74",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-no-depression-1788253596896-6cfp",
+      "title": "RIP Dolly Parton and Tim Curry, Bonnaroo 2027 Canceled, Big Thief's Forthcoming Triple LP, and More Roots Music News",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-pitchfork-news-1788253578052-e2eu",
+      "title": "Tim Curry, Rocky Horror Picture Show Star, Dies at 80",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-loudwire-1788253598086-mq3h",
+      "title": "'Rocky Horror' Actor Tim Curry Dead at 80",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-xxl-magazine-1788253581819-pcs1",
+      "title": "Rappers React to Dolly Parton Dead at 80",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-musicradar-1788253610378-afii",
+      "title": "\u201cHer songs will continue to resonate with people of all ages\u201d: Music legend Dolly Parton dies at 80",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-pitchfork-news-1788253578052-3jar",
+      "title": "Dolly Parton Dies at 80",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-saving-country-music-1788253596090-9uq9",
+      "title": "Frank Beard: The Heartbeat of Texas Music (RIP)",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification"
+    },
+    {
+      "id": "art-the-guardian-music-1789421744050-zg3z",
+      "title": "Brian Potter, British songwriter behind hits for Glen Campbell, Take That and more, dies aged 87",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification [re-verified in 2026-09-14 ingest; ID remapped]"
+    },
+    {
+      "id": "art-the-guardian-music-1789421744049-hl8w",
+      "title": "Bonnie Tyler, 80s pop legend known for Total Eclipse of the Heart and more, dies aged 75",
+      "reason": "Unverifiable death claim about a public figure; pending editorial verification [re-verified in 2026-09-14 ingest; ID remapped]"
+    }
+  ]
+}

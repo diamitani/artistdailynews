@@ -18,6 +18,8 @@ export interface CategoryInfo {
   description: string;
 }
 
+export type EditorialStatus = "published" | "quarantined" | "draft";
+
 export interface Article {
   id: string;
   title: string;
@@ -40,6 +42,16 @@ export interface Article {
   sponsorCtaUrl?: string;
   author?: string;
   tags: string[];
+  /**
+   * Provenance (Phase 1 trust gate).
+   * - sourcePublishedAt: when the PUBLISHER published the story (never inferred).
+   * - ingestedAt: when ADN ingested it.
+   * - editorialStatus: quarantined items are excluded from every public query.
+   */
+  sourcePublishedAt?: string;
+  ingestedAt?: string;
+  editorialStatus?: EditorialStatus;
+  quarantineReason?: string;
 }
 
 export interface FeedSource {
@@ -51,7 +63,7 @@ export interface FeedSource {
   tier: "tier1" | "tier2" | "tier3" | "niche";
   enabled: boolean;
   lastFetchedAt?: string;
-  status: "healthy" | "failing" | "pending";
+  status: "healthy" | "failing" | "pending" | "disabled";
   priority?: number;
 }
 

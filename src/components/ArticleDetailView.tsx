@@ -19,14 +19,17 @@ import {
   Check,
   ShieldCheck,
   Zap,
+  Eye,
 } from "lucide-react";
 
 interface ArticleDetailViewProps {
   article: Article;
   relatedArticles: Article[];
+  /** Real 7-day reader stats; only rendered when views7d > 0 (never fabricated). */
+  readStats?: { views7d: number; engaged7d: number; sourceClicks7d: number };
 }
 
-export function ArticleDetailView({ article, relatedArticles }: ArticleDetailViewProps) {
+export function ArticleDetailView({ article, relatedArticles, readStats }: ArticleDetailViewProps) {
   const { playArticleBriefing } = useAudio();
   const [textSize, setTextSize] = useState<"sm" | "base" | "lg">("base");
   const [copied, setCopied] = useState(false);
@@ -46,17 +49,9 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
     lg: "text-lg sm:text-xl",
   }[textSize];
 
-  const bureauLocation = {
-    financial: "NASHVILLE BUREAU",
-    streaming: "LOS ANGELES DESK",
-    "tech-ai": "SAN FRANCISCO CORRESPONDENT",
-    marketing: "NEW YORK DESK",
-    legal: "WASHINGTON D.C. BUREAU",
-    podcasts: "LONDON BUREAU",
-    tutorials: "AUSTIN DESK",
-    opportunities: "GLOBAL MUSIC STRATEGY",
-    social: "COMMUNITY DESK",
-  }[article.category] || "EDITORIAL NEWSDESK";
+  // Provenance: show the PUBLISHER's date, never a fabricated one.
+  const sourceDate = article.sourcePublishedAt || article.publishedAt;
+  const hasSourceUrl = !!article.originalUrl && /^https?:\/\//.test(article.originalUrl);
 
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-[var(--text-primary)]">
@@ -85,23 +80,22 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
               <Zap className="w-3 h-3 mr-1 fill-current" /> Breaking Alert
             </span>
           )}
-          <span className="text-xs font-mono text-[var(--text-muted)] bg-[var(--bg-secondary)] border border-[var(--border-color)] px-2.5 py-1 rounded-md">
-            {bureauLocation}
-          </span>
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] leading-[1.12]">
           {article.title}
         </h1>
 
-        {/* Byline & Publication Timestamp Strip */}
+        {/* Byline & Publication Timestamp Strip — real publisher date, never fabricated */}
         <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-[var(--text-muted)] font-mono border-y border-[var(--border-color)] py-3.5">
           <div className="flex items-center space-x-3">
             <span className="text-[var(--text-primary)] font-bold">
               By {article.author || "ADN Editorial Board"}
             </span>
             <span>&bull;</span>
-            <span>{formatDate(article.publishedAt)}</span>
+            <span title={sourceDate ? `Source published ${formatDate(sourceDate)}` : undefined}>
+              {sourceDate ? formatDate(sourceDate) : "Date unavailable"}
+            </span>
           </div>
 
           <div className="flex items-center space-x-3">
@@ -109,21 +103,36 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
               <Clock className="w-3.5 h-3.5 mr-1 text-[var(--accent-primary)]" />
               {article.readTimeMinutes} min read
             </span>
+            {/* Real reader count — rendered only when actual views exist */}
+            {readStats && readStats.views7d > 0 && (
+              <>
+                <span>&bull;</span>
+                <span className="flex items-center">
+                  <Eye className="w-3.5 h-3.5 mr-1 text-[var(--accent-primary)]" />
+                  {readStats.views7d.toLocaleString()} reads this week
+                </span>
+              </>
+            )}
             <span>&bull;</span>
-            <a
-              href={article.originalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent-primary)] hover:underline flex items-center font-bold"
-            >
+            {hasSourceUrl ? (
+              <a
+                href={article.originalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="source_click"
+                className="text-[var(--accent-primary)] hover:underline flex items-center font-bold"
+              >
+                <span>Source: {article.sourceName}</span>
+                <ExternalLink className="w-3 h-3 ml-1" />
+              </a>
+            ) : (
               <span>Source: {article.sourceName}</span>
-              <ExternalLink className="w-3 h-3 ml-1" />
-            </a>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Interactive Audio Briefing Player Bar */}
+      {/* Audio Briefing Player Bar */}
       <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
         <div className="flex items-center space-x-3 text-left">
           <div className="w-11 h-11 rounded-xl bg-[var(--accent-primary-light)] border border-[var(--accent-primary)]/20 flex items-center justify-center text-[var(--accent-primary)] shrink-0">
@@ -132,13 +141,11 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
           <div>
             <div className="flex items-center space-x-2">
               <span className="text-[10px] font-mono font-bold text-[var(--accent-primary)] uppercase tracking-wider">
-                AUDIO BRIEFING DISPATCH
+                AUDIO BRIEFING
               </span>
-              <span className="text-[var(--text-muted)]">&bull;</span>
-              <span className="text-[10px] font-mono text-[var(--accent-emerald)] font-bold">2:15 Min Broadcast</span>
             </div>
             <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-medium">
-              Listen to the autonomous newsdesk audio breakdown while you browse.
+              Listen to an audio read of this briefing while you browse.
             </p>
           </div>
         </div>
@@ -153,19 +160,21 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
       </div>
 
       {/* Featured Lead Image */}
-      <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-sm">
-        <img
-          src={article.imageUrl}
-          alt={article.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute bottom-2.5 left-3 text-[10px] font-mono text-white bg-black/75 px-2.5 py-0.5 rounded backdrop-blur-sm">
-          Photo via {article.sourceName} &bull; Editorial Syndicate
+      {article.imageUrl ? (
+        <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-sm">
+          <img
+            src={article.imageUrl}
+            alt={article.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-2.5 left-3 text-[10px] font-mono text-white bg-black/75 px-2.5 py-0.5 rounded backdrop-blur-sm">
+            Image via {article.sourceName}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {/* Semafor-Style 4-Point Structured Intelligence Module */}
-      <div className="card-brand p-6 sm:p-8 space-y-6">
+      <div className={`card-brand p-6 sm:p-8 space-y-6 ${textSizeClass}`}>
         <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
           <div className="flex items-center space-x-2 text-[var(--accent-primary)] font-mono text-xs font-bold uppercase tracking-widest">
             <Sparkles className="w-4 h-4" />
@@ -202,26 +211,28 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
         </div>
 
         {/* 3. The Signal for DIY Artists */}
-        <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-5 space-y-1.5">
-          <div className="text-emerald-800 font-mono font-bold text-xs uppercase tracking-wider flex items-center space-x-1.5">
-            <Zap className="w-3.5 h-3.5 text-emerald-600" />
+        <div className="bg-[var(--accent-emerald)]/10 border border-[var(--accent-emerald)]/30 rounded-2xl p-5 space-y-1.5">
+          <div className="text-[var(--accent-emerald)] font-mono font-bold text-xs uppercase tracking-wider flex items-center space-x-1.5">
+            <Zap className="w-3.5 h-3.5" />
             <span>3. The Signal for Independent Rights Holders</span>
           </div>
-          <p className="text-xs sm:text-sm text-emerald-950 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed font-medium">
             {article.takeaway}
           </p>
         </div>
 
-        {/* 4. The Industry View / Next Step */}
-        <div className="space-y-1.5">
-          <div className="text-xs font-mono font-bold text-[var(--text-primary)] uppercase tracking-wider flex items-center space-x-1.5">
-            <span className="w-2 h-2 rounded-full bg-[var(--accent-amber)]"></span>
-            <span>4. The Industry Context & Strategic Next Step</span>
+        {/* 4. Extended analysis — only rendered from real article content, never filler */}
+        {article.content && article.content.trim() && (
+          <div className="space-y-1.5">
+            <div className="text-xs font-mono font-bold text-[var(--text-primary)] uppercase tracking-wider flex items-center space-x-1.5">
+              <span className="w-2 h-2 rounded-full bg-[var(--accent-amber)]"></span>
+              <span>4. Extended Analysis</span>
+            </div>
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed pl-3.5 border-l-2 border-[var(--accent-amber)]">
+              {article.content}
+            </p>
           </div>
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed pl-3.5 border-l-2 border-[var(--accent-amber)]">
-            Major labels and streaming platforms continue to recalibrate catalog payout thresholds. Independent creators with verified metadata ownership and direct distribution contracts stand to retain significantly higher net share.
-          </p>
-        </div>
+        )}
       </div>
 
       {/* Reading Controls & Actions Bar */}
@@ -261,9 +272,10 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
 
           <button
             onClick={handleCopyLink}
+            data-track-event="share"
             className="flex items-center space-x-1 hover:text-[var(--text-primary)] transition-colors"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-[var(--accent-emerald)]" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? "Link Copied" : "Share"}</span>
           </button>
         </div>
@@ -272,25 +284,24 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
       {/* Mid-Article Leaderboard Unit */}
       <AdContainer slotType="in-feed" />
 
-      {/* Extended Editorial Narrative with Drop Cap */}
-      <div className={`space-y-6 text-[var(--text-secondary)] leading-relaxed font-sans ${textSizeClass}`}>
-        <p className="drop-cap">
-          {article.content ? (
-            article.content
-          ) : (
-            `In an era where independent creators command an unprecedented share of global recorded music revenue, market adjustments in streaming DSP payout algorithms, royalty audit standards, and catalogue net publisher's share (NPS) multiples define the real economic boundary for working artists.`
-          )}
-        </p>
-
-        {/* Editorial Pull Quote */}
-        <div className="pull-quote my-6 text-[var(--text-primary)] font-serif text-lg sm:text-xl font-bold">
-          "The biggest financial mistake independent artists make is treating their catalog as passive streaming files instead of revenue-yielding equity."
+      {/* Full-story CTA — ADN publishes briefs, not full articles; the canonical source is the destination */}
+      {hasSourceUrl && (
+        <div className={`rounded-2xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6 text-center space-y-3`}>
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+            This is an ADN briefing. Read the full story at the original publisher.
+          </p>
+          <a
+            href={article.originalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track-event="source_click"
+            className="btn-brand px-6 py-2.5 inline-flex items-center space-x-2"
+          >
+            <span>Read Full Story at {article.sourceName}</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
         </div>
-
-        <p>
-          According to recent reporting from <strong>{article.sourceName}</strong>, the shift towards direct-to-creator monetization models and transparent split sheets has accelerated across major independent hubs in Nashville, London, and Los Angeles. Artists who maintain clean ISRC, ISWC, and PRO registration records report up to 23% faster turnaround on international mechanical royalty collections.
-        </p>
-      </div>
+      )}
 
       {/* Fact-Check & Verification Methodology Card */}
       <div className="card-brand p-5 flex items-start space-x-3.5 text-xs text-[var(--text-muted)]">
@@ -317,18 +328,18 @@ export function ArticleDetailView({ article, relatedArticles }: ArticleDetailVie
       <div className="bg-[var(--bg-dark)] text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
         <div className="space-y-1.5 text-center sm:text-left">
           <span className="text-[10px] font-mono text-[var(--accent-primary)] font-bold uppercase tracking-wider bg-white/10 px-2 py-0.5 rounded border border-white/20">
-            Official Accreditation
+            Creator Badge
           </span>
-          <h3 className="font-serif text-xl font-bold text-white">Cover Major Tours & Festivals for Artist Daily News</h3>
+          <h3 className="font-serif text-xl font-bold text-white">Get Your ADN Creator Badge</h3>
           <p className="text-xs text-white/70">
-            Apply for an official media pass to report from the press pit at SXSW, A2IM Indie Week, and global music conferences.
+            Generate a free digital media badge for your EPK and socials. Self-issued by Artist Daily News — not official festival accreditation.
           </p>
         </div>
         <Link
           href="/press-pass"
           className="btn-brand px-6 py-3 shrink-0"
         >
-          Apply for Press Pass &rarr;
+          Get Your Badge &rarr;
         </Link>
       </div>
 

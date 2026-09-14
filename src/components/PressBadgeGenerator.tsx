@@ -5,11 +5,11 @@ import { Ticket, ShieldCheck, QrCode, Camera } from "lucide-react";
 
 export function PressBadgeGenerator() {
   const [name, setName] = useState("Alex Rivers");
-  const [outlet, setOutlet] = useState("Artispreneur Media / ADN Field Unit");
-  const [role, setRole] = useState("Concert Photojournalist");
-  const [event, setEvent] = useState("SXSW 2026 Music Festival");
-  const [location, setLocation] = useState("Austin, TX");
-  const [badgeId, setBadgeId] = useState("ADN-8849-PASS");
+  const [outlet, setOutlet] = useState("Independent Creator");
+  const [role, setRole] = useState("Independent Artist");
+  const [event, setEvent] = useState("Electronic Press Kit");
+  const [location, setLocation] = useState("Worldwide");
+  const [badgeId, setBadgeId] = useState("ADN-8849-BADGE");
 
   return (
     <div className="card-brand p-6 sm:p-8 space-y-8">
@@ -18,13 +18,13 @@ export function PressBadgeGenerator() {
         <div>
           <div className="flex items-center space-x-2 text-[var(--accent-primary)] text-xs font-mono font-bold uppercase tracking-wider">
             <Ticket className="w-4 h-4" />
-            <span>Official Credential Card Generator</span>
+            <span>Creator Badge Generator</span>
           </div>
           <h2 className="font-serif text-2xl font-bold text-[var(--text-primary)] mt-1">
             Live Digital Media Badge Preview
           </h2>
           <p className="text-xs text-[var(--text-muted)] font-mono">
-            Preview how your verified credentials render on the official Artispreneur / ADN Field Pass lanyard
+            Preview your self-issued ADN creator badge. This is a sample identity card — not official accreditation.
           </p>
         </div>
       </div>
@@ -35,7 +35,7 @@ export function PressBadgeGenerator() {
         <div className="lg:col-span-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1">Accredited Name</label>
+              <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1">Display Name</label>
               <input
                 type="text"
                 value={name}
@@ -57,7 +57,7 @@ export function PressBadgeGenerator() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1">Target Festival / Event</label>
+              <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1">Affiliation / Focus</label>
               <input
                 type="text"
                 value={event}
@@ -67,7 +67,7 @@ export function PressBadgeGenerator() {
             </div>
 
             <div>
-              <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1">Event City/State</label>
+              <label className="text-xs font-mono text-[var(--text-secondary)] block mb-1">City / Region</label>
               <input
                 type="text"
                 value={location}
@@ -80,10 +80,10 @@ export function PressBadgeGenerator() {
           <div className="p-4 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] text-xs text-[var(--text-secondary)] space-y-2">
             <div className="flex items-center space-x-2 font-bold text-[var(--text-primary)]">
               <ShieldCheck className="w-4 h-4 text-[var(--accent-emerald)]" />
-              <span>Official Verification Safeguards</span>
+              <span>What This Badge Is (and Isn&rsquo;t)</span>
             </div>
             <p className="leading-relaxed">
-              Every digital credential includes an active cryptographic QR code linking to our real-time editorial registry at <code className="text-[var(--accent-primary)]">artistdailynews.com/verify</code>.
+              This badge is generated in your browser and is not verified by any third party. It does <strong>not</strong> grant venue, festival, or backstage access — real press credentials are issued by each event&rsquo;s own PR team.
             </p>
           </div>
         </div>
@@ -101,7 +101,7 @@ export function PressBadgeGenerator() {
                 <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
               </div>
               <div className="text-[9px] font-mono tracking-widest text-[var(--accent-primary)] uppercase font-bold">
-                PRESS PASS &bull; OFFICIAL ACCREDITATION
+                CREATOR BADGE &bull; ARTIST DAILY NEWS
               </div>
               <div className="font-serif font-black text-sm tracking-tight text-white">
                 ARTIST DAILY NEWS
@@ -132,7 +132,7 @@ export function PressBadgeGenerator() {
 
             {/* Event Strip */}
             <div className="bg-black/60 p-3 rounded-xl border border-white/10 space-y-1 text-center font-mono">
-              <div className="text-[9px] text-stone-400 uppercase">ASSIGNMENT EVENT:</div>
+              <div className="text-[9px] text-stone-400 uppercase">AFFILIATION:</div>
               <div className="text-xs font-bold text-white">{event}</div>
               <div className="text-[10px] text-stone-400">{location}</div>
             </div>
@@ -141,7 +141,7 @@ export function PressBadgeGenerator() {
             <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[9px] font-mono text-stone-400">
               <div>
                 <div>ID: <strong className="text-white">{badgeId}</strong></div>
-                <div className="text-emerald-400">STATUS: VERIFIED</div>
+                <div className="text-stone-400">SELF-ISSUED SAMPLE</div>
               </div>
               <div className="p-1 bg-white rounded-md">
                 <QrCode className="w-6 h-6 text-black" />

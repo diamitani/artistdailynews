@@ -16,6 +16,18 @@ export async function POST(req: Request) {
 }
 
 async function handleRssIngest(req: Request) {
+  // Trust gate: unattended auto-publication is paused until explicitly re-enabled.
+  if (process.env.ADN_AUTO_PUBLISH !== "true") {
+    return NextResponse.json(
+      {
+        paused: true,
+        reason:
+          "Auto-publish disabled pending editorial review (Phase 1 trust gate). Set ADN_AUTO_PUBLISH=true to re-enable.",
+      },
+      { status: 200 }
+    );
+  }
+
   const startTime = Date.now();
   const { searchParams } = new URL(req.url);
   const authHeader = req.headers.get("authorization");

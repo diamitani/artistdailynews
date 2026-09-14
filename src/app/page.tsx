@@ -8,6 +8,9 @@ import { BreakingTicker } from '@/components/BreakingTicker';
 import { NewsByPlatformSection } from '@/components/NewsByPlatformSection';
 import { VideoGallerySection } from '@/components/VideoGallerySection';
 import { PodcastPlayer } from '@/components/PodcastPlayer';
+import { MastheadClocks } from '@/components/MastheadClocks';
+import MostRead from '@/components/MostRead';
+import { formatTimeAgo, pickFeaturedStory } from '@/lib/utils';
 import {
   ArrowRight,
   Sparkles,
@@ -59,10 +62,12 @@ export default async function ExecutiveTextAggregatorHomepage() {
     content: item.content || item.why_it_matters || item.dek || "",
     category: (item.category as CategoryType) || (item.pillar === 'business' ? 'financial' : item.pillar === 'culture' ? 'streaming' : 'tech-ai'),
     sourceName: item.source_name || item.platform || "Industry Wire",
-    sourceUrl: item.url || "#",
-    originalUrl: item.url || "#",
+    sourceUrl: item.url || "",
+    originalUrl: item.url || "",
     imageUrl: item.image_url || "",
-    publishedAt: item.freshness || item.published_at || new Date().toISOString(),
+    // TRUST RULE: use the stored timestamp as-is. Never default to "now"
+    // and never rewrite dates to fake recency.
+    publishedAt: item.freshness || item.published_at || "",
     readTimeMinutes: item.read_time_minutes || 3,
     isBreaking: item.is_breaking || idx < 3,
     tags: item.tags || [item.pillar || "Music"],
@@ -73,8 +78,9 @@ export default async function ExecutiveTextAggregatorHomepage() {
   const cultureArticles = articles.filter(a => (a as any).pillar === 'culture' || a.category === 'streaming' || a.category === 'marketing');
   const techAndCommunityArticles = articles.filter(a => (a as any).pillar === 'social' || a.category === 'social' || a.category === 'tutorials' || a.category === 'tech-ai');
 
-  // Hero section dispatches
-  const featuredStory = issue?.lead_item || articles[0];
+  // Hero: keep an editorial lead item only while it is genuinely current;
+  // otherwise the newest item with a real date takes the slot (never a stale pin).
+  const featuredStory = pickFeaturedStory(issue?.lead_item, articles) || articles[0];
   const secondaryLeadStories = articles.slice(1, 4);
   const fastWireStories = articles.slice(4, 18); // 14 fast wire stories
 
@@ -92,6 +98,13 @@ export default async function ExecutiveTextAggregatorHomepage() {
     day: 'numeric',
     year: 'numeric'
   });
+
+  // Never render a dead link: the headline anchor only exists when we have a real URL.
+  const featuredUrl: string = (featuredStory as any)?.url || (featuredStory as any)?.sourceUrl || "";
+  const hasFeaturedUrl = /^https?:\/\//.test(featuredUrl);
+
+  /** True only for real outbound URLs — never "#" or empty. */
+  const hasUrl = (u?: string) => !!u && /^https?:\/\//.test(u);
 
   return (
     <div className="min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] selection:bg-[var(--accent-primary)] selection:text-white">
@@ -116,15 +129,12 @@ export default async function ExecutiveTextAggregatorHomepage() {
               <span>&bull;</span>
               <span className="text-[var(--accent-primary)] font-bold flex items-center">
                 <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] live-pulse mr-1.5" />
-                50+ OUTLETS SYNCED
+                CURATED INDUSTRY WIRE
               </span>
             </div>
 
             <div className="flex items-center space-x-4">
-              <span>NYC <strong className="text-[var(--text-primary)]">09:15</strong></span>
-              <span>LDN <strong className="text-[var(--text-primary)]">14:15</strong></span>
-              <span>LA <strong className="text-[var(--text-primary)]">06:15</strong></span>
-              <span>TYO <strong className="text-[var(--text-primary)]">22:15</strong></span>
+              <MastheadClocks />
             </div>
           </div>
 
@@ -146,35 +156,35 @@ export default async function ExecutiveTextAggregatorHomepage() {
           </div>
 
           {/* Sub-Masthead Navigation Bar (Clean & Focused) */}
-          <div className="border-t border-[var(--border-color)] pt-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono font-bold">
-            <div className="flex items-center gap-4 sm:gap-6 flex-wrap text-[var(--text-secondary)]">
-              <Link href="/topics/financial" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+          <div className="border-t border-[var(--border-color)] pt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs font-mono font-bold">
+            <div className="flex items-center gap-4 sm:gap-6 flex-nowrap overflow-x-auto text-[var(--text-secondary)] py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <Link href="/topics/financial" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Industry & Business</span>
               </Link>
-              <Link href="/topics/streaming" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/topics/streaming" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Mic2 className="w-3.5 h-3.5 text-rose-600" />
-                <span>Culture & Releases</span>
+                <span>Streaming & Releases</span>
               </Link>
-              <Link href="/topics/social" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/topics/social" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                 <span>Tech & Studio</span>
               </Link>
-              <Link href="/#news-by-platform" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/#news-by-platform" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Layers className="w-3.5 h-3.5 text-blue-600" />
                 <span>News by Platform</span>
               </Link>
-              <Link href="/library" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/library" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Tv className="w-3.5 h-3.5 text-indigo-600" />
                 <span>27+ Channel Library</span>
               </Link>
-              <Link href="/news" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5">
+              <Link href="/news" className="hover:text-[var(--accent-primary)] transition-colors flex items-center space-x-1.5 shrink-0">
                 <Newspaper className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Full Chronological Wire</span>
               </Link>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 shrink-0 self-start sm:self-auto">
               <Link
                 href="/newsletters"
                 className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] transition-colors text-[11px]"
@@ -218,9 +228,13 @@ export default async function ExecutiveTextAggregatorHomepage() {
 
                   {/* Headline */}
                   <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] leading-[1.12] tracking-tight hover:text-[var(--accent-primary)] transition-colors">
-                    <a href={featuredStory?.url || featuredStory?.sourceUrl || "#"} target="_blank" rel="noopener noreferrer">
-                      {featuredStory?.title}
-                    </a>
+                    {hasFeaturedUrl ? (
+                      <a href={featuredUrl} target="_blank" rel="noopener noreferrer">
+                        {featuredStory?.title}
+                      </a>
+                    ) : (
+                      featuredStory?.title
+                    )}
                   </h2>
 
                   {/* Dek / Summary */}
@@ -270,15 +284,17 @@ export default async function ExecutiveTextAggregatorHomepage() {
                     >
                       <span>30s Quick Read</span>
                     </Link>
-                    <a
-                      href={featuredStory?.url || featuredStory?.sourceUrl || "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] font-bold transition-colors flex items-center space-x-1"
-                    >
-                      <span>Read Full Story</span>
-                      <ExternalLink className="w-3.5 h-3.5 ml-1" />
-                    </a>
+                    {hasFeaturedUrl && (
+                      <a
+                        href={featuredUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-[var(--accent-primary-hover)] font-bold transition-colors flex items-center space-x-1"
+                      >
+                        <span>Read Full Story</span>
+                        <ExternalLink className="w-3.5 h-3.5 ml-1" />
+                      </a>
+                    )}
                   </div>
                 </div>
 
@@ -299,7 +315,7 @@ export default async function ExecutiveTextAggregatorHomepage() {
                       </h3>
                     </div>
                     <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase">
-                      Live Hourly Index
+                      Curated Wire
                     </span>
                   </div>
 
@@ -312,9 +328,13 @@ export default async function ExecutiveTextAggregatorHomepage() {
                           <span>{formatTimeAgo(item.publishedAt)}</span>
                         </div>
                         <h4 className="font-serif font-bold text-xs sm:text-sm text-[var(--text-primary)] leading-snug group-hover:text-[var(--accent-primary)] transition-colors line-clamp-2">
-                          <a href={item.originalUrl} target="_blank" rel="noopener noreferrer">
-                            {item.title}
-                          </a>
+                          {hasUrl(item.originalUrl) ? (
+                            <a href={item.originalUrl} target="_blank" rel="noopener noreferrer">
+                              {item.title}
+                            </a>
+                          ) : (
+                            item.title
+                          )}
                         </h4>
                       </article>
                     ))}
@@ -327,12 +347,15 @@ export default async function ExecutiveTextAggregatorHomepage() {
                     href="/news"
                     className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-[var(--accent-primary)] hover:underline"
                   >
-                    <span>Open All 2,000+ Ingested Articles</span>
+                    <span>Open the Chronological Wire</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
               </div>
+
+              {/* Real reader data only — renders nothing until events exist */}
+              <MostRead />
             </div>
 
           </div>
@@ -347,9 +370,13 @@ export default async function ExecutiveTextAggregatorHomepage() {
                     <span>{formatTimeAgo(story.publishedAt)}</span>
                   </div>
                   <h3 className="font-serif font-bold text-base text-[var(--text-primary)] leading-snug group-hover:text-[var(--accent-primary)] transition-colors line-clamp-2">
-                    <a href={story.originalUrl} target="_blank" rel="noopener noreferrer">
-                      {story.title}
-                    </a>
+                    {hasUrl(story.originalUrl) ? (
+                      <a href={story.originalUrl} target="_blank" rel="noopener noreferrer">
+                        {story.title}
+                      </a>
+                    ) : (
+                      story.title
+                    )}
                   </h3>
                   <p className="text-xs text-[var(--text-secondary)] line-clamp-3 leading-relaxed">
                     {story.summary}
@@ -386,7 +413,7 @@ export default async function ExecutiveTextAggregatorHomepage() {
               </h2>
             </div>
             <p className="text-xs text-[var(--text-muted)] font-mono">
-              30 In-Depth Dispatches across Industry &bull; Culture &bull; Studio Tech
+              In-Depth Dispatches across Industry &bull; Streaming &bull; Studio Tech
             </p>
           </div>
 
@@ -407,10 +434,10 @@ export default async function ExecutiveTextAggregatorHomepage() {
               </div>
             </div>
 
-            {/* Column 2: Culture & Critical Wire (10 articles) */}
+            {/* Column 2: Streaming & Releases Desk (10 articles) */}
             <div className="space-y-4">
               <SectionHeader
-                title="Culture & Critical Wire"
+                title="Streaming & Releases"
                 href="/topics/streaming"
                 color="#C0272D"
                 icon={<Mic2 className="w-4 h-4" />}
@@ -472,7 +499,7 @@ export default async function ExecutiveTextAggregatorHomepage() {
               </h2>
             </div>
             <span className="text-xs font-mono text-[var(--text-muted)]">
-              Continuous Ingestion &bull; 50+ Verified Outlets
+              Curated from trade press &bull; Source-linked
             </span>
           </div>
 
@@ -489,9 +516,13 @@ export default async function ExecutiveTextAggregatorHomepage() {
                   </div>
 
                   <h3 className="font-serif font-bold text-sm sm:text-base text-[var(--text-primary)] leading-snug group-hover:text-[var(--accent-primary)] transition-colors line-clamp-2">
-                    <a href={article.originalUrl} target="_blank" rel="noopener noreferrer">
-                      {article.title}
-                    </a>
+                    {hasUrl(article.originalUrl) ? (
+                      <a href={article.originalUrl} target="_blank" rel="noopener noreferrer">
+                        {article.title}
+                      </a>
+                    ) : (
+                      article.title
+                    )}
                   </h3>
 
                   {article.summary && (
@@ -509,15 +540,17 @@ export default async function ExecutiveTextAggregatorHomepage() {
                     <span>Read Briefing</span>
                     <ArrowUpRight className="w-3 h-3" />
                   </Link>
-                  <a
-                    href={article.originalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center space-x-1"
-                  >
-                    <span>Source</span>
-                    <ExternalLink className="w-2.5 h-2.5" />
-                  </a>
+                  {hasUrl(article.originalUrl) && (
+                    <a
+                      href={article.originalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center space-x-1"
+                    >
+                      <span>Source</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  )}
                 </div>
               </article>
             ))}
@@ -528,28 +561,28 @@ export default async function ExecutiveTextAggregatorHomepage() {
               href="/news"
               className="px-8 py-3.5 rounded-lg bg-[var(--bg-secondary)] border-2 border-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-white font-mono text-xs font-bold transition-all inline-flex items-center space-x-2"
             >
-              <span>Explore All 2,000+ Articles in Chronological Wire</span>
+              <span>Explore the Chronological Wire</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </section>
 
-        {/* ── 7. EXECUTIVE PRESS ACCREDITATION & NEWSLETTER SUITE ── */}
+        {/* ── 7. DAILY BRIEF & NEWSLETTER SUITE ── */}
         <section className="p-8 sm:p-12 rounded-2xl bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] shadow-sm relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             
             <div className="lg:col-span-7 space-y-4">
               <span className="inline-flex items-center space-x-2 px-3 py-1 bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border border-[var(--accent-primary)]/20 text-xs font-mono font-bold uppercase tracking-wider rounded-md">
                 <ShieldCheck className="w-4 h-4" />
-                <span>Verified Independent Press Network</span>
+                <span>Independent Music News</span>
               </span>
 
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight">
-                Authoritative Music Journalism & Press Credentials
+                The Daily Brief for Independent Artists
               </h2>
 
               <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed max-w-xl">
-                Daily executive intelligence delivered directly to your inbox. Apply for official festival Press Pass credentials and access curated partner discounts for independent artists and producers.
+                A weekday morning briefing on streaming, sync, releases, and the deals shaping independent careers — plus partner discounts and free creator tools.
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2 font-mono text-xs">
@@ -650,9 +683,13 @@ function EditorialTextCard({
         </div>
 
         <h4 className="font-serif font-bold text-xs sm:text-sm text-[var(--text-primary)] leading-snug group-hover:text-[var(--accent-primary)] transition-colors line-clamp-2">
-          <a href={article.originalUrl} target="_blank" rel="noopener noreferrer">
-            {article.title}
-          </a>
+          {article.originalUrl && /^https?:\/\//.test(article.originalUrl) ? (
+            <a href={article.originalUrl} target="_blank" rel="noopener noreferrer">
+              {article.title}
+            </a>
+          ) : (
+            article.title
+          )}
         </h4>
 
         {article.summary && (
@@ -674,27 +711,4 @@ function EditorialTextCard({
       </div>
     </article>
   );
-}
-
-// Time formatting helper
-function formatTimeAgo(dateString?: string): string {
-  if (!dateString) return 'Today';
-
-  if (dateString === 'Today' || dateString === 'Just now' || dateString.endsWith('ago') || dateString.endsWith('m') || dateString.endsWith('h')) {
-    return dateString;
-  }
-
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMinutes = Math.floor(diffMs / (1000 * 60));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-
-  if (isNaN(diffMinutes) || diffMinutes < 2) return 'Just now';
-  if (diffMinutes < 60) return `${diffMinutes}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-
-  // Dynamic distribution within today for fresh continuous wire
-  const normalizedHours = Math.max(1, (Math.abs(date.getDate() - now.getDate()) * 3 + diffHours) % 18);
-  return `${normalizedHours}h ago`;
 }

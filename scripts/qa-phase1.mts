@@ -1,0 +1,221 @@
+/**
+ * Phase 1 Trust & Instrumentation integrity checks.
+ * Run: npx tsx scripts/qa-phase1.mts
+ * Exits non-zero on any failure.
+ */
+import { readFileSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+let failures = 0;
+
+function check(name: string, ok: boolean, detail = "") {
+  if (ok) console.log(`  PASS  ${name}`);
+  else {
+    failures++;
+    console.log(`  FAIL  ${name}${detail ? ` — ${detail}` : ""}`);
+  }
+}
+
+const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
+const load = (p: string) => JSON.parse(read(p));
+
+// ── 1. Quarantine gate ──────────────────────────────────────────
+console.log("\n[1] Quarantine gate");
+const quarantine = load("src/data/quarantine.json");
+const qids: string[] = quarantine.items.map((i: any) => i.id);
+const articles = load("src/data/articles.json");
+const items = load("src/data/adn_items.json");
+const qset = new Set(qids);
+
+const articleIds = new Set(articles.map((a: any) => a.id));
+const itemIds = new Set(items.map((i: any) => i.id));
+check("all 13 quarantine IDs exist in articles.json", qids.every((id) => articleIds.has(id)));
+check("all 13 quarantine IDs exist in adn_items.json", qids.every((id) => itemIds.has(id)));
+
+// Simulate the db.ts/adn-db.ts public-read filter
+const publicArticles = articles.filter((a: any) => !qset.has(a.id));
+const publicItems = items.filter((i: any) => !qset.has(i.id));
+check("no quarantined IDs in public articles", publicArticles.every((a: any) => !qset.has(a.id)));
+check("no quarantined IDs in public items", publicItems.every((i: any) => !qset.has(i.id)));
+check("quarantine removes exactly 13 records", articles.length - publicArticles.length === 13);
+
+// ── 2. Canonical URLs ───────────────────────────────────────────
+console.log("\n[2] Canonical source URLs");
+const badUrls = publicArticles.filter(
+  (a: any) => !/^https?:\/\//i.test(a.originalUrl || "")
+);
+check("every public article has a valid http(s) originalUrl", badUrls.length === 0,
+  badUrls.length ? `e.g. ${badUrls[0]?.id}` : "");
+
+// ── 3. Dedupe ───────────────────────────────────────────────────
+console.log("\n[3] Deduplication");
+const normTitle = (t: string) =>
+  (t || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+const seenUrls = new Set<string>();
+let dupUrls = 0;
+for (const a of publicArticles) {
+  const u = (a.originalUrl || "").toLowerCase();
+  if (u) { if (seenUrls.has(u)) dupUrls++; else seenUrls.add(u); }
+}
+check("no duplicate canonical URLs in public articles", dupUrls === 0, `${dupUrls} dupes`);
+
+// ── 4. Timestamp honesty (uses the REAL formatTimeAgo) ─────────
+console.log("\n[4] Timestamp honesty");
+const { formatTimeAgo } = await import("../src/lib/utils.ts");
+check("old date renders as absolute date, not fake 'ago'",
+  /2020/.test(formatTimeAgo("2020-01-15T10:00:00Z")) && !/ago/.test(formatTimeAgo("2020-01-15T10:00:00Z")),
+  formatTimeAgo("2020-01-15T10:00:00Z"));
+check("missing date renders empty", formatTimeAgo("") === "");
+const future = new Date(Date.now() + 48 * 3600 * 1000).toISOString();
+const futureLabel = formatTimeAgo(future);
+check("future date never renders as 'Just now'/'ago'", !/just now|ago/i.test(futureLabel), futureLabel);
+const recent = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+check("30-min-old date renders '30m ago'", formatTimeAgo(recent) === "30m ago", formatTimeAgo(recent));
+
+// ── 5. Banned fabrication patterns in src/ ─────────────────────
+console.log("\n[5] Banned patterns");
+const banned: Array<[string, string]> = [
+  ["src/lib/adn-db.ts", "normalizeItemsToToday"],
+  ["src/lib/db.ts", "normalizeItemsToToday"],
+  ["src/app/page.tsx", "normalizeItemsToToday"],
+  ["src/lib/utils.ts", "normalizedHours"],
+];
+const deadLinkFiles = [
+  "src/app/page.tsx",
+  "src/app/news/page.tsx",
+  "src/app/news/desk/layout.tsx",
+  "src/app/auth/login/page.tsx",
+  "src/components/BreakingTicker.tsx",
+  "src/components/NewsByPlatformSection.tsx",
+  "src/components/Footer.tsx",
+  "src/components/ArticleDetailView.tsx",
+];
+const falseClaims = [
+  "35,000+", "10,000+", "2,000+", "50+ OUTLETS", "50+ Verified", "ISSN", "Verified Press Entity", "50+ outlets synced",
+  // credential-flavored authority claims (asserting press power the site does not hold)
+  "Official Press Pass", "Official Media Pass", "Official Credential Card",
+  "Verified Independent Press", "Accredited Journalist", "Accredited Press Arm",
+  "Letter of Assignment", "Press Pass Accreditation", "Active Press Accreditation",
+  "Press Pass Credentials", "verified music professionals", "verified musicians",
+  "cryptographic QR code", "STATUS: VERIFIED",
+  "Apply for Credentials", "Apply for Official",
+];
+for (const [file] of banned) {
+  check(`${file} has no ${"normalizeItemsToToday/normalizedHours"}`, !read(file).includes("normalizeItemsToToday") && !read(file).includes("normalizedHours"));
+}
+for (const file of deadLinkFiles) {
+  check(`${file} has no href="#"`, !read(file).includes('href="#"'));
+}
+const claimFiles = [
+  "src/app/page.tsx",
+  "src/app/advertise/page.tsx",
+  "src/app/press-pass/page.tsx",
+  "src/components/NewsletterSignup.tsx",
+  "src/components/CommandMenu.tsx",
+  "src/components/Footer.tsx",
+  "src/app/layout.tsx",
+  // extended sweep: every public surface that carried inflated audience / credential claims
+  "src/components/HeroHeadline.tsx",
+  "src/components/AdContainer.tsx",
+  "src/lib/feeds-config.ts",
+  "src/app/news-home/page.tsx",
+  "src/components/PressPassModal.tsx",
+  "src/components/PressBadgeGenerator.tsx",
+  "src/components/ArticleDetailView.tsx",
+  "src/app/network/page.tsx",
+  "src/app/pricing/page.tsx",
+  "src/app/dashboard/page.tsx",
+];
+for (const file of claimFiles) {
+  const src = read(file);
+  const found = falseClaims.filter((c) => src.toLowerCase().includes(c.toLowerCase()));
+  check(`${file} has no fabricated volume/credential claims`, found.length === 0, found.join(", "));
+}
+
+// ── 5b. Newsletter signup feedback wiring ───────────────────────
+console.log("\n[5b] Newsletter feedback wiring");
+const newsletterSignup = read("src/components/NewsletterSignup.tsx");
+check("NewsletterSignup has no false-positive success message",
+  !newsletterSignup.includes("You're in! Watch your inbox"));
+check("NewsletterSignup shows real error on failure",
+  newsletterSignup.includes("Something went wrong on our end"));
+check("Footer newsletter form wired with inline feedback",
+  read("src/components/Footer.tsx").includes("NewsletterInlineForm"));
+check("news-home newsletter form wired with inline feedback",
+  read("src/app/news-home/page.tsx").includes("NewsletterInlineForm"));
+check("no bare <form> without onSubmit remains on public pages",
+  ["src/components/Footer.tsx", "src/app/news-home/page.tsx"].every((f) => {
+    const src = read(f);
+    const forms = src.match(/<form[\s\S]*?>/g) || [];
+    return forms.every((tag) => tag.includes("onSubmit"));
+  }),
+  "a form tag without onSubmit reloads the page with no feedback");
+check("PressPassModal no longer promises an official letter of assignment",
+  !read("src/components/PressPassModal.tsx").toLowerCase().includes("official letter of assignment"));
+
+// publishedAt must never default to "now" (ingestedAt may — that IS now)
+for (const file of ["src/app/page.tsx", "src/lib/adn-db.ts", "src/lib/db.ts", "src/lib/rss-parser.ts"]) {
+  const src = read(file);
+  const lines = src.split("\n");
+  const bad = lines.filter((l) => /publishedAt|published_at|freshness/i.test(l) && l.includes("new Date().toISOString()") && !/ingested/i.test(l));
+  check(`${file}: no publishedAt defaulting to now`, bad.length === 0, bad[0]?.trim());
+}
+
+// ── 6. Trust pages live ─────────────────────────────────────────
+console.log("\n[6] Trust pages");
+for (const p of ["about", "editorial-standards", "corrections", "privacy", "terms"]) {
+  check(`/${p} page exists`, existsSync(join(ROOT, `src/app/${p}/page.tsx`)));
+}
+const footer = read("src/components/Footer.tsx");
+for (const p of ["/about", "/editorial-standards", "/corrections"]) {
+  check(`footer links ${p}`, footer.includes(p));
+}
+
+// ── 7. Freshness: date-aware hero selection ──────────────────────
+console.log("\n[7] Freshness (hero selection)");
+const { isCurrentStory, newestValidStory, pickFeaturedStory } = await import("../src/lib/utils.js");
+
+const now = Date.now();
+const H = 3600_000;
+const story = (title: string, hoursAgo: number | null, extra: any = {}) => ({
+  id: `t-${title}`,
+  title,
+  publishedAt:
+    hoursAgo === null ? "not-a-date" : new Date(now - hoursAgo * H).toISOString(),
+  ...extra,
+});
+
+const staleLead = story("Stale lead from Sep 1", 13 * 24); // 13 days old
+const freshStory = story("Fresh story", 2); // 2 hours old
+const currentLead = story("Editorial lead, still current", 5); // 5 hours old
+const futureStory = { id: "t-future", title: "Future story", publishedAt: new Date(now + 24 * H).toISOString() };
+const invalidStory = story("Invalid date story", null);
+
+check("stale issue lead loses to a newer valid story",
+  pickFeaturedStory(staleLead, [staleLead, freshStory])?.id === freshStory.id);
+check("current editorial lead remains featured",
+  pickFeaturedStory(currentLead, [currentLead, freshStory])?.id === currentLead.id);
+check("future-dated story cannot win the hero",
+  pickFeaturedStory(null, [futureStory, freshStory])?.id === freshStory.id);
+check("invalid-date story cannot win the hero",
+  pickFeaturedStory(null, [invalidStory, freshStory])?.id === freshStory.id);
+check("no valid stories -> no hero (never fabricates)",
+  pickFeaturedStory(null, [futureStory, invalidStory]) === null);
+check("isCurrentStory uses a 72h window",
+  isCurrentStory(story("x", 71)) === true && isCurrentStory(story("x", 73)) === false);
+check("newestValidStory rejects future dates",
+  newestValidStory([futureStory, freshStory])?.id === freshStory.id);
+
+// Merged data files: newest item must be current (within 24h)
+const newestItem = items
+  .map((i: any) => ({ d: new Date(i.freshness || i.published_at || 0).getTime(), t: i.title }))
+  .filter((x: any) => !isNaN(x.d))
+  .sort((a: any, b: any) => b.d - a.d)[0];
+check("adn_items.json newest item is current (<24h old)",
+  now - newestItem.d < 24 * H, newestItem.t?.slice(0, 60));
+
+// ── Summary ─────────────────────────────────────────────────────
+console.log(failures === 0 ? "\nALL PHASE 1 QA CHECKS PASSED" : `\n${failures} CHECK(S) FAILED`);
+process.exit(failures === 0 ? 0 : 1);

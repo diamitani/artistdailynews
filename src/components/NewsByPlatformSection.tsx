@@ -28,6 +28,7 @@ interface PlatformDefinition {
   accentColor: string;
   description: string;
   url: string;
+  internal?: boolean;
   matches: (article: Article) => boolean;
 }
 
@@ -40,8 +41,9 @@ const PLATFORMS: PlatformDefinition[] = [
     badgeText: "text-[var(--accent-primary)]",
     borderColor: "border-[var(--accent-primary)]/30",
     accentColor: "var(--accent-primary)",
-    description: "Real-time dispatches aggregated from 50+ music industry trade publications and verified creator communities.",
-    url: "https://artistdailynews.com",
+    description: "A curated directory of music-industry publications and creator communities we read.",
+    url: "/news",
+    internal: true,
     matches: () => true,
   },
   {
@@ -237,15 +239,25 @@ export function NewsByPlatformSection({ articles, onQuickRead }: NewsByPlatformS
           </div>
 
           <div className="flex items-center space-x-3 shrink-0">
-            <a
-              href={selectedPlatform.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-mono font-bold bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-highlight)] transition-colors"
-            >
-              <span>Visit {selectedPlatform.name}</span>
-              <ExternalLink className="w-3 h-3 text-[var(--text-muted)]" />
-            </a>
+            {selectedPlatform.internal ? (
+              <Link
+                href={selectedPlatform.url}
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-mono font-bold bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-highlight)] transition-colors"
+              >
+                <span>Browse {selectedPlatform.name}</span>
+                <ArrowUpRight className="w-3 h-3 text-[var(--text-muted)]" />
+              </Link>
+            ) : (
+              <a
+                href={selectedPlatform.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-mono font-bold bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-highlight)] transition-colors"
+              >
+                <span>Visit {selectedPlatform.name}</span>
+                <ExternalLink className="w-3 h-3 text-[var(--text-muted)]" />
+              </a>
+            )}
           </div>
         </div>
 
@@ -313,7 +325,7 @@ export function NewsByPlatformSection({ articles, onQuickRead }: NewsByPlatformS
 
           <div className="text-[11px] font-mono text-[var(--text-muted)] shrink-0 flex items-center space-x-2 self-end sm:self-center">
             <span className="w-2 h-2 rounded-full bg-[var(--accent-emerald)] live-pulse"></span>
-            <span>Feed Active &bull; Ingested hourly</span>
+            <span>Curated publisher directory</span>
           </div>
         </div>
 
@@ -390,7 +402,7 @@ export function NewsByPlatformSection({ articles, onQuickRead }: NewsByPlatformS
             href="/news"
             className="inline-flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-wider text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] transition-colors"
           >
-            <span>Browse All 2,000+ Ingested Articles in Chronological Wire</span>
+            <span>Browse the chronological wire</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
         </div>

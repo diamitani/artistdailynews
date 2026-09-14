@@ -56,7 +56,7 @@ export default function AdvertisePage() {
           </div>
 
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] leading-tight">
-            Reach 35,000+ Verified Music Creators & Label Executives
+            Reach Independent Music Creators & Label Executives
           </h1>
 
           <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
@@ -201,7 +201,7 @@ export default function AdvertisePage() {
                 Official Brand Guidelines & Press Assets
               </h2>
               <p className="text-sm text-[var(--text-secondary)] mt-1">
-                Approved high-resolution vectors, badge lockups, and color specifications for festival programs, sponsor banners, and accredited press releases.
+                Approved high-resolution vectors, badge lockups, and color specifications for festival programs, sponsor banners, and press releases.
               </p>
             </div>
             <a

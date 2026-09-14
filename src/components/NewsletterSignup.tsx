@@ -36,9 +36,8 @@ export function NewsletterSignup() {
         setMessage(data.error || "Subscription failed. Please try again.");
       }
     } catch (err) {
-      setStatus("success");
-      setMessage("You're in! Watch your inbox every weekday morning at 7:00 AM EST.");
-      setEmail("");
+      setStatus("error");
+      setMessage("Something went wrong on our end. Please try again in a moment.");
     }
   };
 
@@ -56,7 +55,7 @@ export function NewsletterSignup() {
           </h2>
 
           <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto">
-            Join <strong className="text-[var(--text-primary)]">35,000+ independent artists, managers, attorneys, and indie labels</strong> receiving daily breakdowns on streaming payout shifts, catalogue valuation benchmarks, sync leads, and release strategy.
+            A weekday brief for <strong className="text-[var(--text-primary)]">independent artists, managers, attorneys, and indie labels</strong>: streaming payout shifts, catalogue valuation benchmarks, sync leads, and release strategy — no fluff, no inflated claims.
           </p>
 
           {/* Form */}
@@ -97,6 +96,7 @@ export function NewsletterSignup() {
                 <button
                   type="submit"
                   disabled={status === "loading"}
+                  data-track-event="signup"
                   className="btn-brand px-6 py-3 shrink-0"
                 >
                   <span>{status === "loading" ? "Subscribing..." : "Join Free"}</span>

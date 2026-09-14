@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { NewsletterInlineForm } from "@/components/NewsletterInlineForm";
 import { Radio, Rss, ShieldCheck, Mail, ExternalLink, Gift, Bot, BarChart3, TrendingUp, Mic2, Sparkles, Layers, Tv } from "lucide-react";
 
 const SECTIONS = [
   { href: "/topics/financial", label: "Business", icon: TrendingUp, color: "#047857" },
-  { href: "/topics/streaming", label: "Culture", icon: Mic2, color: "#C0272D" },
+  { href: "/topics/streaming", label: "Streaming & Releases", icon: Mic2, color: "#C0272D" },
   { href: "/#news-by-platform", label: "By Platform", icon: Layers, color: "#2563EB" },
   { href: "/podcasts", label: "Audio & Video", icon: Tv, color: "#7C3AED" },
 ];
@@ -14,13 +15,13 @@ const ECOSYSTEM_LINKS = [
   { href: "/chat", label: "AI Copilot", icon: Bot },
   { href: "/podcasts", label: "Podcasts", icon: Radio },
   { href: "/newsletters", label: "Newsletter", icon: Mail },
-  { href: "/press-pass", label: "Press Credentials", icon: ShieldCheck },
+  { href: "/press-pass", label: "Creator Badge", icon: ShieldCheck },
 ];
 
 const BUSINESS_LINKS = [
   { href: "/advertise", label: "Advertise With Us" },
   { href: "/newsletters", label: "Daily Newsletter" },
-  { href: "/press-pass", label: "Press Pass Accreditation" },
+  { href: "/press-pass", label: "Creator Badge" },
   { href: "/api/news/feed?format=rss", label: "RSS Feed", external: true, icon: Rss },
 ];
 
@@ -36,19 +37,10 @@ export function Footer() {
                 Stay informed on the music business
               </h3>
               <p className="text-sm text-[var(--text-secondary)]">
-                Daily intelligence delivered at 6am. Join 35,000+ music professionals.
+                A weekday brief on the music business, written for independent artists.
               </p>
             </div>
-            <form className="flex flex-col sm:flex-row gap-3 sm:w-auto w-full">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 sm:w-64 px-4 py-2.5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] text-sm"
-              />
-              <button className="btn-brand px-6 py-2.5 text-sm whitespace-nowrap">
-                Subscribe Free
-              </button>
-            </form>
+            <NewsletterInlineForm variant="light" />
           </div>
         </div>
       </div>
@@ -60,27 +52,20 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-5">
             <Link href="/" className="flex items-center space-x-3 group">
-              <div className="relative flex items-center">
-                <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex flex-col items-center justify-center text-white font-black shadow-sm group-hover:scale-105 transition-all">
-                  <span className="text-[13px] tracking-wider leading-none font-mono font-black">ADN</span>
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] p-0.5 shadow-sm overflow-hidden flex items-center justify-center">
-                  <img src="/artispreneur-logo.png" alt="Artispreneur" className="w-full h-full object-contain" />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-black text-lg text-[var(--text-primary)] tracking-tight">
-                  ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
-                </span>
-                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase">
-                  Powered by <strong className="text-[var(--accent-primary)]">Artispreneur</strong>
-                </span>
-              </div>
+              <img
+                src="/artispreneur-logo.png"
+                alt="Artispreneur — Artist Daily News"
+                className="w-10 h-10 object-contain shrink-0 transition-transform group-hover:scale-105"
+              />
+              <span className="font-black text-lg text-[var(--text-primary)] tracking-tight whitespace-nowrap">
+                ARTIST DAILY <span className="text-[var(--accent-primary)]">NEWS</span>
+              </span>
             </Link>
 
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-sm">
-              The premier intelligence platform for independent musicians, managers, and indie labels.
-              Aggregating 50+ music industry feeds with AI-powered synthesis.
+              A daily editorial brief on the music business for independent
+              artists — original summaries with links to the canonical source
+              of every story.
             </p>
 
             <div className="p-4 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
@@ -106,14 +91,6 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4 text-[11px] font-mono text-[var(--text-muted)]">
-              <span className="flex items-center">
-                <ShieldCheck className="w-3.5 h-3.5 mr-1 text-[var(--accent-emerald)]" />
-                Verified Press Entity
-              </span>
-              <span>·</span>
-              <span>ISSN Registered</span>
-            </div>
           </div>
 
           {/* Sections Column */}
@@ -220,9 +197,16 @@ export function Footer() {
             <Link href="/news" className="hover:text-[var(--text-secondary)] transition-colors">Today</Link>
             <Link href="/library" className="hover:text-[var(--text-secondary)] transition-colors">27+ Channels</Link>
             <Link href="/podcasts" className="hover:text-[var(--text-secondary)] transition-colors">Podcasts</Link>
-            <Link href="/press-pass" className="hover:text-[var(--text-secondary)] transition-colors">Press Pass</Link>
+            <Link href="/press-pass" className="hover:text-[var(--text-secondary)] transition-colors">Creator Badge</Link>
             <Link href="/advertise" className="hover:text-[var(--text-secondary)] transition-colors">Advertise</Link>
             <span className="font-mono text-[10px] text-[var(--border-highlight)]">v3.0</span>
+            <span aria-hidden="true" className="opacity-40">|</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-primary)] font-bold">Trust</span>
+            <Link href="/about" className="hover:text-[var(--text-secondary)] transition-colors">About</Link>
+            <Link href="/editorial-standards" className="hover:text-[var(--text-secondary)] transition-colors">Editorial Standards</Link>
+            <Link href="/corrections" className="hover:text-[var(--text-secondary)] transition-colors">Corrections</Link>
+            <Link href="/privacy" className="hover:text-[var(--text-secondary)] transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-[var(--text-secondary)] transition-colors">Terms</Link>
           </div>
         </div>
       </div>

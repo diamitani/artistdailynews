@@ -35,7 +35,7 @@ export function HeroHeadline({ leadArticle, subArticles, onQuickRead }: HeroHead
           </h1>
 
           <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto">
-            Join <strong className="text-[var(--text-primary)]">35,000+ independent artists, managers, and labels</strong> who start every day with institutional-grade music business intelligence.
+            Music business intelligence for <strong className="text-[var(--text-primary)]">independent artists, managers, and labels</strong> — start every day with the brief built for your career.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -238,21 +238,20 @@ export function HeroHeadline({ leadArticle, subArticles, onQuickRead }: HeroHead
             </div>
           </div>
 
-          {/* Press Credential Card */}
+          {/* Creator Badge Card */}
           <div className="card-elevated rounded-2xl p-5 relative overflow-hidden space-y-3 border-[var(--accent-gold)]/20 gold-glow">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono font-bold text-[var(--accent-gold)] uppercase tracking-wider bg-[var(--accent-gold-subtle)] px-2 py-0.5 rounded border border-[var(--accent-gold)]/20">
-                Official Media Pass
+                Digital Creator Badge
               </span>
-              <span className="text-[10px] font-mono text-[var(--text-muted)]">SXSW &bull; A2IM &bull; Tours</span>
             </div>
 
             <h4 className="text-base font-black text-[var(--text-primary)] leading-tight">
-              Report from the Media Pit as an ADN Accredited Journalist
+              A Media Badge for Your EPK &amp; Socials
             </h4>
 
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Verified independent artists, videographers, and creators receive official media credentials and Letter of Assignment.
+              Independent artists and creators can generate a free ADN digital badge. It&rsquo;s self-issued — not official festival accreditation.
             </p>
 
             <div className="pt-1 flex items-center justify-between">
@@ -260,7 +259,7 @@ export function HeroHeadline({ leadArticle, subArticles, onQuickRead }: HeroHead
                 href="/press-pass"
                 className="bg-[var(--text-primary)] hover:opacity-90 text-[var(--bg-card)] font-bold text-xs px-3.5 py-1.5 rounded transition-transform active:scale-95 uppercase tracking-wider"
               >
-                Apply for Credentials &rarr;
+                Get Your Badge &rarr;
               </Link>
               <Link
                 href="/pricing"

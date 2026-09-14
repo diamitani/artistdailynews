@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { getLatestIssue } from '@/lib/adn-db';
+import { formatTimeAgo } from '@/lib/utils';
 import { BreakingTicker } from '@/components/BreakingTicker';
 import { MOCK_ARTICLES } from '@/lib/mock-articles';
 
@@ -78,9 +79,17 @@ export default async function DailyPostHomepage() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-4">
-            <Link href={issue?.lead_item?.url || "#"} className="btn-brand text-xs px-6 py-2.5">
-              Read Full Dispatch
-            </Link>
+            {/^https?:\/\//i.test(issue?.lead_item?.url || "") && (
+              <a
+                href={issue.lead_item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="source_click"
+                className="btn-brand text-xs px-6 py-2.5"
+              >
+                Read Full Dispatch
+              </a>
+            )}
             <Link href="/podcasts" className="btn-brand-outline text-xs px-6 py-2.5">
               Listen Audio Brief
             </Link>
@@ -89,14 +98,14 @@ export default async function DailyPostHomepage() {
 
         {/* Rails */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-[var(--border-color)] pt-8">
-          {/* Culture Rail */}
+          {/* Streaming & Releases Rail */}
           <div className="card-brand p-6">
             <h3 className="font-serif font-bold text-xl uppercase border-b border-[var(--border-color)] pb-2 mb-4 text-[var(--accent-primary)]">
-              Culture
+              Streaming & Releases
             </h3>
             <div className="space-y-4">
               {rails.culture?.map((item: any, idx: number) => (
-                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || ''} url={item.url} />
               ))}
             </div>
           </div>
@@ -108,7 +117,7 @@ export default async function DailyPostHomepage() {
             </h3>
             <div className="space-y-4">
               {rails.business?.map((item: any, idx: number) => (
-                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || ''} url={item.url} />
               ))}
             </div>
           </div>
@@ -120,7 +129,7 @@ export default async function DailyPostHomepage() {
             </h3>
             <div className="space-y-4">
               {rails.social?.map((item: any, idx: number) => (
-                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || 'Today'} />
+                <RailItem key={idx} title={item.title} platform={item.platform} time={item.time || ''} url={item.url} />
               ))}
             </div>
           </div>
@@ -141,16 +150,24 @@ export default async function DailyPostHomepage() {
   );
 }
 
-function RailItem({ title, platform, time }: { title: string, platform: string, time: string }) {
-  return (
-    <Link href="#" className="block group">
+function RailItem({ title, platform, time, url }: { title: string, platform: string, time: string, url?: string }) {
+  const hasUrl = !!url && /^https?:\/\//i.test(url);
+  const inner = (
+    <>
       <div className="flex justify-between items-center text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1">
         <span>{platform}</span>
-        <span>{time}</span>
+        <span>{time ? formatTimeAgo(time) : ""}</span>
       </div>
       <h4 className="font-serif text-base font-semibold leading-tight text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors">
         {title}
       </h4>
-    </Link>
+    </>
+  );
+  return hasUrl ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" data-track-event="source_click" className="block group">
+      {inner}
+    </a>
+  ) : (
+    <div className="block group">{inner}</div>
   );
 }
