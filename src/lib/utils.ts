@@ -44,6 +44,50 @@ export function formatDate(dateString: string): string {
   });
 }
 
+// ── Featured-story selection (currency without fabrication) ──
+// The hero slot must never pin to a stale static item. An editorial lead item
+// keeps the slot only while it is genuinely current; otherwise we fall back to
+// the newest item carrying a real, valid, non-future date.
+
+/** Extract a candidate's story date (ms since epoch) from known timestamp fields. NaN when absent/invalid. */
+function storyDateMs(item: any): number {
+  const raw = item?.freshness || item?.published_at || item?.publishedAt || item?.sourcePublishedAt || "";
+  if (!raw) return NaN;
+  return new Date(raw).getTime();
+}
+
+/** True when the item's date is real, not materially in the future, and within maxAgeHours. */
+export function isCurrentStory(item: any, maxAgeHours = 72): boolean {
+  const ms = storyDateMs(item);
+  if (isNaN(ms)) return false;
+  const ageMs = Date.now() - ms;
+  // Tolerate up to 1h of future skew (publisher clock differences); reject the rest.
+  if (ageMs < -60 * 60 * 1000) return false;
+  return ageMs <= maxAgeHours * 60 * 60 * 1000;
+}
+
+/** Newest item with a valid, non-future date. Never mutates the array. */
+export function newestValidStory<T>(articles: T[]): T | undefined {
+  let best: T | undefined;
+  let bestMs = -Infinity;
+  for (const a of articles) {
+    const ms = storyDateMs(a);
+    if (isNaN(ms)) continue;
+    if (ms - Date.now() > 60 * 60 * 1000) continue; // reject future-dated junk
+    if (ms > bestMs) { bestMs = ms; best = a; }
+  }
+  return best;
+}
+
+/**
+ * Pick the hero story: keep an editorial lead item only while it is current;
+ * otherwise fall back to the newest item with a valid, non-future date.
+ */
+export function pickFeaturedStory<T>(leadItem: T | null | undefined, articles: T[]): T | undefined {
+  if (leadItem && isCurrentStory(leadItem)) return leadItem;
+  return newestValidStory(articles) ?? (articles.length ? articles[0] : leadItem ?? undefined);
+}
+
 // Slug generation
 export function generateSlug(title: string): string {
   return title

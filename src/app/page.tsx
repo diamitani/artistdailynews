@@ -10,7 +10,7 @@ import { VideoGallerySection } from '@/components/VideoGallerySection';
 import { PodcastPlayer } from '@/components/PodcastPlayer';
 import { MastheadClocks } from '@/components/MastheadClocks';
 import MostRead from '@/components/MostRead';
-import { formatTimeAgo } from '@/lib/utils';
+import { formatTimeAgo, pickFeaturedStory } from '@/lib/utils';
 import {
   ArrowRight,
   Sparkles,
@@ -78,8 +78,9 @@ export default async function ExecutiveTextAggregatorHomepage() {
   const cultureArticles = articles.filter(a => (a as any).pillar === 'culture' || a.category === 'streaming' || a.category === 'marketing');
   const techAndCommunityArticles = articles.filter(a => (a as any).pillar === 'social' || a.category === 'social' || a.category === 'tutorials' || a.category === 'tech-ai');
 
-  // Hero section dispatches
-  const featuredStory = issue?.lead_item || articles[0];
+  // Hero: keep an editorial lead item only while it is genuinely current;
+  // otherwise the newest item with a real date takes the slot (never a stale pin).
+  const featuredStory = pickFeaturedStory(issue?.lead_item, articles) || articles[0];
   const secondaryLeadStories = articles.slice(1, 4);
   const fastWireStories = articles.slice(4, 18); // 14 fast wire stories
 

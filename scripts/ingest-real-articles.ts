@@ -4,6 +4,25 @@ import { INITIAL_FEEDS } from "../src/lib/feeds-config";
 import { fetchAndParseFeed } from "../src/lib/rss-parser";
 import { Article } from "../src/lib/types";
 
+// Batch-job resilience: a single hostile feed (socket-level crash inside the
+// HTTP client) must never kill the whole ingest run. Log it and move on.
+process.on("uncaughtException", (err) => {
+  console.error("[RSS Ingest] uncaughtException (continuing):", (err as Error)?.message || err);
+});
+process.on("unhandledRejection", (reason) => {
+  console.error("[RSS Ingest] unhandledRejection (continuing):", (reason as Error)?.message || reason);
+});
+
+/** Race a promise against a timeout so one hung feed can't stall the batch. */
+function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    p,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(`timeout after ${ms}ms: ${label}`)), ms)
+    ),
+  ]);
+}
+
 // Helper to determine pillar from category and content
 // Pillars: business (deals, royalties, legal), culture (news, releases, tours), social (features, community, tutorials)
 function determinePillar(art: Article): "business" | "culture" | "social" {
@@ -76,9 +95,13 @@ async function main() {
   const seenTitles = new Set<string>();
 
   for (const feed of INITIAL_FEEDS) {
+    if (!feed.enabled) {
+      console.log(`⏭️  Skipping disabled feed: ${feed.name}`);
+      continue;
+    }
     try {
       console.log(`📡 Fetching from: ${feed.name} (${feed.category})...`);
-      const articles = await fetchAndParseFeed(feed);
+      const articles = await withTimeout(fetchAndParseFeed(feed), 45000, feed.name);
       let added = 0;
 
       for (const art of articles) {
@@ -116,7 +139,8 @@ async function main() {
       pillar,
       platform,
       freshness: art.publishedAt,
-      ingested_at: art.publishedAt,
+      // TRUST: ingested_at is when WE pulled the item, never the publisher date.
+      ingested_at: new Date().toISOString(),
       url: art.originalUrl,
       source_name: art.sourceName,
       source_url: art.sourceUrl,

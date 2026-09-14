@@ -63,7 +63,7 @@ export interface FeedSource {
   tier: "tier1" | "tier2" | "tier3" | "niche";
   enabled: boolean;
   lastFetchedAt?: string;
-  status: "healthy" | "failing" | "pending";
+  status: "healthy" | "failing" | "pending" | "disabled";
   priority?: number;
 }
 

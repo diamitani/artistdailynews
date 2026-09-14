@@ -120,8 +120,14 @@ export async function getLatestIssue() {
     }
   }
 
-  // Dynamic Issue generated from top real items
-  const leadItem = seedItems[0] || {
+  // Dynamic Issue generated from top real items.
+  // TRUST RULE: the lead item is the newest item with a valid, non-future date —
+  // never a pinned static entry that goes stale.
+  const datedSeeds = seedItems
+    .map((i: any) => ({ item: i, ms: new Date(i.freshness || i.published_at || "").getTime() }))
+    .filter((c) => !isNaN(c.ms) && c.ms <= Date.now() + 60 * 60 * 1000)
+    .sort((a, b) => b.ms - a.ms);
+  const leadItem = (datedSeeds[0]?.item) || seedItems[0] || {
     id: "lead-01",
     title: "Music Industry Royalties & Rights Overhaul",
     dek: "Independent artists and catalogue owners navigate shifting streaming payout policies and mechanical licensing standards.",
