@@ -92,11 +92,14 @@ export default async function ExecutiveTextAggregatorHomepage() {
   // Latest continuous wire stream (24 additional articles)
   const continuousStream = articles.slice(48, 72);
 
+  // Date line renders in America/Chicago: the server runs on UTC, which would
+  // show tomorrow's date for US evening readers.
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
+    timeZone: 'America/Chicago'
   });
 
   // Never render a dead link: the headline anchor only exists when we have a real URL.
