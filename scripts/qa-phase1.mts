@@ -31,15 +31,27 @@ const qset = new Set(qids);
 
 const articleIds = new Set(articles.map((a: any) => a.id));
 const itemIds = new Set(items.map((i: any) => i.id));
-check("all 13 quarantine IDs exist in articles.json", qids.every((id) => articleIds.has(id)));
-check("all 13 quarantine IDs exist in adn_items.json", qids.every((id) => itemIds.has(id)));
+check(`all ${qids.length} quarantine IDs exist in articles.json`, qids.every((id) => articleIds.has(id)));
+check(`all ${qids.length} quarantine IDs exist in adn_items.json`, qids.every((id) => itemIds.has(id)));
 
 // Simulate the db.ts/adn-db.ts public-read filter
 const publicArticles = articles.filter((a: any) => !qset.has(a.id));
 const publicItems = items.filter((i: any) => !qset.has(i.id));
 check("no quarantined IDs in public articles", publicArticles.every((a: any) => !qset.has(a.id)));
 check("no quarantined IDs in public items", publicItems.every((i: any) => !qset.has(i.id)));
-check("quarantine removes exactly 13 records", articles.length - publicArticles.length === 13);
+check(`quarantine removes exactly ${qids.length} records`, articles.length - publicArticles.length === qids.length);
+
+// Owner-verified real stories (2026-09-14): the Brian Potter and Bonnie Tyler
+// Guardian obituaries were confirmed legitimate and un-quarantined — they must
+// be publicly visible, never re-quarantined by accident.
+const RESTORED_REAL = [
+  "art-the-guardian-music-1789421744050-zg3z", // Brian Potter obituary
+  "art-the-guardian-music-1789421744049-hl8w", // Bonnie Tyler obituary
+];
+check("verified-real Guardian obituaries are not in the quarantine list",
+  RESTORED_REAL.every((id) => !qset.has(id)));
+check("verified-real Guardian obituaries are publicly visible",
+  RESTORED_REAL.every((id) => publicItems.some((i: any) => i.id === id)));
 
 // ── 2. Canonical URLs ───────────────────────────────────────────
 console.log("\n[2] Canonical source URLs");
