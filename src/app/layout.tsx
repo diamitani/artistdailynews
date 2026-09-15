@@ -8,6 +8,7 @@ import { AuthProvider } from "@/components/AuthContext";
 import { AudioPlayerBar } from "@/components/AudioPlayerBar";
 import { ReadingProgressBar } from "@/components/ReadingProgressBar";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
+import { SiteAnalytics } from "@/components/SiteAnalytics";
 import { cn } from "@/lib/utils";
 
 const playfairDisplay = Playfair_Display({
@@ -129,6 +130,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
+        <SiteAnalytics />
       </head>
       <body className="min-h-screen flex flex-col font-sans antialiased">
         <AuthProvider>
