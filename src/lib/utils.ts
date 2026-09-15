@@ -56,16 +56,13 @@ function storyDateMs(item: any): number {
   return new Date(raw).getTime();
 }
 
-/** True when the item's date is real, not materially in the future, and within maxAgeHours. */
-export function isCurrentStory(item: any, maxAgeHours = 72): boolean {
-  const ms = storyDateMs(item);
-  if (isNaN(ms)) return false;
-  const ageMs = Date.now() - ms;
-  // Tolerate up to 1h of future skew (publisher clock differences); reject the rest.
-  if (ageMs < -60 * 60 * 1000) return false;
-  return ageMs <= maxAgeHours * 60 * 60 * 1000;
+/**
+ * Pick the hero story: always the newest item with a valid, non-future date.
+ * (Owner decision 2026-09-15: no curated pin — the top slot tracks the wire.)
+ */
+export function pickFeaturedStory<T>(articles: T[]): T | null {
+  return newestValidStory(articles) ?? null;
 }
-
 /** Newest item with a valid, non-future date. Never mutates the array. */
 export function newestValidStory<T>(articles: T[]): T | undefined {
   let best: T | undefined;
@@ -77,15 +74,6 @@ export function newestValidStory<T>(articles: T[]): T | undefined {
     if (ms > bestMs) { bestMs = ms; best = a; }
   }
   return best;
-}
-
-/**
- * Pick the hero story: keep an editorial lead item only while it is current;
- * otherwise fall back to the newest item with a valid, non-future date.
- */
-export function pickFeaturedStory<T>(leadItem: T | null | undefined, articles: T[]): T | null {
-  if (leadItem && isCurrentStory(leadItem)) return leadItem;
-  return newestValidStory(articles) ?? null;
 }
 
 // Slug generation
