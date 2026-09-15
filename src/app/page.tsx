@@ -1,5 +1,5 @@
 import React from 'react';
-import { getArticles, getLatestIssue } from '@/lib/adn-db';
+import { getArticles } from '@/lib/adn-db';
 import { MOCK_PODCASTS, MOCK_VIDEOS } from '@/lib/mock-articles';
 import { CURATED_MEDIA_CHANNELS } from '@/lib/media-channels';
 import { Article, CategoryType } from '@/lib/types';
@@ -42,10 +42,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 export default async function ExecutiveTextAggregatorHomepage() {
-  const [rawArticles, issue] = await Promise.all([
-    getArticles(150),
-    getLatestIssue()
-  ]);
+  const rawArticles = await getArticles(150);
 
   // Normalize articles to Article type
   const articles: Article[] = rawArticles.map((item, idx) => ({
@@ -78,9 +75,9 @@ export default async function ExecutiveTextAggregatorHomepage() {
   const cultureArticles = articles.filter(a => (a as any).pillar === 'culture' || a.category === 'streaming' || a.category === 'marketing');
   const techAndCommunityArticles = articles.filter(a => (a as any).pillar === 'social' || a.category === 'social' || a.category === 'tutorials' || a.category === 'tech-ai');
 
-  // Hero: keep an editorial lead item only while it is genuinely current;
-  // otherwise the newest item with a real date takes the slot (never a stale pin).
-  const featuredStory = pickFeaturedStory(issue?.lead_item, articles) || articles[0];
+  // Hero: always the newest story with a valid, non-future date (owner decision
+  // 2026-09-15) — the top slot tracks the wire, never a pinned pick.
+  const featuredStory = pickFeaturedStory(articles) || articles[0];
   const secondaryLeadStories = articles.slice(1, 4);
   const fastWireStories = articles.slice(4, 18); // 14 fast wire stories
 
@@ -219,13 +216,13 @@ export default async function ExecutiveTextAggregatorHomepage() {
                         Top Story
                       </span>
                       <span className="font-bold text-[var(--text-primary)] uppercase">
-                        {featuredStory?.source_name || featuredStory?.sourceName}
+                        {featuredStory?.sourceName}
                       </span>
                     </div>
 
                     <div className="flex items-center space-x-2 text-[var(--text-muted)]">
                       <Clock className="w-3.5 h-3.5" />
-                      <span>{formatTimeAgo(featuredStory?.freshness || featuredStory?.publishedAt)}</span>
+                      <span>{formatTimeAgo(featuredStory?.publishedAt)}</span>
                     </div>
                   </div>
 
@@ -242,7 +239,7 @@ export default async function ExecutiveTextAggregatorHomepage() {
 
                   {/* Dek / Summary */}
                   <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed font-serif italic border-l-2 border-[var(--accent-primary)] pl-4">
-                    {featuredStory?.dek || featuredStory?.summary || "Comprehensive breakdown on the strategic shifts impacting independent distribution, licensing, and streaming momentum."}
+                    {featuredStory?.summary || "Comprehensive breakdown on the strategic shifts impacting independent distribution, licensing, and streaming momentum."}
                   </p>
 
                   {/* Executive 3-Point Briefing Box */}
@@ -277,7 +274,7 @@ export default async function ExecutiveTextAggregatorHomepage() {
                 {/* Footer Actions */}
                 <div className="pt-6 mt-6 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
                   <span className="text-[var(--text-muted)]">
-                    Reported by: <strong className="text-[var(--text-primary)]">{featuredStory?.source_name || featuredStory?.sourceName}</strong>
+                    Reported by: <strong className="text-[var(--text-primary)]">{featuredStory?.sourceName}</strong>
                   </span>
 
                   <div className="flex items-center space-x-3">
